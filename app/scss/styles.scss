@@ -57,6 +57,11 @@ img{width: 100%;}
       background-color: transparent;
       width: 100%;
       border-radius: 0;
+
+      .geocoder-icon.geocoder-icon-search{
+        right: .5em;
+        left: auto;
+      }
     }
   }
 }

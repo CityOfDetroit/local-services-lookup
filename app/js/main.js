@@ -28,80 +28,8 @@ import Controller from './controller.class.js';
         sw: [-83.3437,42.2102],
         ne: [-82.8754,42.5197]
       },
-      sources: json.sources,
-      layers: [
-        {
-          "id": "address-point",
-          "source": "address-point",
-          "type": "circle",
-          "paint": {
-              "circle-radius": 10,
-              "circle-color": "#007cbf"
-          }
-        },
-        {
-          "id": "city-fill",
-          "type": "fill",
-          "source": "city",
-          "maxzoom": 15,
-          "layout": {
-          },
-          "paint": {
-               "fill-color":"#9fd5b3",
-               "fill-opacity":.5
-          }
-         },
-        {
-         "id": "city-line",
-         "type": "line",
-         "source": "city",
-         "layout": {
-         },
-         "paint": {
-              "line-color":"#004544",
-              "line-width": 2
-         }
-        },
-        {
-            "id": "parcel-fill",
-            "type": "fill",
-            "source": "parcels",
-            "minzoom": 15.5,
-            "layout": {
-            },
-            "paint": {
-                 "fill-color":"#fff",
-                 "fill-opacity":0
-            },
-            'source-layer': 'parcelsgeojson',
-            "event": true
-         },
-         {
-            "id": "parcel-line",
-            "type": "line",
-            "source": "parcels",
-            "minzoom": 15.5,
-            "layout": {
-            },
-            "paint": {
-                 "line-color":"#cbcbcb",
-            },
-            'source-layer': 'parcelsgeojson'
-         },
-         {
-           "id": "parcel-fill-selected",
-           "type": "line",
-           "source": "parcels",
-           "minzoom": 15.5,
-           "layout": {},
-           "paint": {
-             "line-color": "#BD0019",
-             "line-width": 3
-           },
-           "source-layer": "parcelsgeojson",
-           "filter": ["==", "parcelno", ""]
-         }
-      ]
+      sources: [],
+      layers: []
     },{
       lat: 0,
       lng: 0,
@@ -114,40 +42,4 @@ import Controller from './controller.class.js';
     ["#feebe2","#fbb4b9","#f768a1","#c51b8a","#7a0177"]);
   })
   .catch(function(error) { console.log(error); });
-  // let closeAlertBtns = document.querySelectorAll('.close');
-  // closeAlertBtns.forEach(function(btn){
-  //   btn.addEventListener('click', function(ev){
-  //       controller.closeAlert(ev)
-  //   });
-  // });
-  // document.getElementById("hidde-settings-btn").addEventListener('click', function(){
-  //   document.getElementById("settings-map-panel").className = "";
-  // });
-  // document.getElementById("settings-btn").addEventListener('click', function(){
-  //   document.getElementById("settings-map-panel").className = "active";
-  // });
-  // document.getElementById("hidde-panel-btn").addEventListener('click', function(){
-  //   document.getElementById("map-side-panel").className = "";
-  // });
-  // document.getElementById("hidde-panel-small-btn").addEventListener('click', function(){
-  //   document.getElementById("map-side-panel-small").className = "";
-  // });
-  // document.getElementById("layers-btn").addEventListener('click', function(){
-  //   document.getElementById("map-data-panel").className = "active";
-  // });
-  // document.getElementById("hidde-map-data-btn").addEventListener('click', function(){
-  //   document.getElementById("map-data-panel").className = "";
-  // });
-  // document.getElementById("buffer-btn").addEventListener('click', function(){
-  //   controller.buffer.editBuffer(controller);
-  // });
-  // document.getElementById("hidde-buffer-panel-btn").addEventListener('click', function(){
-  //   document.getElementById("buffer-panel").className = "";
-  // });
-  // let layerBtns = document.querySelectorAll('input[name="datasets"]');
-  // layerBtns.forEach(function(btn){
-  //   btn.addEventListener('click', function(ev){
-  //     controller.sandBoxLayers(ev, controller);
-  //   });
-  // });
 })(window);

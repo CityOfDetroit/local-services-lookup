@@ -54,3 +54,6 @@ img {
       background-color: transparent;
       width: 100%;
       border-radius: 0; }
+      #local-services #geocoder .mapboxgl-ctrl-geocoder.mapboxgl-ctrl .geocoder-icon.geocoder-icon-search {
+        right: .5em;
+        left: auto; }
