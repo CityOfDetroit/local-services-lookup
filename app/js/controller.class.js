@@ -2,13 +2,12 @@
 import Map from './map.class.js';
 import JSUtilities from './utilities.class.js';
 import DataManager from './data-manager.class.js';
-import Buffer from './buffer.class.js';
 import mapboxgl from 'mapbox-gl';
 const turf = require('@turf/turf');
 const moment = require('moment');
 const GeoJSON = require('geojson');
 export default class Controller {
-  constructor(map, router, dataSouresInfo, palette) {
+  constructor(map, router) {
     this.defaultSettings = {department: 'All'};
     this.currentPolygon = null;
     this.cityPolygon = null;
@@ -17,10 +16,7 @@ export default class Controller {
     this.currentBoundary = "city";
     this.tempDataDetails = null;
     this.tempAddressPoint = null;
-    this.dataSouresInfo = dataSouresInfo;
-    this.palette = palette;
     this.dataManager = new DataManager();
-    this.buffer = new Buffer();
     this.map = new Map(map, this);
     this.initialLoad(this);
   }
