@@ -2,95 +2,10 @@
 const moment = require('moment');
 export default class Panel {
   constructor() {
-    this.title = null;
-    this.layer = null;
   }
 
-  creatPanel(type, data, controller){
-    console.log(type);
+  creatPanel(data, controller){
     console.log(data);
-    console.log(controller.panel.layer);
-    if(controller.panel.layer === null || controller.panel.layer === data.layer.id){
-      if(typeof(data) != "object"){
-        controller.panel.layer = type;
-      }else{
-        controller.panel.layer = data.layer.id;
-      }
-      switch (controller.panel.layer) {
-        case "parcel-fill":
-          let assessorsData = new Promise((resolve, reject) => {
-            let url = "https://apis.detroitmi.gov/assessments/parcel/" + data + "/";
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "assessors-data", "data": data});
-            });
-          });
-          let dteData = new Promise((resolve, reject) => {
-            let url = "https://apis.detroitmi.gov/property_data/dte/active_connections/" + data + "/";
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "dte-data", "data": data});
-            });
-          });
-          let permitData = new Promise((resolve, reject) => {
-            let url = "https://data.detroitmi.gov/resource/but4-ky7y.json?parcel_no=" + data;
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "permit-data", "data": data});
-            });
-          });
-          let blightData = new Promise((resolve, reject) => {
-            let url = "https://data.detroitmi.gov/resource/s7hj-n86v.json?parcelno=" + data;
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "blight-data", "data": data});
-            });
-          });
-          let salesHistoryData = new Promise((resolve, reject) => {
-            let url = "https://data.detroitmi.gov/resource/9xku-658c.json?parcel_no=" + data;
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "sales-data", "data": data});
-            });
-          });
-          let demosData = new Promise((resolve, reject) => {
-            let url = "https://data.detroitmi.gov/resource/uzpg-2pfj.json?parcel_id=" + data;
-            return fetch(url)
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
-              resolve({"id": "demos-data", "data": data});
-            });
-          });
-          Promise.all([assessorsData,dteData,permitData,blightData,salesHistoryData,demosData]).then(values => {
-            console.log(values); //one, two
-            let tempHTML = controller.panel.createMarkup(controller.panel.layer, values, controller);
-            document.querySelector('#map-side-panel .panel-information').innerHTML = tempHTML;
-            document.getElementById('initial-loader-overlay').className = '';
-            document.getElementById("map-side-panel-small").className = "";
-            document.getElementById("map-data-panel").className = "";
-            document.getElementById("map-side-panel").className = "active";
-            controller.panel.layer = null;
-          }).catch(reason => {
-            console.log(reason);
-          });
-          break;
-        default:
-          let tempHTML = controller.panel.createMarkup(controller.panel.layer, data, controller);
-          document.querySelector('#map-side-panel-small .panel-information').innerHTML = tempHTML;
-          document.getElementById('initial-loader-overlay').className = '';
-          document.getElementById("map-side-panel").className = "";
-          document.getElementById("map-data-panel").className = "";
-          document.getElementById("map-side-panel-small").className = "active";
-          controller.panel.layer = null;
-      }
-    }else{
-      console.log("already active layer");
-    }
   }
   createMarkup(type, values, controller){
     console.log(values);

@@ -1,6 +1,7 @@
 'use strict';
 import Map from './map.class.js';
 import JSUtilities from './utilities.class.js';
+import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';
 import mapboxgl from 'mapbox-gl';
 const turf = require('@turf/turf');
@@ -9,13 +10,7 @@ const GeoJSON = require('geojson');
 export default class Controller {
   constructor(map, router) {
     this.defaultSettings = {department: 'All'};
-    this.currentPolygon = null;
-    this.cityPolygon = null;
-    this.dataBank = null;
-    this.activeLayers = ['parcel-fill'];
-    this.currentBoundary = "city";
-    this.tempDataDetails = null;
-    this.tempAddressPoint = null;
+    this.panel = new Panel();
     this.dataManager = new DataManager();
     this.map = new Map(map, this);
     this.initialLoad(this);
@@ -28,11 +23,10 @@ export default class Controller {
       controller.cityPolygon = data.features[0];
       controller.defaultSettings.startDate = moment().format('YYYY-MM-DD');
       controller.defaultSettings.endDate = moment().add(5,'months').format('YYYY-MM-DD');
-      console.log(controller.defaultSettings);
+      // console.log(controller.defaultSettings);
       let boundaries = 'city';
       let dataList = '';
       let polygon = '';
-      // console.log(dataList);
       controller.map.currentState.layers.forEach(function(layer){
         (JSUtilities.inArray(controller.dataSouresInfo.boundaries, layer.id)) ? boundaries += layer.id : 0;
         (JSUtilities.inArray(controller.dataSouresInfo.dataSets, layer.id)) ? dataList += layer.id + ',' : 0;

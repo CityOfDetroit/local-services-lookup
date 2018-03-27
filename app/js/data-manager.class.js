@@ -6,7 +6,9 @@ const arcGIS = require('terraformer-arcgis-parser');
 const WKT = require('terraformer-wkt-parser');
 export default class DataManager {
   constructor() {
-    this.dataRequest = null;
+    // -------------------------------------------------------------------------
+    // NOTE: Current government officials and contact information.
+    // -------------------------------------------------------------------------
     this.currentGovOfficials = {
       d1: {
         district: "District 1",
@@ -141,7 +143,7 @@ export default class DataManager {
     let dataObj = {title: location.address};
     let simplePolygon = null;
     // -------------------------------------------------------------------------
-    // NOTE: Fetching all the dataSets
+    // NOTE: Fetching all the data sets.
     // -------------------------------------------------------------------------
     let council = new Promise((resolve, reject) => {
       let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Council_Districts/FeatureServer/0/query?where=&objectIds=&time=&geometry=" + location.location.x + "%2C" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=name&returnGeometry=false&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
@@ -266,7 +268,6 @@ export default class DataManager {
       fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
-        console.log(data);
         let todaysMonth =  moment().month() + 1;
         let todaysYear = moment().year();
         let url = null;
@@ -274,7 +275,6 @@ export default class DataManager {
         return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) {
-          console.log(data);
           resolve({"id": "recycling", "data": data});
         });
       });
@@ -292,12 +292,8 @@ export default class DataManager {
             initialLoadChecker = false;
           }
         });
-        if(initialLoadChecker){
-          controller.dataBank = initalLoadInfo;
-        }
         dataObj.dataSets = dataSets;
-        console.log(dataObj);
-        // controller.dashboard.createView(view, dataObj, controller);
+        controller.panel.creatPanel(dataObj, controller);
     }).catch(reason => {
       console.log(reason);
     });
