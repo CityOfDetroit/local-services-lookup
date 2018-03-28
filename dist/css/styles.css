@@ -8,16 +8,30 @@
   width: 100%;
   padding: 1em;
   background-color: #444; }
+  #local-services-results.active .local-address {
+    color: #fff;
+    padding-top: .5em;
+    border-bottom: 0.25em solid #E48F22;
+    margin-bottom: 1em; }
   #local-services-results.active .local-content {
     column-count: 3; }
     #local-services-results.active .local-content .info-section {
-      background-color: #5e5e5e;
-      color: #fff;
-      padding: .5em;
-      margin-bottom: 1em; }
+      padding: .5em; }
       #local-services-results.active .local-content .info-section span {
-        background-color: #CF3234;
-        padding: .5em; }
+        background-color: #E48F22;
+        padding: .5em;
+        font-weight: bold; }
+      #local-services-results.active .local-content .info-section div {
+        color: #fff;
+        background-color: #515151;
+        padding: .5em;
+        margin-top: 1em; }
+        #local-services-results.active .local-content .info-section div p {
+          margin: 0; }
+          #local-services-results.active .local-content .info-section div p strong {
+            font-weight: bold; }
+          #local-services-results.active .local-content .info-section div p a {
+            color: #fff; }
   #local-services-results.active #close-services-btn {
     position: absolute;
     top: 0;

@@ -204,7 +204,8 @@ export default class DataManager {
       });
     });
     let blightData = new Promise((resolve, reject) => {
-      let url = "https://data.detroitmi.gov/resource/s7hj-n86v.json?parcelno=" + location.attributes.User_fld;
+      let url = "https://data.detroitmi.gov/resource/s7hj-n86v.json?$query=SELECT * WHERE parcelno='" + location.attributes.User_fld + "' ORDER BY violation_date DESC LIMIT 2";
+      console.log(url);
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -212,7 +213,7 @@ export default class DataManager {
       });
     });
     let salesHistoryData = new Promise((resolve, reject) => {
-      let url = "https://data.detroitmi.gov/resource/9xku-658c.json?parcel_no=" + location.attributes.User_fld;
+      let url = "https://data.detroitmi.gov/resource/9xku-658c.json?$query=SELECT * WHERE parcel_no='" + location.attributes.User_fld + "' ORDER BY sale_date DESC LIMIT 2";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
