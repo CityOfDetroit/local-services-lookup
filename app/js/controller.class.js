@@ -122,22 +122,22 @@ export default class Controller {
       newTempAddr += item;
       ((index < size) && (index + 1) !== size) ? newTempAddr += '+': 0;
     });
-    console.log(newTempAddr);
+    // console.log(newTempAddr);
     let url = "https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=" + newTempAddr + "&category=&outFields=User_fld&maxLocations=&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json";
     fetch(url)
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
-      console.log(data);
+      // console.log(data);
       if(data.candidates.length){
         if(data.candidates[0].attributes.User_fld != ""){
-          console.log('parcel found');
+          // console.log('parcel found');
           controller.dataManager.buildData(data.candidates[0], controller);
           // controller.panel.creatPanel("parcel", data.candidates[0].attributes.User_fld, controller);
         }else{
-          console.log("no parcel found");
+          // console.log("no parcel found");
         }
       }else{
-        console.log("no parcel found");
+        // console.log("no parcel found");
       }
     });
   }
