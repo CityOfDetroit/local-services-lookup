@@ -1,12 +1,10 @@
 'use strict';
 import Map from './map.class.js';
-import JSUtilities from './utilities.class.js';
 import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';
 import mapboxgl from 'mapbox-gl';
 const turf = require('@turf/turf');
 const moment = require('moment');
-const GeoJSON = require('geojson');
 export default class Controller {
   constructor(map, router) {
     this.defaultSettings = {department: 'All'};
@@ -23,94 +21,7 @@ export default class Controller {
       controller.cityPolygon = data.features[0];
       controller.defaultSettings.startDate = moment().format('YYYY-MM-DD');
       controller.defaultSettings.endDate = moment().add(5,'months').format('YYYY-MM-DD');
-      // console.log(controller.defaultSettings);
-      let boundaries = 'city';
-      let dataList = '';
-      let polygon = '';
-      controller.map.currentState.layers.forEach(function(layer){
-        (JSUtilities.inArray(controller.dataSouresInfo.boundaries, layer.id)) ? boundaries += layer.id : 0;
-        (JSUtilities.inArray(controller.dataSouresInfo.dataSets, layer.id)) ? dataList += layer.id + ',' : 0;
-      });
     });
-  }
-  createPanelData(view, controller){
-    console.log(view);
-    // console.log(controller);
-    switch (view) {
-      case 'DASH':
-        document.getElementById('initial-loader-overlay').className = 'active';
-        // console.log('creating stats data');
-        controller.activeLayers.forEach(function(layer){
-          if(layer != 'parcel-fill'){
-            controller.layerAddRemove(layer, "remove", controller);
-            let tempCheckbox = document.getElementById(layer);
-            if(tempCheckbox != null){
-              tempCheckbox.checked = false;
-              tempCheckbox.parentElement.className = "";
-            }
-          }
-        });
-        let tempCheckboxList = document.querySelectorAll('input[name="datasets"]');
-        tempCheckboxList.forEach(function(box){
-          box.disabled = false;
-        });
-        document.getElementById('map-data-panel').className = "";
-        document.getElementById('map-side-panel').className = "";
-        document.getElementById('map-side-panel-small').className = "";
-        controller.dataManager.createViewData(controller.router.getQueryVariable('boundary'), controller.router.getQueryVariable('dataSets'), controller.router.getQueryVariable('polygon'), controller, view);
-        document.getElementById('menu').checked = true;
-        break;
-      case 'MAP':
-        (document.getElementById('menu').checked) ? document.getElementById('menu').checked = false : document.getElementById('menu').checked = true;
-        break;
-      case 'PROPERTY':
-        document.getElementById('initial-loader-overlay').className = 'active';
-        // console.log('creating stats data');
-        controller.activeLayers.forEach(function(layer){
-          if(layer != 'parcel-fill'){
-            controller.layerAddRemove(layer, "remove", controller);
-            let tempCheckbox = document.getElementById(layer);
-            if(tempCheckbox != null){
-              tempCheckbox.checked = false;
-              tempCheckbox.parentElement.className = "";
-            }
-          }
-        });
-        document.getElementById('map-data-panel').className = "";
-        document.getElementById('map-side-panel').className = "";
-        document.getElementById('map-side-panel-small').className = "";
-        controller.dashboard.loadPropertyView(controller);
-        document.getElementById('menu').checked = true;
-        break;
-      case 'FILTERS':
-        // console.log('creating layers data');
-        const layerURL = 'js/layers.json';
-        fetch(layerURL)
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function(data) {
-          // console.log(data);
-          let dataObj = {title: "FILTERS", data: data};
-          controller.dashboard.createView(view, dataObj, controller);
-        })
-        break;
-      case 'TOOLS':
-        // console.log('creating tools data');
-        let dataObj = {title: "TOOLS", boarded: null, needBoarding: null};
-        controller.dashboard.createView(view, dataObj, controller);
-        break;
-      case 'SET':
-        // console.log('creating settings data');
-        dataObj = {title: "SETTINGS", boarded: null, needBoarding: null};
-        controller.dashboard.createView(view, dataObj, controller);
-        break;
-      case 'FORM':
-        dataObj = {title: "FORM", boarded: null, needBoarding: null};
-        // console.log('creating forms data');
-        controller.dashboard.createView(view, dataObj, controller);
-        break;
-      default:
-        console.log('invalid view reverting back');
-    }
   }
   geocoderResults(e, controller){
     let tempAddr = e.result.place_name.split(",");

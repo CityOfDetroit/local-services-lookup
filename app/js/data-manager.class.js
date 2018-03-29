@@ -1,5 +1,4 @@
 'use strict';
-import JSUtilities from './utilities.class.js';
 const moment = require('moment');
 const turf = require('@turf/turf');
 const arcGIS = require('terraformer-arcgis-parser');
@@ -139,7 +138,6 @@ export default class DataManager {
     }
   }
   buildData(location, controller){
-    console.log(location);
     let dataObj = {title: location.address};
     let simplePolygon = null;
     // -------------------------------------------------------------------------
@@ -196,7 +194,7 @@ export default class DataManager {
       });
     });
     let permitData = new Promise((resolve, reject) => {
-      let url = "https://data.detroitmi.gov/resource/but4-ky7y.json?parcel_no=" + location.attributes.User_fld;
+      let url = "https://data.detroitmi.gov/resource/but4-ky7y.json?$query=SELECT * WHERE parcel_no='" + location.attributes.User_fld + "' ORDER BY permit_issued DESC LIMIT 2";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {

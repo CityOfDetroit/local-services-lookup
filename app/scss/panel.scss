@@ -33,7 +33,7 @@ $lg: new-breakpoint(min-width 1024px);
   }
 
   .local-content{
-    column-count: 3;
+    column-count: 1;
 
     .info-section{
       margin-bottom: 1em;
@@ -69,7 +69,7 @@ $lg: new-breakpoint(min-width 1024px);
 
       h4{
         a{
-          color: $color-4;  
+          color: $color-4;
         }
       }
     }
@@ -96,5 +96,38 @@ $lg: new-breakpoint(min-width 1024px);
     width: 3.25em;
     height: 3.25em;
     transition: all $base-duration $cubic;
+  }
+}
+// -----------------------------------------------------------------------------
+// NOTE: tablet starts.
+// -----------------------------------------------------------------------------
+@media all and (min-width: 551px) {
+  #local-services-results.active{
+
+    .local-content{
+      column-count: 2;
+    }
+  }
+}
+// -----------------------------------------------------------------------------
+// NOTE: desktop starts.
+// -----------------------------------------------------------------------------
+@media all and (min-width: 1024px) {
+  #local-services-results.active{
+
+    .local-content{
+      column-count: 3;
+    }
+  }
+}
+// -----------------------------------------------------------------------------
+// NOTE: xl desktop starts.
+// -----------------------------------------------------------------------------
+@media all and (min-width: 1401px) {
+  #local-services-results.active{
+
+    .local-content{
+      column-count: 4;
+    }
   }
 }

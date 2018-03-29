@@ -11,7 +11,6 @@ export default class Panel {
     document.getElementById('local-services-results').className = 'active';
   }
   createMarkup(values, controller){
-    console.log(values);
     let siteURL = window.location.hostname;
     let tempHTML = `
     <article class="info-section">
@@ -60,13 +59,16 @@ export default class Panel {
           <p><strong>NAME:</strong> ${values[7].data.features[0].attributes.NPO_Office}</p>
           <p><strong>PHONE:</strong> ${values[7].data.features[0].attributes.Phone}</p>
           <p><strong>Email:</strong> ${values[7].data.features[0].attributes.Email}</p>
-        </div>
+        </div>`;
+      if(values[7].data.features[0].attributes.Sgt_Phone != "0"){
+        tempHTML += `
         <div>
           <h5>SERGEANT</h5>
           <p><strong>NAME:</strong> ${values[7].data.features[0].attributes.Sergeant}</p>
           <p><strong>PHONE:</strong> ${values[7].data.features[0].attributes.Sgt_Phone}</p>
-        </div>
-      </article>`;
+        </div>`;
+      }
+      tempHTML += `</article>`;
     }else{
       tempHTML += `
       <article class="info-section">
@@ -115,6 +117,12 @@ export default class Panel {
       </article>`;
     }
     if(Object.keys(values[2].data).length != 0 && values[2].data.constructor === Object){
+      let property = {
+        year: null,
+        value: null,
+        floor: null,
+        buildingClass: null
+      }
       tempHTML += `
       <article class="info-section">
         <span>OWNER</span>
@@ -125,17 +133,27 @@ export default class Panel {
           <p><strong>ADDRESS:</strong> ${values[2].data.ownerstreetaddr}</p>
           <p><strong>ZIP:</strong> ${values[2].data.ownerzip}</p>
         </div>
-      </article>
+      </article>`;
+      if(values[2].data.resb_bldgclass === 0){
+        property.year = values[2].data.cib_yearbuilt;
+        property.value = values[2].data.cib_value;
+        property.floor = values[2].data.cib_yearbuilt;
+        property.buildingClass = values[2].data.cib_yearbuilt;
+      }else{
+        property.year = values[2].data.resb_yearbuilt;
+        property.value = values[2].data.resb_value;
+        property.floor = values[2].data.resb_floorarea;
+        property.buildingClass = values[2].data.resb_bldgclass;
+      }
+      tempHTML += `
       <article class="info-section">
         <span>PROPERTY</span>
         <div>
           <p><strong>PARCEL NUMBER:</strong> ${values[2].data.pnum}</p>
-          <p><strong>YEAR BUILD:</strong> ${values[2].data.resb_yearbuilt}</p>
-          <p><strong>CALCULATED VALUE:</strong> $${values[2].data.resb_value.toLocaleString()}</p>
-          <p><strong>FLOOR AREA:</strong> ${values[2].data.resb_floorarea.toLocaleString()} SQFT</p>
-          <p><strong>BASEMENT AREA:</strong>  ${values[2].data.resb_basementarea.toLocaleString()} SQFT</p>
-          <p><strong>BUILDING CLASS:</strong> ${values[2].data.resb_bldgclass}</p>
-          <p><strong>EXTERIOR:</strong> ${values[2].data.resb_exterior}</p>
+          <p><strong>YEAR BUILD:</strong> ${property.year}</p>
+          <p><strong>CALCULATED VALUE:</strong> $${property.value.toLocaleString()}</p>
+          <p><strong>FLOOR AREA:</strong> ${property.floor.toLocaleString()} SQFT</p>
+          <p><strong>BUILDING CLASS:</strong> ${property.buildingClass}</p>
         </div>
       </article>
       <article class="info-section">
