@@ -5,7 +5,6 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    console.log(data);
     let markup = controller.panel.createMarkup(data.dataSets, controller);
     document.querySelector('.local-address').innerText = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
@@ -31,7 +30,7 @@ export default class Panel {
     }else{
       tempHTML += `
         <div>
-          <p>NO GOVERNMENT INFO</p>
+          <p>NO GOVERNMENT INFO FOUND</p>
         </div>
       </article>`;
     }
@@ -48,7 +47,70 @@ export default class Panel {
       <article class="info-section">
         <span>NEIGHBORHOOD</span>
         <div>
-          <p>NO NEIGHBORHOOD INFO</p>
+          <p>NO NEIGHBORHOOD FOUND</p>
+        </div>
+      </article>`;
+    }
+    if(Object.keys(values[7].data).length != 0 && values[7].data.constructor === Object){
+      tempHTML += `
+      <article class="info-section">
+        <span>POLICE</span>
+        <div>
+          <h5>NEIGHBORHOOD POLICE OFFICER (NPO)</h5>
+          <p><strong>NAME:</strong> ${values[7].data.features[0].attributes.NPO_Office}</p>
+          <p><strong>PHONE:</strong> ${values[7].data.features[0].attributes.Phone}</p>
+          <p><strong>Email:</strong> ${values[7].data.features[0].attributes.Email}</p>
+        </div>
+        <div>
+          <h5>SERGEANT</h5>
+          <p><strong>NAME:</strong> ${values[7].data.features[0].attributes.Sergeant}</p>
+          <p><strong>PHONE:</strong> ${values[7].data.features[0].attributes.Sgt_Phone}</p>
+        </div>
+      </article>`;
+    }else{
+      tempHTML += `
+      <article class="info-section">
+        <span>POLICE</span>
+        <div>
+          <p>NO POLICE INFO FOUND</p>
+        </div>
+      </article>`;
+    }
+    if(Object.keys(values[9].data).length != 0 && values[9].data.constructor === Object){
+      let contractorInfo = {
+        name: null,
+        url: null,
+        phone: null
+      };
+      if(values[9].data.next_pickups.trash.contractor === 'gfl'){
+        contractorInfo.name = 'GFL';
+        contractorInfo.url =  'http://gflusa.com/residential/detroit/';
+        contractorInfo.phone = '(844) 464-3587';
+      }else{
+        contractorInfo.name = 'ADVANCED';
+        contractorInfo.url =  'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
+        contractorInfo.phone = ' (844) 233-8764';
+      }
+      tempHTML += `
+      <article class="info-section">
+        <span>TRASH & RECYCLING</span>
+        <div>
+          <p><strong>PROVIDER:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
+          <p><strong>NEXT TRASH:</strong> ${moment(values[9].data.next_pickups.trash.next_pickup).format('MMM DD, YYYY')}</p>
+          <p><strong>NEXT RECYCLING:</strong> ${moment(values[9].data.next_pickups.recycling.next_pickup).format('MMM DD, YYYY')}</p>
+          <p><strong>NEXT BULK:</strong> ${moment(values[9].data.next_pickups.bulk.next_pickup).format('MMM DD, YYYY')}</p>`;
+      if('yard waste' in values[9].data.next_pickups){
+        tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(values[9].data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>`;
+      }
+      tempHTML += `</div>
+      <h4><a href="http://www.detroitmi.gov/publicworks" target="_blank">MORE INFO</a></h4>
+      </article>`;
+    }else{
+      tempHTML += `
+      <article class="info-section">
+        <span>TRASH & RECYCLING</span>
+        <div>
+          <p>NO TRASH & RECYCLING INFO FOUND</p>
         </div>
       </article>`;
     }
@@ -70,8 +132,8 @@ export default class Panel {
           <p><strong>PARCEL NUMBER:</strong> ${values[2].data.pnum}</p>
           <p><strong>YEAR BUILD:</strong> ${values[2].data.resb_yearbuilt}</p>
           <p><strong>CALCULATED VALUE:</strong> $${values[2].data.resb_value.toLocaleString()}</p>
-          <p><strong>FLOOR AREA:</strong> ${values[2].data.resb_floorarea} SQFT</p>
-          <p><strong>BASEMENT AREA:</strong>  ${values[2].data.resb_basementarea} SQFT</p>
+          <p><strong>FLOOR AREA:</strong> ${values[2].data.resb_floorarea.toLocaleString()} SQFT</p>
+          <p><strong>BASEMENT AREA:</strong>  ${values[2].data.resb_basementarea.toLocaleString()} SQFT</p>
           <p><strong>BUILDING CLASS:</strong> ${values[2].data.resb_bldgclass}</p>
           <p><strong>EXTERIOR:</strong> ${values[2].data.resb_exterior}</p>
         </div>
@@ -89,7 +151,7 @@ export default class Panel {
       <article class="info-section">
         <span>PROPERTY</span>
         <div>
-          <p>NO PROPERTY INFO</p>
+          <p>NO PROPERTY INFO FOUND</p>
         </div>
       </article>
       <article class="info-section">
@@ -109,10 +171,11 @@ export default class Panel {
         </div>
         `;
       });
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/s7hj-n86v" target="_blank">MORE INFO</a></h4>`;
     }else{
       tempHTML += `
       <div>
-        <p>NO BLIGHT TICKETS</p>
+        <p>NO BLIGHT TICKETS FOUND</p>
       </div>`;
     }
     tempHTML += `</article>
@@ -122,19 +185,18 @@ export default class Panel {
       values[5].data.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>SALE ID:</strong> ${value.id}</p>
           <p><strong>SALE DATE:</strong> ${moment(value.sale_date).format('MMM DD, YYYY')}</p>
-          <p><strong>SALE PRICE:</strong> $${value.sale_price}</p>
-          <p><strong>SALE NUMBER:</strong> ${value.sale_number}</p>
-          <p><strong>INSTRUMENT:</strong> ${value.instrument}</p>
-          <p><strong>TERMS:</strong> ${value.terms}</p>
+          <p><strong>SALE PRICE:</strong> $${parseInt(value.sale_price).toLocaleString()}</p>
+          <p><strong>GRANTEE:</strong> ${value.grantee}</p>
+          <p><strong>GRANTOR:</strong> ${value.grantor}</p>
         </div>
         `;
       });
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/9xku-658c" target="_blank">MORE INFO</a></h4>`;
     }else{
       tempHTML += `
       <div>
-        <p>NO PROPERTY SALES HISTORY</p>
+        <p>NO PROPERTY SALES HISTORY FOUND</p>
       </div>`;
     }
     tempHTML += `</article>
@@ -154,10 +216,11 @@ export default class Panel {
         </div>
         `;
       });
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/but4-ky7y" target="_blank">MORE INFO</a></h4>`;
     }else{
       tempHTML += `
       <div>
-        <p>NO BUILDING PERMITS</p>
+        <p>NO BUILDING PERMITS FOUND</p>
       </div>`;
     }
     tempHTML += `</article>
@@ -169,22 +232,50 @@ export default class Panel {
         <div>
           <p><strong>ADDRESS:</strong> ${value.address}</p>
           <p><strong>COMMERCIAL:</strong> ${value.commercial}</p>
-          <p><strong>PRICE:</strong> $${value.price}</p>
+          <p><strong>PRICE:</strong> $${parseInt(value.price).toLocaleString()}</p>
           <p><strong>PARCEL:</strong> ${value.parcel_id}</p>
           <p><strong>CONTRACTOR:</strong> ${value.contractor_name}</p>
           <p><strong>COUNCIL DISTRICT:</strong> ${value.council_district}</p>
           <p><strong>NEIGHBORHOOD:</strong> ${value.neighborhood}</p>
           <p><strong>DATE:</strong> ${moment(value.demolition_date).format('MMM DD, YYYY')}</p>
-        </div>
-        `;
+        </div>`;
       });
+      tempHTML += `
+      <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+      </article>`;
     }else{
       tempHTML += `
       <div>
-        <p>NO DEMOLITIONS</p>
-      </div>`;
+        <p>NO DEMOLITIONS FOUND</p>
+      </div>
+      </article>`;
     }
-    tempHTML += `</article>`;
+    if(values[8].data.length){
+      tempHTML += `
+      <article class="info-section">
+      <span>IMPROVE DETROIT</span>`;
+      values[8].data.forEach(function(value){
+        tempHTML += `
+        <div>
+          <p><strong>ID:</strong> <a href="${value.web_url}" target="_blank">${value.id}</a></p>
+          <p><strong>TYPE:</strong> ${value.request_type_title}</p>
+          <p><strong>STATUS:</strong> ${value.status}</p>
+          <p><strong>REPORTED ON:</strong> ${moment(value.created_at).format('MMM DD, YYYY')}</p>
+          <p><strong>DESCRIPTION:</strong> ${value.description}</p>
+        </div>`;
+      });
+      tempHTML += `
+      <h4><a href="https://seeclickfix.com/enhanced_watch_areas/674" target="_blank">MORE INFO</a></h4>
+      </article>`;
+    }else{
+      tempHTML += `
+      <article class="info-section">
+      <span>IMPROVE DETROIT</span>
+      <div>
+        <p>NO IMPROVE DETROIT ISSUES</p>
+      </div>
+      </article>`;
+    }
     return tempHTML;
   }
 }

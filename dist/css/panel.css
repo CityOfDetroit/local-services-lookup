@@ -15,7 +15,7 @@
   #local-services-results.active .local-content {
     column-count: 3; }
     #local-services-results.active .local-content .info-section {
-      padding: .5em; }
+      margin-bottom: 1em; }
       #local-services-results.active .local-content .info-section span {
         background-color: #E48F22;
         padding: .5em;
@@ -25,12 +25,16 @@
         background-color: #515151;
         padding: .5em;
         margin-top: 1em; }
+        #local-services-results.active .local-content .info-section div h5 {
+          border-bottom: .1em solid; }
         #local-services-results.active .local-content .info-section div p {
           margin: 0; }
           #local-services-results.active .local-content .info-section div p strong {
             font-weight: bold; }
           #local-services-results.active .local-content .info-section div p a {
             color: #fff; }
+      #local-services-results.active .local-content .info-section h4 a {
+        color: #CF3234; }
   #local-services-results.active #close-services-btn {
     position: absolute;
     top: 0;

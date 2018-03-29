@@ -205,7 +205,6 @@ export default class DataManager {
     });
     let blightData = new Promise((resolve, reject) => {
       let url = "https://data.detroitmi.gov/resource/s7hj-n86v.json?$query=SELECT * WHERE parcelno='" + location.attributes.User_fld + "' ORDER BY violation_date DESC LIMIT 2";
-      console.log(url);
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -225,7 +224,7 @@ export default class DataManager {
       let buffer = turf.buffer(point, 1, {units: 'miles'});
       let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
       let socrataPolygon = WKT.convert(simplePolygon);
-      let url = "https://data.detroitmi.gov/resource/nfx3-ihbp.json?$query=SELECT * WHERE demolish_by_date between '" + controller.defaultSettings.startDate + "' AND '" + controller.defaultSettings.endDate + "' AND within_polygon(location,"+ JSON.stringify(socrataPolygon) + ") LIMIT 500000";
+      let url = "https://data.detroitmi.gov/resource/nfx3-ihbp.json?$query=SELECT * WHERE demolish_by_date between '" + controller.defaultSettings.startDate + "' AND '" + controller.defaultSettings.endDate + "' AND within_polygon(location,"+ JSON.stringify(socrataPolygon) + ") ORDER BY demolish_by_date ASC LIMIT 3";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -254,10 +253,10 @@ export default class DataManager {
     });
     let improveDet = new Promise((resolve, reject) => {
       let point = turf.point([location.location.x, location.location.y]);
-      let buffer = turf.buffer(point, 500, {units: 'meters'});
+      let buffer = turf.buffer(point, 300, {units: 'meters'});
       let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
       let socrataPolygon = WKT.convert(simplePolygon);
-      let url = "https://data.detroitmi.gov/resource/a9kb-mhiu.json?$query=SELECT * WHERE status NOT IN ('Closed','Archived')  AND within_polygon(location,"+ JSON.stringify(socrataPolygon) + ") LIMIT 500000";
+      let url = "https://data.detroitmi.gov/resource/a9kb-mhiu.json?$query=SELECT * WHERE status NOT IN ('Closed','Archived')  AND within_polygon(location,"+ JSON.stringify(socrataPolygon) + ") LIMIT 3";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {

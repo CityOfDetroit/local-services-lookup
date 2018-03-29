@@ -36,7 +36,7 @@ $lg: new-breakpoint(min-width 1024px);
     column-count: 3;
 
     .info-section{
-      padding: .5em;
+      margin-bottom: 1em;
 
       span{
         background-color: $color-3;
@@ -50,6 +50,10 @@ $lg: new-breakpoint(min-width 1024px);
         padding: .5em;
         margin-top: 1em;
 
+        h5{
+          border-bottom: .1em solid;
+        }
+
         p{
           margin: 0;
 
@@ -60,6 +64,12 @@ $lg: new-breakpoint(min-width 1024px);
           a{
             color: $white;
           }
+        }
+      }
+
+      h4{
+        a{
+          color: $color-4;  
         }
       }
     }
