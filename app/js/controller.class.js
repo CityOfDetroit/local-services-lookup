@@ -1,4 +1,6 @@
 'use strict';
+import "babel-polyfill";
+import "isomorphic-fetch";
 import Map from './map.class.js';
 import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';

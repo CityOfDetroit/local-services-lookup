@@ -105,7 +105,7 @@ export default class Panel {
         tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(values[9].data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>`;
       }
       tempHTML += `</div>
-      <h4><a href="http://www.detroitmi.gov/publicworks" target="_blank">MORE INFO</a></h4>
+      <h4><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML += `

@@ -1,4 +1,6 @@
 'use strict';
+import "babel-polyfill";
+import "isomorphic-fetch";
 const moment = require('moment');
 const turf = require('@turf/turf');
 const arcGIS = require('terraformer-arcgis-parser');
@@ -18,12 +20,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Stephanie Young',
-          url: '/departments/neighborhoods/distric-1',
+          url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
           phone: '(313)236-3473'
         },
         ddmanager: {
           name: 'Reggie Reg Davis',
-          url: '/departments/neighborhoods/distric-1',
+          url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
           phone: '(313)236-3484'
         }
       },
@@ -36,12 +38,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Kim Tandy',
-          url: '/departments/neighborhoods/distric-2',
+          url: '/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1',
           phone: '(313)236-3494'
         },
         ddmanager: {
           name: 'Sean Davis',
-          url: '/departments/neighborhoods/distric-2',
+          url: '/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1',
           phone: '(313)236-3489'
         }
       },
@@ -54,12 +56,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Erinn Harris',
-          url: '/departments/neighborhoods/distric-3',
+          url: '/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1',
           phone: '(313)236-3504'
         },
         ddmanager: {
           name: 'Ernest Johnson',
-          url: '/departments/neighborhoods/distric-3',
+          url: '/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1',
           phone: '(313)348-8464'
         }
       },
@@ -72,12 +74,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Letty Azar',
-          url: '/departments/neighborhoods/distric-4',
+          url: '/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1',
           phone: '(313)236-3518'
         },
         ddmanager: {
           name: 'Toson Knight',
-          url: '/departments/neighborhoods/distric-4',
+          url: '/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1',
           phone: '(313)236-3520'
         }
       },
@@ -90,12 +92,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Marshall Bullock',
-          url: '/departments/neighborhoods/distric-5',
+          url: '/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1',
           phone: '(313)236-3523'
         },
         ddmanager: {
           name: 'Kya Robertson',
-          url: '/departments/neighborhoods/distric-5',
+          url: '/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1',
           phone: '(313)236-3528'
         }
       },
@@ -108,12 +110,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Ninfa Cancel',
-          url: '/departments/neighborhoods/distric-6',
+          url: '/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1',
           phone: '(313)236-3530'
         },
         ddmanager: {
           name: 'Ammie Woodruff',
-          url: '/departments/neighborhoods/distric-6',
+          url: '/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1',
           phone: '(313)236-3529'
         }
       },
@@ -126,12 +128,12 @@ export default class DataManager {
         },
         dmanager:{
           name: 'Ray Solomon II',
-          url: '/departments/neighborhoods/distric-7',
+          url: '/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1',
           phone: '(313)236-3516'
         },
         ddmanager: {
           name: 'Ammie Woodruff',
-          url: '/departments/neighborhoods/distric-7',
+          url: '/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1',
           phone: '(313)236-3540'
         }
       }
