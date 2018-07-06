@@ -271,7 +271,7 @@ export default class Panel {
     if(values[8].data.length){
       tempHTML += `
       <article class="info-section">
-      <span>IMPROVE DETROIT</span>`;
+      <span>IMPROVE DETROIT ISSUES NEAR YOU</span>`;
       values[8].data.forEach(function(value){
         tempHTML += `
         <div>
