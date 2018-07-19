@@ -4,9 +4,9 @@ import Controller from './controller.class.js';
   let controller = new Controller({
     styleURL: 'mapbox://styles/mapbox',
     mapContainer: 'map',
-    geocoder: true,
-    controls: true,
-    draw: true,
+    geocoder: false,
+    controls: false,
+    draw: false,
     baseLayers: {
       street: 'streets-v10',
       satellite: 'cj774gftq3bwr2so2y6nqzvz4'

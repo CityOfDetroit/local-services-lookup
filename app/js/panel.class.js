@@ -4,9 +4,16 @@ export default class Panel {
   constructor() {
   }
 
+  createLoader(){
+    document.querySelector('.local-address').innerHTML = ``;
+  }
+
   creatPanel(data, controller){
+    console.log(data);
+    
     let markup = controller.panel.createMarkup(data.dataSets, controller);
-    document.querySelector('.local-address').innerText = `INFO FOR: ${data.title}`;
+    document.querySelector('#geocoder input').value = ``;
+    document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
     document.getElementById('local-services-results').className = 'active';
   }
@@ -20,6 +27,7 @@ export default class Panel {
         <div>
           <p><strong>COUNCIL:</strong> <a href="${values[0].data.districtURL}" target="_blank">${values[0].data.district}</a></p>
           <p><strong>COUNCIL MEMBER:</strong> <a href="http://${siteURL}${values[0].data.council.url}" target="_blank">${values[0].data.council.name}</a></p>
+          <p><strong>COUNCIL MEMBER PHONE:</strong> ${values[0].data.council.phone}</p>
           <p><strong>DISTRICT MANAGER:</strong> <a href="${values[0].data.dmanager.url}" target="_blank">${values[0].data.dmanager.name}</a></p>
           <p><strong>DISTRICT MANAGER PHONE:</strong> ${values[0].data.dmanager.phone}</p>
           <p><strong>DEPUTY MANAGER:</strong> <a href="${values[0].data.ddmanager.url}" target="_blank">${values[0].data.ddmanager.name}</a></p>
@@ -157,7 +165,7 @@ export default class Panel {
         </div>
       </article>
       <article class="info-section">
-      <span>BLIGHT TICKETS</span>`;
+      <span>RENTAL ENFORCEMENT STATUS</span>`;
     }else{
       tempHTML += `
       <article class="info-section">
@@ -173,8 +181,28 @@ export default class Panel {
         </div>
       </article>
       <article class="info-section">
-      <span>BLIGHT TICKETS</span>`;
+      <span>RENTAL ENFORCEMENT STATUS</span>`;
     }
+    if(values[10].data.features.length){
+      values[10].data.features.forEach(function(value){
+        tempHTML += `
+        <div>
+          <p><strong>REGISTER:</strong> ${moment(value.properties.csa_date3).format('MMM DD, YYYY')}</p>
+          <p><strong>CERTIFIED:</strong> ${values[11].data.features.length ? `${moment(values[11].data.features[0].properties.csa_date3).format('MMM DD, YYYY')}` : `Not certified`}</p>
+        </div>
+        `;
+      });
+      tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>`;
+    }else{
+      tempHTML += `
+      <div>
+        <p><strong>REGISTER:</strong> Not registered</p>
+        <p><strong>CERTIFIED:</strong> Not certified</p>
+      </div>`;
+    }
+    tempHTML += `</article>
+    <article class="info-section">
+    <span>BLIGHT TICKETS</span>`;
     if(values[4].data.length){
       values[4].data.forEach(function(value){
         tempHTML += `
@@ -243,7 +271,7 @@ export default class Panel {
     }
     tempHTML += `</article>
     <article class="info-section">
-    <span>DEMOLITIONS</span>`;
+    <span>DEMOLITIONS NEAR YOU</span>`;
     if(values[6].data.length){
       values[6].data.forEach(function(value){
         tempHTML += `
@@ -279,7 +307,6 @@ export default class Panel {
           <p><strong>TYPE:</strong> ${value.request_type_title}</p>
           <p><strong>STATUS:</strong> ${value.status}</p>
           <p><strong>REPORTED ON:</strong> ${moment(value.created_at).format('MMM DD, YYYY')}</p>
-          <p><strong>DESCRIPTION:</strong> ${value.description}</p>
         </div>`;
       });
       tempHTML += `

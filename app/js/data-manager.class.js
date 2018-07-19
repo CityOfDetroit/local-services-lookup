@@ -16,7 +16,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-1",
         council:{
           name: 'James Tate',
-          url: '/government/city-council/city-council-district-1'
+          url: '/government/city-council/city-council-district-1',
+          phone: '(313)224-1027'
         },
         dmanager:{
           name: 'Stephanie Young',
@@ -34,7 +35,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-2",
         council:{
           name: 'Roy McCalister Jr.',
-          url: '/government/city-council/city-council-district-2'
+          url: '/government/city-council/city-council-district-2',
+          phone: '(313)224-4535'
         },
         dmanager:{
           name: 'Kim Tandy',
@@ -52,7 +54,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-3",
         council:{
           name: 'Scott Benson',
-          url: '/government/city-council/city-council-district-3'
+          url: '/government/city-council/city-council-district-3',
+          phone: '(313)224-1198'
         },
         dmanager:{
           name: 'Erinn Harris',
@@ -70,7 +73,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-4",
         council:{
           name: 'André L. Spivey',
-          url: '/government/city-council/city-council-district-4'
+          url: '/government/city-council/city-council-district-4',
+          phone: '(313)224-4841'
         },
         dmanager:{
           name: 'Letty Azar',
@@ -88,7 +92,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-5",
         council:{
           name: 'Mary Sheffield',
-          url: '/government/city-council/city-council-district-5'
+          url: '/government/city-council/city-council-district-5',
+          phone: '(313)224-4505'
         },
         dmanager:{
           name: 'Marshall Bullock',
@@ -106,7 +111,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-6",
         council:{
           name: 'Raquel Castañeda-López',
-          url: '/government/city-council/city-council-district-6'
+          url: '/government/city-council/city-council-district-6',
+          phone: '(313)224-2450'
         },
         dmanager:{
           name: 'Ninfa Cancel',
@@ -124,7 +130,8 @@ export default class DataManager {
         districtURL: "http://theneighborhoods.org/districts/district-7",
         council:{
           name: 'Gabe Leland',
-          url: '/government/city-council/city-council-district-7'
+          url: '/government/city-council/city-council-district-7',
+          phone: '(313)224-2151'
         },
         dmanager:{
           name: 'Ray Solomon II',
@@ -201,6 +208,22 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "permit-data", "data": data});
+      });
+    });
+    let rentalData = new Promise((resolve, reject) => {
+      let url = `https://data.detroitmi.gov/resource/vphr-kg52.geojson?$query=SELECT * WHERE parcelnum='${location.attributes.User_fld}'`;
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "rental-data", "data": data});
+      });
+    });
+    let rentalCertData = new Promise((resolve, reject) => {
+      let url = `https://data.detroitmi.gov/resource/baxk-dxw9.geojson?$query=SELECT * WHERE parcelnum='${location.attributes.User_fld}'`;
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "rental-cert-data", "data": data});
       });
     });
     let blightData = new Promise((resolve, reject) => {
@@ -280,7 +303,7 @@ export default class DataManager {
       });
     });
 
-    Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling]).then(values => {
+    Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData]).then(values => {
         let dataSets = [];
         let initalLoadInfo = {};
         let initialLoadChecker = true;
