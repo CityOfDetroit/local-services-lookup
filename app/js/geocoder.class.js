@@ -73,6 +73,8 @@ export default class Geocoder {
             if(parcel !== null){
                 geocoder.clearSuggestions(geocoder);
                 geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+            }else{
+                geocoder.needGeocode(parcel.address, geocoder);
             }
         }
     });
@@ -80,6 +82,12 @@ export default class Geocoder {
 
   selectSuggestion(ev, geocoder){
     console.log(ev.target);
+    if(ev.target.attributes[0].value === 'no-parcel'){
+        geocoder.clearSuggestions(geocoder);
+        geocoder.needGeocode(ev.target.innerText, geocoder);
+    }else{
+        geocoder.supplementGeocoder(ev.target.innerText, geocoder, 'submit');
+    }
   }
 
   inputChange (ev, geocoder){
@@ -93,6 +101,11 @@ export default class Geocoder {
     while (geocoder.form.childNodes[1].firstChild) {
         geocoder.form.childNodes[1].removeChild(geocoder.form.childNodes[1].firstChild);
     }
+  }
+
+  needGeocode(address, geocoder){
+      console.log(address);
+      geocoder.controller.panel.createErrorPanel(address);
   }
 
   submit(ev, geocoder){
