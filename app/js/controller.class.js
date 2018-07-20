@@ -14,7 +14,7 @@ export default class Controller {
     this.panel = new Panel();
     this.dataManager = new DataManager();
     this.map = new Map(map, this);
-    this.geocoder = new Geocoder('geocoder');
+    this.geocoder = new Geocoder('geocoder', this);
     this.initialLoad(this);
   }
   initialLoad(controller){
@@ -27,38 +27,7 @@ export default class Controller {
       controller.defaultSettings.endDate = moment().add(5,'months').format('YYYY-MM-DD');
     });
   }
-  supplementGeocoder(address){
-    let tempAddr = address.split(",");
-    tempAddr = tempAddr[0];
-    tempAddr = tempAddr.split(" ");
-    let newTempAddr = '';
-    let size = tempAddr.length;
-    tempAddr.forEach(function(item, index) {
-      newTempAddr += item;
-      ((index < size) && (index + 1) !== size) ? newTempAddr += '+': 0;
-    });
-    // console.log(newTempAddr);
-    let candidates = [];
-    let url = `https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=${newTempAddr}&category=&outFields=Address&maxLocations=2&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json`
-    fetch(url)
-    .then((resp) => resp.json()) // Transform the data into json
-    .then(function(data) {
-      data.candidates.forEach((candidate)=>{
-        candidates.push({
-          center: [candidate.location.x , candidate.location.y],
-          geometry: {
-              type: "Point",
-              coordinates: [candidate.location.x , candidate.location.y]
-          },
-          place_name: candidate.address, // eslint-disable-line camelcase
-          place_type: ['coordinate'], // eslint-disable-line camelcase
-          properties: {},
-          type: 'Feature'
-        })
-      });
-    });
-    return candidates;
-  }
+  
   geocoderResults(e, controller){
     let tempAddr = e.result.place_name.split(",");
     tempAddr = tempAddr[0];

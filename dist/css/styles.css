@@ -112,14 +112,15 @@ img {
   display: flex; }
   #local-services #geocoder {
     flex: 1;
-    padding-left: 1em;
-    color: #fff; }
-    #local-services #geocoder .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
-      border-bottom: 0.2em solid #004544;
-      box-shadow: none;
-      background-color: transparent;
-      width: 100%;
-      border-radius: 0; }
-      #local-services #geocoder .mapboxgl-ctrl-geocoder.mapboxgl-ctrl .geocoder-icon.geocoder-icon-search {
-        right: .5em;
-        left: auto; }
+    padding-left: 1em; }
+    #local-services #geocoder form ul {
+      list-style: none; }
+      #local-services #geocoder form ul li {
+        margin: 0;
+        padding: .25em .5em;
+        background-color: #d7eee0;
+        cursor: pointer;
+        transition: .2s all; }
+      #local-services #geocoder form ul li:hover {
+        background-color: #9fd5b3;
+        transition: .2s all; }

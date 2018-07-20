@@ -50,18 +50,23 @@ img{width: 100%;}
   #geocoder{
     flex: 1;
     padding-left: 1em;
-    color: $white;
 
-    .mapboxgl-ctrl-geocoder.mapboxgl-ctrl{
-      border-bottom: .2em solid $color-1;
-      box-shadow: none;
-      background-color: transparent;
-      width: 100%;
-      border-radius: 0;
+    form{
+      ul{
+        list-style: none;
 
-      .geocoder-icon.geocoder-icon-search{
-        right: .5em;
-        left: auto;
+        li{
+          margin: 0;
+          padding: .25em .5em;
+          background-color: #d7eee0;
+          cursor: pointer;
+          transition: .2s all;
+        }
+
+        li:hover{
+          background-color: #9fd5b3;
+          transition: .2s all;
+        }
       }
     }
   }
