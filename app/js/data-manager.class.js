@@ -28,7 +28,12 @@ export default class DataManager {
           name: 'Reggie Reg Davis',
           url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
           phone: '(313)236-3484'
-        }
+        },
+        enforcement: [{
+          name: 'Edna Keys',
+          email: 'KeysE@detroitmi.gov',
+          phone: '(313)588-2137'
+        }]
       },
       d2: {
         district: "District 2",
@@ -47,7 +52,12 @@ export default class DataManager {
           name: 'Sean Davis',
           url: '/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1',
           phone: '(313)236-3489'
-        }
+        },
+        enforcement: [{
+          name: 'Trish Williams',
+          email: 'williamstr@detroitmi.gov',
+          phone: '(313)938-1824'
+        }]
       },
       d3: {
         district: "District 3",
@@ -66,7 +76,12 @@ export default class DataManager {
           name: 'Ernest Johnson',
           url: '/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1',
           phone: '(313)348-8464'
-        }
+        },
+        enforcement: [{
+          name: 'Moncy Chacko',
+          email: 'ChackoM@detroitmi.gov',
+          phone: '(313)269-4145'
+        }]
       },
       d4: {
         district: "District 4",
@@ -85,7 +100,18 @@ export default class DataManager {
           name: 'Toson Knight',
           url: '/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1',
           phone: '(313)236-3520'
+        },
+        enforcement: [{
+          name: 'Donnie Wright',
+          email: 'WrightDo@detroitmi.gov',
+          phone: '(313)815-5542'
+        },
+        {
+          name: 'Wesley Bush',
+          email: 'BushW@detroitmi.gov',
+          phone: '(313)820-0871'
         }
+        ]
       },
       d5: {
         district: "District 5",
@@ -104,7 +130,14 @@ export default class DataManager {
           name: 'Kya Robertson',
           url: '/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1',
           phone: '(313)236-3528'
-        }
+        },
+        enforcement: [
+          {
+            name: 'Michael Madrigal',
+            email: 'MADRIGALM261@detroitmi.gov',
+            phone: '(313)949-6468'
+          }
+        ]
       },
       d6: {
         district: "District 6",
@@ -123,7 +156,19 @@ export default class DataManager {
           name: 'Ammie Woodruff',
           url: '/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1',
           phone: '(313)236-3529'
-        }
+        },
+        enforcement: [
+          {
+            name: 'Michael Addison',
+            email: 'AddisonM@detroitmi.gov',
+            phone: '(313)799-9225'
+          },
+          {
+            name: 'Dorjan Samuel',
+            email: 'samueld@detroitmi.gov',
+            phone: '(313)319-1654'
+          }
+        ]
       },
       d7: {
         district: "District 7",
@@ -142,7 +187,19 @@ export default class DataManager {
           name: 'Ammie Woodruff',
           url: '/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1',
           phone: '(313)236-3540'
-        }
+        },
+        enforcement: [
+          {
+            name: 'Ernest Thompson',
+            email: 'ThompsonEr@detroitmi.gov',
+            phone: '(313)498-0796'
+          },
+          {
+            name: 'Louis Smith',
+            email: 'SmithL@detroitmi.gov',
+            phone: '(313)948-5141'
+          }
+        ]
       }
     }
   }
@@ -235,7 +292,7 @@ export default class DataManager {
       });
     });
     let salesHistoryData = new Promise((resolve, reject) => {
-      let url = "https://data.detroitmi.gov/resource/9xku-658c.json?$query=SELECT * WHERE parcel_no='" + location.attributes.User_fld + "' ORDER BY sale_date DESC LIMIT 2";
+      let url = "https://data.detroitmi.gov/resource/9xku-658c.json?$query=SELECT * WHERE parcel_no='" + location.attributes.User_fld + "' ORDER BY sale_date DESC LIMIT 1";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -247,11 +304,19 @@ export default class DataManager {
       let buffer = turf.buffer(point, 1, {units: 'miles'});
       let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
       let socrataPolygon = WKT.convert(simplePolygon);
-      let url = "https://data.detroitmi.gov/resource/nfx3-ihbp.json?$query=SELECT * WHERE demolish_by_date between '" + controller.defaultSettings.startDate + "' AND '" + controller.defaultSettings.endDate + "' AND within_polygon(location,"+ JSON.stringify(socrataPolygon) + ") ORDER BY demolish_by_date ASC LIMIT 3";
+      let url = `https://data.detroitmi.gov/resource/nfx3-ihbp.json?$query=SELECT * WHERE demolish_by_date between '${controller.defaultSettings.startDate}' AND '${controller.defaultSettings.endDate}' AND parcel_id <> '${location.attributes.User_fld}' AND within_polygon(location,${JSON.stringify(socrataPolygon)}) ORDER BY demolish_by_date ASC LIMIT 3`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "demos-data", "data": data});
+      });
+    });
+    let demoStatus = new Promise((resolve, reject) => {
+      let url = "https://data.detroitmi.gov/resource/nfx3-ihbp.json?$query=SELECT * WHERE parcel_id='" + location.attributes.User_fld + "' ORDER BY demolish_by_date DESC LIMIT 1";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "demo-status", "data": data});
       });
     });
     let pSchools = new Promise((resolve, reject) => {
@@ -303,7 +368,7 @@ export default class DataManager {
       });
     });
 
-    Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData]).then(values => {
+    Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus]).then(values => {
         let dataSets = [];
         let initalLoadInfo = {};
         let initialLoadChecker = true;

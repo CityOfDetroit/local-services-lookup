@@ -1,10 +1,10 @@
 'use strict';
 import "babel-polyfill";
 import "isomorphic-fetch";
-const moment = require('moment');
-const turf = require('@turf/turf');
-const arcGIS = require('terraformer-arcgis-parser');
-const WKT = require('terraformer-wkt-parser');
+// const moment = require('moment');
+// const turf = require('@turf/turf');
+// const arcGIS = require('terraformer-arcgis-parser');
+// const WKT = require('terraformer-wkt-parser');
 export default class Geocoder {
   constructor(container, controller) {
     this.form = null;
@@ -36,7 +36,6 @@ export default class Geocoder {
   }
 
   supplementGeocoder(address, geocoder, type){
-    console.log(address);
     let tempAddr = address.split(",");
     tempAddr = tempAddr[0];
     tempAddr = tempAddr.split(" ");
@@ -52,13 +51,17 @@ export default class Geocoder {
     fetch(url)
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
-        console.log(data);
         if(type === 'suggestions'){
             data.candidates.forEach((item)=>{
-                console.log(item);
                 let sugg = document.createElement('li');
-                sugg.innerText = item.address;
-                sugg.setAttribute('data-parsel', (item.attributes.User_fld === '') ? 'no-parcel' : item.attributes.User_fld);
+                if(item.attributes.User_fld === ''){
+                    sugg.innerHTML = item.address;
+                    sugg.setAttribute('data-parsel', 'no-parcel');
+                }else{
+                    sugg.innerHTML = `${item.address} <span class="geo-recomended">RECOMENDED</span>`;
+                    sugg.setAttribute('data-parsel', item.attributes.User_fld);
+                }
+                
                 sugg.onclick = (ev) => {
                     geocoder.selectSuggestion(ev, geocoder);
                 }
@@ -66,7 +69,6 @@ export default class Geocoder {
             });
         }else{
             let parcel = null;
-            console.log('submiting');
             data.candidates.forEach((item) => {
                 (item.attributes.User_fld === '') ? 0 : parcel = item;
             });
@@ -81,7 +83,6 @@ export default class Geocoder {
   }
 
   selectSuggestion(ev, geocoder){
-    console.log(ev.target);
     if(ev.target.attributes[0].value === 'no-parcel'){
         geocoder.clearSuggestions(geocoder);
         geocoder.needGeocode(ev.target.innerText, geocoder);
@@ -91,9 +92,31 @@ export default class Geocoder {
   }
 
   inputChange (ev, geocoder){
-    if(ev.key != 'Enter'){
-        geocoder.clearSuggestions(geocoder);
-        geocoder.supplementGeocoder(ev.target.value, geocoder, 'suggestions');
+    switch (ev.key) {
+        case 'Enter':
+            
+            break;
+    
+        case 'ArrowDown':
+
+            break;
+
+        case 'ArrowUp':
+
+            break;
+
+        case 'ArrowRight':
+
+            break;
+
+        case 'ArrowLeft':
+
+            break;
+
+        default:
+            geocoder.clearSuggestions(geocoder);
+            geocoder.supplementGeocoder(ev.target.value, geocoder, 'suggestions');
+            break;
     }
   }
 
@@ -104,14 +127,11 @@ export default class Geocoder {
   }
 
   needGeocode(address, geocoder){
-      console.log(address);
       geocoder.controller.panel.createErrorPanel(address);
   }
 
   submit(ev, geocoder){
       ev.preventDefault();
-      console.log('submit');
-      console.log(ev);
       geocoder.supplementGeocoder(ev.target['0'].value, geocoder, 'submit');
   }
 }

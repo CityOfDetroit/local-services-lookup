@@ -60,7 +60,14 @@ img{width: 100%;}
           padding: .25em .5em;
           background-color: #d7eee0;
           cursor: pointer;
+          text-transform: uppercase;
           transition: .2s all;
+
+          .geo-recomended{
+            float: right;
+            font-weight: bold;
+            color: #004544;
+          }
         }
 
         li:hover{

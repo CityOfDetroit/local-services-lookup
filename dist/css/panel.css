@@ -13,7 +13,8 @@
     border-bottom: 0.25em solid #E48F22;
     margin-bottom: 1em; }
   #local-services-results.active .local-content {
-    column-count: 1; }
+    column-count: 1;
+    color: #fff; }
     #local-services-results.active .local-content .info-section {
       margin-bottom: 1em; }
       #local-services-results.active .local-content .info-section span {

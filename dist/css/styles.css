@@ -14,7 +14,8 @@
     border-bottom: 0.25em solid #E48F22;
     margin-bottom: 1em; }
   #local-services-results.active .local-content {
-    column-count: 1; }
+    column-count: 1;
+    color: #fff; }
     #local-services-results.active .local-content .info-section {
       margin-bottom: 1em; }
       #local-services-results.active .local-content .info-section span {
@@ -120,7 +121,12 @@ img {
         padding: .25em .5em;
         background-color: #d7eee0;
         cursor: pointer;
+        text-transform: uppercase;
         transition: .2s all; }
+        #local-services #geocoder form ul li .geo-recomended {
+          float: right;
+          font-weight: bold;
+          color: #004544; }
       #local-services #geocoder form ul li:hover {
         background-color: #9fd5b3;
         transition: .2s all; }

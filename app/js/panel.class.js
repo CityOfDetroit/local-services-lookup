@@ -52,6 +52,13 @@ export default class Panel {
           <p><strong>DISTRICT MANAGER PHONE:</strong> ${values[0].data.dmanager.phone}</p>
           <p><strong>DEPUTY MANAGER:</strong> <a href="${values[0].data.ddmanager.url}" target="_blank">${values[0].data.ddmanager.name}</a></p>
           <p><strong>DEPUTY MANAGER PHONE:</strong> ${values[0].data.ddmanager.phone}</p>
+          ${values[0].data.enforcement.map(inspector =>
+            `
+            <p><strong>ENFORCEMENT INSPECTOR:</strong> ${inspector.name}</p>
+            <p><strong>ENFORCEMENT INSPECTOR EMAIL:</strong> <a href="mailto:${inspector.email}">${inspector.email}</a></p>
+            <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${inspector.phone}</p>
+            `
+          ).join('')}
         </div>
       </article>`;
     }else{
@@ -153,9 +160,8 @@ export default class Panel {
       }
       tempHTML += `
       <article class="info-section">
-        <span>OWNER</span>
+        <span>OWNER'S ADDRESS</span>
         <div>
-          <p><strong>NAME:</strong> ${values[2].data.ownername1}</p>
           <p><strong>CITY:</strong> ${values[2].data.ownercity}</p>
           <p><strong>STATE:</strong> ${values[2].data.ownerstate}</p>
           <p><strong>ADDRESS:</strong> ${values[2].data.ownerstreetaddr}</p>
@@ -253,8 +259,6 @@ export default class Panel {
         <div>
           <p><strong>SALE DATE:</strong> ${moment(value.sale_date).format('MMM DD, YYYY')}</p>
           <p><strong>SALE PRICE:</strong> $${parseInt(value.sale_price).toLocaleString()}</p>
-          <p><strong>GRANTEE:</strong> ${value.grantee}</p>
-          <p><strong>GRANTOR:</strong> ${value.grantor}</p>
         </div>
         `;
       });
@@ -289,7 +293,26 @@ export default class Panel {
         <p>NO BUILDING PERMITS FOUND</p>
       </div>`;
     }
-    tempHTML += `</article>
+    tempHTML += `</article>`;
+    if(values[12].data.length){
+      tempHTML += `<article class="info-section">
+      <span>DEMOLITION STATUS</span>`;
+      values[12].data.forEach(function(value){
+        console.log(value);
+        
+        tempHTML += `
+          <div>
+            <p><STRONG>WARNING!</STRONG></p>
+            <p>SQUEDULED FOR DEMOLITION ON</p> 
+            <p><strong>${moment(value.demolish_by_date).format('MMM DD, YYYY')}</stron></p>
+          </div>
+        `;
+      });
+      tempHTML += `
+      <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+      </article>`;
+    }
+    tempHTML += `
     <article class="info-section">
     <span>DEMOLITIONS NEAR YOU</span>`;
     if(values[6].data.length){
@@ -303,7 +326,7 @@ export default class Panel {
           <p><strong>CONTRACTOR:</strong> ${value.contractor_name}</p>
           <p><strong>COUNCIL DISTRICT:</strong> ${value.council_district}</p>
           <p><strong>NEIGHBORHOOD:</strong> ${value.neighborhood}</p>
-          <p><strong>DATE:</strong> ${moment(value.demolition_date).format('MMM DD, YYYY')}</p>
+          <p><strong>EXPECTED DATE:</strong> ${moment(value.demolish_by_date).format('MMM DD, YYYY')}</p>
         </div>`;
       });
       tempHTML += `
@@ -330,7 +353,10 @@ export default class Panel {
         </div>`;
       });
       tempHTML += `
-      <h4><a href="https://seeclickfix.com/enhanced_watch_areas/674" target="_blank">MORE INFO</a></h4>
+      <h4>
+      <a href="https://seeclickfix.com/enhanced_watch_areas/674" target="_blank">MORE INFO</a>
+      <a href="/webapp/improve-detroit-report-issue-online" target="_blank">REPORT ISSUE</a>
+      </h4>
       </article>`;
     }else{
       tempHTML += `
