@@ -25,13 +25,12 @@ export default class DataManager {
           phone: '(313)236-3473'
         },
         ddmanager: {
-          name: 'Reggie Reg Davis',
+          name: 'Latrice McClendon',
           url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
           phone: '(313)236-3484'
         },
         enforcement: [{
           name: 'Edna Keys',
-          email: 'KeysE@detroitmi.gov',
           phone: '(313)588-2137'
         }]
       },
@@ -55,7 +54,6 @@ export default class DataManager {
         },
         enforcement: [{
           name: 'Trish Williams',
-          email: 'williamstr@detroitmi.gov',
           phone: '(313)938-1824'
         }]
       },
@@ -79,7 +77,6 @@ export default class DataManager {
         },
         enforcement: [{
           name: 'Moncy Chacko',
-          email: 'ChackoM@detroitmi.gov',
           phone: '(313)269-4145'
         }]
       },
@@ -103,12 +100,10 @@ export default class DataManager {
         },
         enforcement: [{
           name: 'Donnie Wright',
-          email: 'WrightDo@detroitmi.gov',
           phone: '(313)815-5542'
         },
         {
           name: 'Wesley Bush',
-          email: 'BushW@detroitmi.gov',
           phone: '(313)820-0871'
         }
         ]
@@ -134,7 +129,6 @@ export default class DataManager {
         enforcement: [
           {
             name: 'Michael Madrigal',
-            email: 'MADRIGALM261@detroitmi.gov',
             phone: '(313)949-6468'
           }
         ]
@@ -160,12 +154,10 @@ export default class DataManager {
         enforcement: [
           {
             name: 'Michael Addison',
-            email: 'AddisonM@detroitmi.gov',
             phone: '(313)799-9225'
           },
           {
             name: 'Dorjan Samuel',
-            email: 'samueld@detroitmi.gov',
             phone: '(313)319-1654'
           }
         ]
@@ -191,12 +183,10 @@ export default class DataManager {
         enforcement: [
           {
             name: 'Ernest Thompson',
-            email: 'ThompsonEr@detroitmi.gov',
             phone: '(313)498-0796'
           },
           {
             name: 'Louis Smith',
-            email: 'SmithL@detroitmi.gov',
             phone: '(313)948-5141'
           }
         ]

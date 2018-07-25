@@ -1,6 +1,7 @@
 'use strict';
 import "babel-polyfill";
 import "isomorphic-fetch";
+import firebase from "firebase";
 // const moment = require('moment');
 // const turf = require('@turf/turf');
 // const arcGIS = require('terraformer-arcgis-parser');
@@ -9,6 +10,14 @@ export default class Geocoder {
   constructor(container, controller) {
     this.form = null;
     this.controller = controller;
+    this.config = {
+        apiKey: "AIzaSyCbDRSJy9owEb-dbWlSJo6HkkeG4Y1LHRQ",
+        authDomain: "local-services-loopkup.firebaseapp.com",
+        databaseURL: "https://local-services-loopkup.firebaseio.com",
+        projectId: "local-services-loopkup",
+        storageBucket: "local-services-loopkup.appspot.com",
+        messagingSenderId: "836263253195"
+    };
     this.init(document.getElementById(container), this);
   }
 
@@ -17,25 +26,55 @@ export default class Geocoder {
     let label = document.createElement('label');
     let input = document.createElement('input');
     let suggestions = document.createElement('ul');
+    let icon = document.createElement('i');
     form.addEventListener('submit', (ev) => {
         this.submit(ev, geocoder);
     });
+    icon.className = 'fas fa-map-marker-alt';
     label.innerText = "My Home Info:";
     label.setAttribute("for", "geocoder-input"); 
     input.type = 'text';
     input.placeholder = 'Enter address';
     input.setAttribute('id', 'geocoder-input');
+    input.setAttribute('autocomplete', 'off');
     input.addEventListener('keyup', (ev)=>{
         this.inputChange(ev, geocoder);
     });
-    label.appendChild(input);
     form.appendChild(label);
+    form.appendChild(input);
+    form.appendChild(icon);
     form.appendChild(suggestions);
     container.appendChild(form);
     this.form = form;
+
+    // let url = 'https://www.arcgis.com/sharing/rest/oauth2/token';
+    // let param = {
+    //     'client_id' : 'OQ5VQliiK0mvcxxj',
+    //     'client_secret': '30ae1d143f504aad9a88cb0e58ede662',
+    //     'grant_type': 'client_credentials'
+    // }
+    // let postRequest = new Request(url, {
+    //     method: 'POST',
+    //     body: JSON.stringify(param),
+    //     headers: new Headers({ 
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //     "Cache-Control": "no-cache"
+    //     }),
+    //     mode: 'cors',
+    //     cache: 'default'
+    // });
+    // fetch(postRequest)
+    // .then((resp) => {
+    //     console.log(resp);
+    //     // console.log(resp.status);
+    //     if(resp.status === 201){
+    //         // console.log('item submitted');
+    //     }
+    // });
   }
 
   supplementGeocoder(address, geocoder, type){
+    // if(type !== 'suggestions')geocoder.controller.panel.loaderToggle(true);
     let tempAddr = address.split(",");
     tempAddr = tempAddr[0];
     tempAddr = tempAddr.split(" ");
@@ -48,46 +87,61 @@ export default class Geocoder {
     // console.log(newTempAddr);
     let url = `https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=${newTempAddr}&category=&outFields=User_fld&maxLocations=4&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json`;
     
-    fetch(url)
-    .then((resp) => resp.json()) // Transform the data into json
-    .then(function(data) {
-        if(type === 'suggestions'){
-            data.candidates.forEach((item)=>{
-                let sugg = document.createElement('li');
-                if(item.attributes.User_fld === ''){
-                    sugg.innerHTML = item.address;
-                    sugg.setAttribute('data-parsel', 'no-parcel');
-                }else{
-                    sugg.innerHTML = `${item.address} <span class="geo-recomended">RECOMENDED</span>`;
-                    sugg.setAttribute('data-parsel', item.attributes.User_fld);
-                }
-                
-                sugg.onclick = (ev) => {
-                    geocoder.selectSuggestion(ev, geocoder);
-                }
-                geocoder.form.childNodes[1].appendChild(sugg);
-            });
-        }else{
-            let parcel = null;
-            data.candidates.forEach((item) => {
-                (item.attributes.User_fld === '') ? 0 : parcel = item;
-            });
-            if(parcel !== null){
-                geocoder.clearSuggestions(geocoder);
-                geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+    try {
+        fetch(url)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function(data) {
+            // console.log(data);
+            if(type === 'suggestions'){
+                data.candidates.forEach((item)=>{
+                    let sugg = document.createElement('li');
+                    if(item.attributes.User_fld === ''){
+                        sugg.innerHTML = item.address;
+                        sugg.setAttribute('data-parsel', 'no-parcel');
+                    }else{
+                        sugg.innerHTML = `${item.address} <span class="geo-recomended">RECOMMENDED</span>`;
+                        sugg.setAttribute('data-parsel', item.attributes.User_fld);
+                    }
+                    
+                    sugg.onclick = (ev) => {
+                        geocoder.selectSuggestion(ev, geocoder);
+                    }
+                    geocoder.form.childNodes[3].appendChild(sugg);
+                });
             }else{
-                geocoder.needGeocode(parcel.address, geocoder);
+                geocoder.controller.panel.createErrorPanel(address, false);
+                let parcel = null;
+                data.candidates.forEach((item) => {
+                    (item.attributes.User_fld === '') ? 0 : parcel = item;
+                });
+                if(parcel === null){
+                    geocoder.needGeocode(address, geocoder);
+                    // geocoder.controller.panel.loaderToggle(false);
+                    geocoder.clearSuggestions(geocoder);
+                }else{
+                    // geocoder.controller.panel.loaderToggle(false);
+                    geocoder.clearSuggestions(geocoder);
+                    geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+                }
             }
-        }
-    });
+        });
+    } catch (error) {
+        geocoder.controller.panel.createErrorPanel(address, true);
+    }
   }
 
   selectSuggestion(ev, geocoder){
-    if(ev.target.attributes[0].value === 'no-parcel'){
-        geocoder.clearSuggestions(geocoder);
-        geocoder.needGeocode(ev.target.innerText, geocoder);
+    let selection = null;
+    if(ev.target.tagName === 'SPAN'){
+        selection = ev.target.parentNode;
     }else{
-        geocoder.supplementGeocoder(ev.target.innerText, geocoder, 'submit');
+        selection = ev.target;
+    }
+    if(selection.attributes[0].value === 'no-parcel'){
+        geocoder.clearSuggestions(geocoder);
+        geocoder.needGeocode(selection.innerText, geocoder);
+    }else{
+        geocoder.supplementGeocoder(selection.innerText, geocoder, 'submit');
     }
   }
 
@@ -121,13 +175,35 @@ export default class Geocoder {
   }
 
   clearSuggestions(geocoder){
-    while (geocoder.form.childNodes[1].firstChild) {
-        geocoder.form.childNodes[1].removeChild(geocoder.form.childNodes[1].firstChild);
+    while (geocoder.form.childNodes[3].firstChild) {
+        geocoder.form.childNodes[3].removeChild(geocoder.form.childNodes[3].firstChild);
     }
   }
 
   needGeocode(address, geocoder){
-      geocoder.controller.panel.createErrorPanel(address);
+      geocoder.controller.panel.clearPanel();
+      geocoder.controller.panel.createErrorPanel(address, true);
+      firebase.initializeApp(geocoder.config);
+      firebase.auth().signInAnonymously().catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          console.log(uid);
+          
+          // ...
+        } else {
+          // User is signed out.
+          // ...
+        }
+        // ...
+      });
   }
 
   submit(ev, geocoder){

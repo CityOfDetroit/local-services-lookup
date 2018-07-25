@@ -29,7 +29,5 @@ import Controller from './controller.class.js';
   });
   document.getElementById('close-services-btn').addEventListener('click', function(){
     document.getElementById('local-services-results').className = '';
-    document.querySelector('.mapboxgl-ctrl-geocoder.mapboxgl-ctrl input').value = '';
-    document.querySelector('button.geocoder-icon.geocoder-icon-close').style.display = 'none';
   });
 })(window);
