@@ -46,31 +46,6 @@ export default class Geocoder {
     form.appendChild(suggestions);
     container.appendChild(form);
     this.form = form;
-
-    // let url = 'https://www.arcgis.com/sharing/rest/oauth2/token';
-    // let param = {
-    //     'client_id' : 'OQ5VQliiK0mvcxxj',
-    //     'client_secret': '30ae1d143f504aad9a88cb0e58ede662',
-    //     'grant_type': 'client_credentials'
-    // }
-    // let postRequest = new Request(url, {
-    //     method: 'POST',
-    //     body: JSON.stringify(param),
-    //     headers: new Headers({ 
-    //     'Content-Type': 'application/x-www-form-urlencoded',
-    //     "Cache-Control": "no-cache"
-    //     }),
-    //     mode: 'cors',
-    //     cache: 'default'
-    // });
-    // fetch(postRequest)
-    // .then((resp) => {
-    //     console.log(resp);
-    //     // console.log(resp.status);
-    //     if(resp.status === 201){
-    //         // console.log('item submitted');
-    //     }
-    // });
   }
 
   supplementGeocoder(address, geocoder, type){
