@@ -2,6 +2,7 @@
 import "babel-polyfill";
 import "isomorphic-fetch";
 import firebase from "firebase";
+require("firebase/functions");
 // const moment = require('moment');
 // const turf = require('@turf/turf');
 // const arcGIS = require('terraformer-arcgis-parser');
@@ -22,6 +23,7 @@ export default class Geocoder {
   }
 
   init(container, geocoder){
+    firebase.initializeApp(geocoder.config);
     let form = document.createElement('form');
     let label = document.createElement('label');
     let input = document.createElement('input');
@@ -156,29 +158,35 @@ export default class Geocoder {
   }
 
   needGeocode(address, geocoder){
-      geocoder.controller.panel.clearPanel();
-      geocoder.controller.panel.createErrorPanel(address, true);
-      firebase.initializeApp(geocoder.config);
-      firebase.auth().signInAnonymously().catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-      });
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is signed in.
-          var isAnonymous = user.isAnonymous;
-          var uid = user.uid;
-          console.log(uid);
-          
-          // ...
-        } else {
-          // User is signed out.
-          // ...
-        }
-        // ...
-      });
+    geocoder.controller.panel.clearPanel();
+    geocoder.controller.panel.createErrorPanel(address, true);
+    fetch('https://us-central1-local-services-loopkup.cloudfunctions.net/getToken')
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function(data) {
+        // console.log(data);
+        let params = [
+            {
+              "attributes" : {
+                "user_input" : address
+              },
+              "geometry" : {
+                "x" : 0,
+                "y" : 0
+              }
+            }
+        ];
+        let request = new Request(`https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/addressvalidator/FeatureServer/0/addFeatures?token=${data.access_token}&features=${encodeURIComponent(JSON.stringify(params))}&f=json`, {
+            method: 'POST',
+            body: '',
+            headers: new Headers(),
+            mode: 'cors',
+            cache: 'default'
+        });
+        fetch(request)
+        .then((res) => {
+            console.log(res);
+        });
+    });
   }
 
   submit(ev, geocoder){
