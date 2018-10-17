@@ -250,7 +250,7 @@ export default class Panel {
       values[4].data.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>TICKET ID:</strong> ${value.ticket_id}</p>
+          <p><strong>TICKET ID:</strong> ${value.ticket_number}</p>
           <p><strong>FINE AMOUNT:</strong> $${value.fine_amount}</p>
           <p><strong>AGENCY NAME:</strong> ${value.agency_name}</p>
           <p><strong>DISPOSITION:</strong> ${value.disposition}</p>
@@ -267,25 +267,25 @@ export default class Panel {
         <p>NO BLIGHT TICKETS FOUND</p>
       </div>`;
     }
-    tempHTML += `</article>
-    <article class="info-section">
-    <span>PROPERTY SALES HISTORY</span>`;
-    if(values[5].data.length){
-      values[5].data.forEach(function(value){
-        tempHTML += `
-        <div>
-          <p><strong>SALE DATE:</strong> ${moment(value.sale_date).format('MMM DD, YYYY')}</p>
-          <p><strong>SALE PRICE:</strong> $${parseInt(value.sale_price).toLocaleString()}</p>
-        </div>
-        `;
-      });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/9xku-658c" target="_blank">MORE INFO</a></h4>`;
-    }else{
-      tempHTML += `
-      <div>
-        <p>NO PROPERTY SALES HISTORY FOUND</p>
-      </div>`;
-    }
+    tempHTML += `</article>`;
+    // <article class="info-section">
+    // <span>PROPERTY SALES HISTORY</span>`;
+    // if(values[5].data.length){
+    //   values[5].data.forEach(function(value){
+    //     tempHTML += `
+    //     <div>
+    //       <p><strong>SALE DATE:</strong> ${moment(value.sale_date).format('MMM DD, YYYY')}</p>
+    //       <p><strong>SALE PRICE:</strong> $${parseInt(value.sale_price).toLocaleString()}</p>
+    //     </div>
+    //     `;
+    //   });
+    //   tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/9xku-658c" target="_blank">MORE INFO</a></h4>`;
+    // }else{
+    //   tempHTML += `
+    //   <div>
+    //     <p>NO PROPERTY SALES HISTORY FOUND</p>
+    //   </div>`;
+    // }
     tempHTML += `</article>
     <article class="info-section">
     <span>BUILDING PERMITS</span>`;
@@ -320,7 +320,7 @@ export default class Panel {
         tempHTML += `
           <div>
             <p><STRONG>WARNING!</STRONG></p>
-            <p>SQUEDULED FOR DEMOLITION ON</p> 
+            <p>SCHEDULED FOR DEMOLITION ON</p> 
             <p><strong>${moment(value.demolish_by_date).format('MMM DD, YYYY')}</stron></p>
           </div>
         `;
