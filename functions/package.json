@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "cors": "^2.8.4",
-    "firebase-admin": "~5.12.1",
+    "firebase-admin": "^5.12.1",
     "firebase-functions": "^2.0.0",
     "request": "^2.87.0",
     "request-promise": "^4.2.2"

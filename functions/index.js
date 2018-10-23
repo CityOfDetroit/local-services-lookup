@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 const requestGlobal = require('request');
 const cors = require('cors')({
     origin: true,
@@ -33,4 +34,12 @@ exports.getToken = functions.https.onRequest((request, response) => {
         });
     });
     
+});
+
+exports.getSuggestions = functions.https.onCall((data, context) => {
+    admin.initializeApp();
+    return admin.database().ref('/addresses/').once('value').then(function(snapshot) {
+        console.log(snapshot.val());
+        return snapshot.val();
+    });
 });

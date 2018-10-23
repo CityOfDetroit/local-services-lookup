@@ -1,33 +1,35 @@
 'use strict';
 import "babel-polyfill";
 import "isomorphic-fetch";
-import firebase from "firebase";
-require("firebase/functions");
-// const moment = require('moment');
-// const turf = require('@turf/turf');
-// const arcGIS = require('terraformer-arcgis-parser');
-// const WKT = require('terraformer-wkt-parser');
+// import firebase from "firebase";
+// require("firebase/functions");
 export default class Geocoder {
   constructor(container, controller) {
     this.form = null;
     this.controller = controller;
-    this.config = {
-        apiKey: "AIzaSyCbDRSJy9owEb-dbWlSJo6HkkeG4Y1LHRQ",
-        authDomain: "local-services-loopkup.firebaseapp.com",
-        databaseURL: "https://local-services-loopkup.firebaseio.com",
-        projectId: "local-services-loopkup",
-        storageBucket: "local-services-loopkup.appspot.com",
-        messagingSenderId: "836263253195"
-    };
+    
+    this.user = null;
     this.init(document.getElementById(container), this);
   }
 
   init(container, geocoder){
-    firebase.initializeApp(geocoder.config);
+    // firebase.initializeApp(geocoder.config);
+    // firebase.auth().onAuthStateChanged(function(user) {
+    //     if (user) {
+    //       geocoder.user = user;
+    //       // ...
+    //     } else {
+    //       // User is signed out.
+    //       // ...
+    //     }
+    //     // ...
+    // });
+    
     let form = document.createElement('form');
     let label = document.createElement('label');
     let input = document.createElement('input');
     let suggestions = document.createElement('ul');
+    let list = document.createElement('datalist');
     let icon = document.createElement('i');
     form.addEventListener('submit', (ev) => {
         this.submit(ev, geocoder);
@@ -36,18 +38,30 @@ export default class Geocoder {
     label.innerText = "My Home Info:";
     label.setAttribute("for", "geocoder-input"); 
     input.type = 'text';
+    input.setAttribute('list','addresses');
     input.placeholder = 'Enter address';
     input.setAttribute('id', 'geocoder-input');
     input.setAttribute('autocomplete', 'off');
     input.addEventListener('keyup', (ev)=>{
         this.inputChange(ev, geocoder);
     });
+    list.setAttribute('id','addresses');
+    
+
     form.appendChild(label);
     form.appendChild(input);
     form.appendChild(icon);
     form.appendChild(suggestions);
+    form.appendChild(list);
     container.appendChild(form);
     this.form = form;
+  }
+
+  writeUserData(userId, name, pass) {
+    firebase.database().ref('users/' + userId).set({
+      username: name,
+      password: pass
+    });
   }
 
   supplementGeocoder(address, geocoder, type){
@@ -62,6 +76,11 @@ export default class Geocoder {
       ((index < size) && (index + 1) !== size) ? newTempAddr += '+': 0;
     });
     // console.log(newTempAddr);
+    // let getSuggestions = firebase.functions().httpsCallable('getSuggestions');
+    // getSuggestions(address).then(function(result) {
+    //     // Read result of the Cloud Function.
+    //     console.log(result);
+    // });
     let url = `https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=${newTempAddr}&category=&outFields=User_fld&maxLocations=4&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json`;
     
     try {

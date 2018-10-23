@@ -28,6 +28,7 @@ export default class Panel {
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
+    document.querySelector('#local-services-results .data-form').innerHTML = `<a href="https://app.smartsheet.com/b/form/5d291f237bbe41c88d44bfcd56e5b620" target="_blank"><button>REPORT DATA ISSUES</button></a>`;;
     document.getElementById('local-services-results').className = 'active';
   }
 
@@ -384,6 +385,7 @@ export default class Panel {
       </div>
       </article>`;
     }
+
     return tempHTML;
   }
 }
