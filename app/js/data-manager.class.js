@@ -202,12 +202,12 @@ export default class DataManager {
     let council = new Promise((resolve, reject) => {
 
       let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/CouncilDistricts/FeatureServer/0/query?where=&objectIds=&time=&geometry=" + location.location.x + "%2C" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=name&returnGeometry=false&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
-      console.log(url);
+      // console.log(url);
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         let councilInfo = {"id": "council", "data": null};
-        console.log(data);
+        // console.log(data);
         switch (data.features[0].attributes.Name) {
           case "District 1":
             councilInfo.data = controller.dataManager.currentGovOfficials.d1;
@@ -242,6 +242,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "neighborhood", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let assessorsData = new Promise((resolve, reject) => {
@@ -250,6 +252,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "assessors-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let permitData = new Promise((resolve, reject) => {
@@ -258,6 +262,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "permit-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let rentalData = new Promise((resolve, reject) => {
@@ -266,6 +272,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "rental-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let rentalCertData = new Promise((resolve, reject) => {
@@ -274,6 +282,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "rental-cert-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let blightData = new Promise((resolve, reject) => {
@@ -282,6 +292,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "blight-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let salesHistoryData = new Promise((resolve, reject) => {
@@ -290,6 +302,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "sales-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let demosData = new Promise((resolve, reject) => {
@@ -302,6 +316,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "demos-data", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let demoStatus = new Promise((resolve, reject) => {
@@ -310,6 +326,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "demo-status", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let pSchools = new Promise((resolve, reject) => {
@@ -322,6 +340,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id" : "schools", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let npo = new Promise((resolve, reject) => {
@@ -342,6 +362,8 @@ export default class DataManager {
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "improve-det", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let recycling = new Promise((resolve, reject) => {
@@ -358,6 +380,8 @@ export default class DataManager {
         .then(function(data) {
           resolve({"id": "recycling", "data": data});
         });
+      }).catch( err => {
+        console.log(err);
       });
     });
 

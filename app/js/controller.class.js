@@ -43,9 +43,9 @@ export default class Controller {
     fetch(url)
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
-      // console.log(data);
+      console.log(controller.checkParcelValid(data.candidates[0].attributes.User_fld));
       if(data.candidates.length){
-        if(data.candidates[0].attributes.User_fld != ""){
+        if(data.candidates[0].attributes.User_fld != "" && controller.checkParcelValid(data.candidates[0].attributes.User_fld)){
           // console.log('parcel found');
           controller.dataManager.buildData(data.candidates[0], controller);
           // controller.panel.creatPanel("parcel", data.candidates[0].attributes.User_fld, controller);
@@ -57,6 +57,11 @@ export default class Controller {
       }
     });
   }
+
+  checkParcelValid(parcel){
+    return /\d/.test(parcel);
+  }
+
   closeAlert(ev){
     (ev.target.parentNode.parentNode.id === 'alert-overlay') ? document.getElementById('alert-overlay').className = '': document.getElementById('drill-down-overlay').className = '';
   }

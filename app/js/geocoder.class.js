@@ -108,7 +108,11 @@ export default class Geocoder {
                 geocoder.controller.panel.createErrorPanel(address, false);
                 let parcel = null;
                 data.candidates.forEach((item) => {
-                    (item.attributes.User_fld === '') ? 0 : parcel = item;
+                    if(item.attributes.User_fld !== ''){
+                        if(geocoder.controller.checkParcelValid(item.attributes.User_fld)){
+                            parcel = item;
+                        }
+                    }
                 });
                 if(parcel === null){
                     geocoder.needGeocode(address, geocoder);
