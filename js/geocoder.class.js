@@ -85,7 +85,7 @@ export default class Geocoder {
         fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) {
-            // console.log(data);
+            console.log(data);
             if(type === 'suggestions'){
                 data.candidates.forEach((item)=>{
                     let sugg = document.createElement('li');
@@ -103,28 +103,41 @@ export default class Geocoder {
                     geocoder.form.childNodes[3].appendChild(sugg);
                 });
             }else{
-                geocoder.controller.panel.createErrorPanel(address, false);
-                let parcel = null;
-                data.candidates.forEach((item) => {
-                    if(item.attributes.User_fld !== ''){
-                        if(geocoder.controller.checkParcelValid(item.attributes.User_fld)){
-                            parcel = item;
+                let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/City_of_Detroit_Boundaries/FeatureServer/0/query?where=&objectIds=&time=&geometry=${data.candidates[0].location.x}%2C+${data.candidates[0].location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=4326&returnGeometry=true&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=geojson&token=`;
+                try {
+                    fetch(url)
+                    .then((resp) => resp.json()) // Transform the data into json
+                    .then(function(city) {
+                        if(city.features.length){
+                            geocoder.controller.panel.createErrorPanel(address, false);
+                            let parcel = null;
+                            data.candidates.forEach((item) => {
+                                if(item.attributes.User_fld !== ''){
+                                    if(geocoder.controller.checkParcelValid(item.attributes.User_fld)){
+                                        parcel = item;
+                                    }
+                                }
+                            });
+                            if(parcel === null){
+                                geocoder.needGeocode(address, geocoder);
+                                // geocoder.controller.panel.loaderToggle(false);
+                                geocoder.clearSuggestions(geocoder);
+                                geocoder.controller.panel.loaderToggle(true);
+                                geocoder.controller.panel.clearPanel();
+                                geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
+                            }else{
+                                // geocoder.controller.panel.loaderToggle(false);
+                                geocoder.clearSuggestions(geocoder);
+                                geocoder.controller.panel.loaderToggle(true);
+                                geocoder.controller.panel.clearPanel();
+                                geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+                            }
+                        }else{
+                            geocoder.controller.panel.createErrorPanel(address, true);
                         }
-                    }
-                });
-                if(parcel === null){
-                    geocoder.needGeocode(address, geocoder);
-                    // geocoder.controller.panel.loaderToggle(false);
-                    geocoder.clearSuggestions(geocoder);
-                    geocoder.controller.panel.loaderToggle(true);
-                    geocoder.controller.panel.clearPanel();
-                    geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
-                }else{
-                    // geocoder.controller.panel.loaderToggle(false);
-                    geocoder.clearSuggestions(geocoder);
-                    geocoder.controller.panel.loaderToggle(true);
-                    geocoder.controller.panel.clearPanel();
-                    geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+                    });
+                }catch (error) {
+                    geocoder.controller.panel.createErrorPanel(address, true);
                 }
             }
         });

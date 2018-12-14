@@ -43,6 +43,7 @@ export default class Panel {
 
   createErrorPanel(address, toggle){
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${address}`;
+    document.querySelector('#local-services-results .local-content').innerHTML = '';
     document.querySelector('#local-services-results .error-container').innerHTML = `${(toggle) ? `
     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="70" viewBox="0 0 100 68">
       <g id="large">
