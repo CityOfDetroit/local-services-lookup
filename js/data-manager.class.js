@@ -382,8 +382,18 @@ export default class DataManager {
         console.log(err);
       });
     });
+    let historicDistrict = new Promise((resolve, reject) => {
+      let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Detroit_Local_Historic_Districts/FeatureServer/0/query?where=&text=&objectIds=&time=&geometry=" + location.location.x + "%2C+" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+      fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id" : "historicDistrict", "data": data});
+      }).catch( err => {
+        console.log(err);
+      });
+    });
     if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus]).then(values => {
+      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict]).then(values => {
         let dataSets = {};
         let initalLoadInfo = {};
         let initialLoadChecker = true;
@@ -401,7 +411,7 @@ export default class DataManager {
         console.log(reason);
       });
     }else{
-      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling]).then(values => {
+      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict]).then(values => {
         let dataSets = {};
         let initalLoadInfo = {};
         let initialLoadChecker = true;

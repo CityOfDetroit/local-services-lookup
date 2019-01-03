@@ -26,7 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    // console.log(data);
+    console.log(data);
     let markup = controller.panel.createMarkup(data.dataSets, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -110,6 +110,24 @@ export default class Panel {
         </div>
       </article>`;
     }
+    if(Object.keys(values['historicDistrict'].data).length != 0 && values['historicDistrict'].data.constructor === Object && values['historicDistrict'].data.features.length > 0){
+      tempHTML += `
+      <article class="info-section">
+        <span>LOCAL HISTORIC DISTRICT</span>
+        <div>
+          <p><strong>NAME:</strong> ${values['historicDistrict'].data.features[0].attributes.Name}</p>
+          <p><strong>DESIGNATED ON:</strong> ${moment(values['historicDistrict'].data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
+        </div>
+      </article>`;
+    }else{
+      tempHTML += `
+      <article class="info-section">
+        <span>HISTORIC DISTRICT</span>
+        <div>
+          <p>NO HISTORIC DISTRICT FOUND</p>
+        </div>
+      </article>`;
+    }
     if(Object.keys(values['npo'].data).length != 0 && values['npo'].data.constructor === Object){
       tempHTML += `
       <article class="info-section">
@@ -176,7 +194,7 @@ export default class Panel {
         </div>
       </article>`;
     }
-    if(values['assessors-data'] && Object.keys(values['assessors-data'].data).length != 0 && values['assessors-data'].data.constructor === Object){
+    if(values['assessors-data'] && Object.keys(values['assessors-data'].data).length != 0 && values['assessors-data'].data.constructor === Object && values['assessors-data'].data.detail !== "Not found."){
       let property = {
         year: null,
         value: null,
