@@ -208,30 +208,80 @@ export default class DataManager {
         // console.log(data);
         switch (data.features[0].attributes.Name) {
           case "District 1":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d1;
+            councilInfo.data = 1;
             break;
           case "District 2":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d2;
+            councilInfo.data = 2;
             break;
           case "District 3":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d3;
+            councilInfo.data = 3;
             break;
           case "District 4":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d4;
+            councilInfo.data = 4;
             break;
           case "District 5":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d5;
+            councilInfo.data = 5;
             break;
           case "District 6":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d6;
+            councilInfo.data = 6;
             break;
           case "District 7":
-            councilInfo.data = controller.dataManager.currentGovOfficials.d7;
+            councilInfo.data = 7;
             break;
           default:
 
         }
         resolve(councilInfo);
+      });
+    });
+    let districtManagers1to4 = new Promise((resolve, reject) => {
+      let url = "https://dev.detroitmi.gov/rest/district-managers-1-4?_format=hal_json";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "districtManagers1to4", "data": data});
+      }).catch( err => {
+        console.log(err);
+      });
+    });
+    let districtManagers5to7 = new Promise((resolve, reject) => {
+      let url = "https://dev.detroitmi.gov/rest/district-managers-5-7?_format=hal_json";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "districtManagers5to7", "data": data});
+      }).catch( err => {
+        console.log(err);
+      });
+    });
+    let districtInspectors = new Promise((resolve, reject) => {
+      let url = "https://dev.detroitmi.gov/rest/district-inspectors?_format=hal_json";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "districtInspectors", "data": data});
+      }).catch( err => {
+        console.log(err);
+      });
+    });
+    let councilMembers1to3 = new Promise((resolve, reject) => {
+      let url = "https://dev.detroitmi.gov/rest/council-members-1-3?_format=hal_json";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "councilMembers1to3", "data": data});
+      }).catch( err => {
+        console.log(err);
+      });
+    });
+    let councilMembers4to7 = new Promise((resolve, reject) => {
+      let url = "https://dev.detroitmi.gov/rest/council-members-4-7?_format=hal_json";
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "councilMembers4to7", "data": data});
+      }).catch( err => {
+        console.log(err);
       });
     });
     let neighborhoods = new Promise((resolve, reject) => {
@@ -393,7 +443,7 @@ export default class DataManager {
       });
     });
     if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict]).then(values => {
+      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers1to4,districtManagers5to7,districtInspectors,councilMembers1to3,councilMembers4to7]).then(values => {
         let dataSets = {};
         let initalLoadInfo = {};
         let initialLoadChecker = true;
@@ -406,12 +456,13 @@ export default class DataManager {
           }
         });
         dataObj.dataSets = dataSets;
-        controller.panel.creatPanel(dataObj, controller);
+        controller.buildCouncilData(dataObj, controller);
+        // controller.panel.creatPanel(dataObj, controller);
       }).catch(reason => {
         console.log(reason);
       });
     }else{
-      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict]).then(values => {
+      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,,districtManagers1to4,districtManagers5to7,districtInspectors,councilMembers1to3,councilMembers4to7]).then(values => {
         let dataSets = {};
         let initalLoadInfo = {};
         let initialLoadChecker = true;
@@ -424,7 +475,8 @@ export default class DataManager {
           }
         });
         dataObj.dataSets = dataSets;
-        controller.panel.creatPanel(dataObj, controller);
+        controller.buildCouncilData(dataObj, controller);
+        // controller.panel.creatPanel(dataObj, controller);
       }).catch(reason => {
         console.log(reason);
       });

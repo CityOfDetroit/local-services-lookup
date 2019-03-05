@@ -85,7 +85,7 @@ export default class Geocoder {
         fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) {
-            console.log(data);
+            // console.log(data);
             if(type === 'suggestions'){
                 data.candidates.forEach((item)=>{
                     let sugg = document.createElement('li');

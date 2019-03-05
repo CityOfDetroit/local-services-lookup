@@ -26,7 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    console.log(data);
+    // console.log(data);
     let markup = controller.panel.createMarkup(data.dataSets, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -78,12 +78,10 @@ export default class Panel {
           <p><strong>DISTRICT MANAGER PHONE:</strong> ${values['council'].data.dmanager.phone}</p>
           <p><strong>DEPUTY MANAGER:</strong> <a href="${values['council'].data.ddmanager.url}" target="_blank">${values['council'].data.ddmanager.name}</a></p>
           <p><strong>DEPUTY MANAGER PHONE:</strong> ${values['council'].data.ddmanager.phone}</p>
-          ${values['council'].data.enforcement.map(inspector =>
-            `
-            <p><strong>ENFORCEMENT INSPECTOR:</strong> ${inspector.name}</p>
-            <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${inspector.phone}</p>
-            `
-          ).join('')}
+          <p><strong>BUSINESS LIAISON:</strong> ${values['council'].data.bliaision.name}</p>
+          <p><strong>BUSINESS LIAISON PHONE:</strong> ${values['council'].data.bliaision.email}</p>
+          <p><strong>ENFORCEMENT INSPECTOR:</strong> ${values['council'].data.enforcement.name}</p>
+          <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${values['council'].data.enforcement.phone}</p>
         </div>
       </article>`;
     }else{
