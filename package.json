@@ -19,6 +19,7 @@
     "@turf/turf": "^5.1.6",
     "babel-polyfill": "^6.26.0",
     "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.11",
     "mapbox-gl": "^0.51.0",
     "moment": "^2.24.0",
     "request": "^2.88.0",
@@ -28,6 +29,8 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "browserslist": "^4.4.2",
+    "caniuse-lite": "^1.0.30000941",
     "cssnano": "^4.1.10",
     "fetch-polyfill": "^0.8.2",
     "firebase": "^5.8.5",
