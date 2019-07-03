@@ -4,193 +4,8 @@ const turf = require('@turf/turf');
 const arcGIS = require('terraformer-arcgis-parser');
 const WKT = require('terraformer-wkt-parser');
 export default class DataManager {
-  constructor() {
-    // -------------------------------------------------------------------------
-    // NOTE: Current government officials and contact information.
-    // -------------------------------------------------------------------------
-    this.currentGovOfficials = {
-      d1: {
-        district: "District 1",
-        districtURL: "/government/city-council/city-council-district-1",
-        council:{
-          name: 'James Tate',
-          url: '/government/city-council/city-council-district-1',
-          phone: '(313)224-1027'
-        },
-        dmanager:{
-          name: 'Latrice McClendon',
-          url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3484'
-        },
-        ddmanager: {
-          name: 'Kya Robertson',
-          url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3528'
-        },
-        enforcement: [{
-          name: 'Edna Keys',
-          phone: '(313)588-2137'
-        }]
-      },
-      d2: {
-        district: "District 2",
-        districtURL: "/government/city-council/city-council-district-2",
-        council:{
-          name: 'Roy McCalister Jr.',
-          url: '/government/city-council/city-council-district-2',
-          phone: '(313)224-4535'
-        },
-        dmanager:{
-          name: 'Kim Tandy',
-          url: '/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3494'
-        },
-        ddmanager: {
-          name: 'Sean Davis',
-          url: '/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3489'
-        },
-        enforcement: [{
-          name: 'Trish Williams',
-          phone: '(313)938-1824'
-        }]
-      },
-      d3: {
-        district: "District 3",
-        districtURL: "/government/city-council/city-council-district-3",
-        council:{
-          name: 'Scott Benson',
-          url: '/government/city-council/city-council-district-3',
-          phone: '(313)224-1198'
-        },
-        dmanager:{
-          name: 'Erinn Harris',
-          url: '/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3504'
-        },
-        ddmanager: {
-          name: 'Ernest Johnson',
-          url: '/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1',
-          phone: '(313)348-8464'
-        },
-        enforcement: [{
-          name: 'Moncy Chacko',
-          phone: '(313)269-4145'
-        }]
-      },
-      d4: {
-        district: "District 4",
-        districtURL: "/government/city-council/city-council-district-4",
-        council:{
-          name: 'André L. Spivey',
-          url: '/government/city-council/city-council-district-4',
-          phone: '(313)224-4841'
-        },
-        dmanager:{
-          name: 'Letty Azar',
-          url: '/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3518'
-        },
-        ddmanager: {
-          name: 'Vaughn Arrington',
-          url: '/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3520'
-        },
-        enforcement: [{
-          name: 'Donnie Wright',
-          phone: '(313)815-5542'
-        },
-        {
-          name: 'Wesley Bush',
-          phone: '(313)820-0871'
-        }
-        ]
-      },
-      d5: {
-        district: "District 5",
-        districtURL: "/government/city-council/city-council-district-5",
-        council:{
-          name: 'Mary Sheffield',
-          url: '/government/city-council/city-council-district-5',
-          phone: '(313)224-4505'
-        },
-        dmanager:{
-          name: 'Marshall Bullock',
-          url: '/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3523'
-        },
-        ddmanager: {
-          name: 'Karla Williamson',
-          url: '/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3523'
-        },
-        enforcement: [
-          {
-            name: 'Michael Madrigal',
-            phone: '(313)949-6468'
-          }
-        ]
-      },
-      d6: {
-        district: "District 6",
-        districtURL: "/government/city-council/city-council-district-6",
-        council:{
-          name: 'Raquel Castañeda-López',
-          url: '/government/city-council/city-council-district-6',
-          phone: '(313)224-2450'
-        },
-        dmanager:{
-          name: 'Ninfa Cancel',
-          url: '/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3530'
-        },
-        ddmanager: {
-          name: 'Mario Bueno',
-          url: '/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3529'
-        },
-        enforcement: [
-          {
-            name: 'Michael Addison',
-            phone: '(313)799-9225'
-          },
-          {
-            name: 'Dorjan Samuel',
-            phone: '(313)319-1654'
-          }
-        ]
-      },
-      d7: {
-        district: "District 7",
-        districtURL: "/government/city-council/city-council-district-7",
-        council:{
-          name: 'Gabe Leland',
-          url: '/government/city-council/city-council-district-7',
-          phone: '(313)224-2151'
-        },
-        dmanager:{
-          name: 'Ray Solomon II',
-          url: '/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3516'
-        },
-        ddmanager: {
-          name: 'Mona Ali',
-          url: '/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1',
-          phone: '(313)236-3540'
-        },
-        enforcement: [
-          {
-            name: 'Ernest Thompson',
-            phone: '(313)498-0796'
-          },
-          {
-            name: 'Louis Smith',
-            phone: '(313)948-5141'
-          }
-        ]
-      }
-    }
-  }
+  constructor() {}
+  
   buildData(location, controller){
     let dataObj = {title: location.address};
     let simplePolygon = null;
@@ -395,14 +210,13 @@ export default class DataManager {
       });
     });
     let recycling = new Promise((resolve, reject) => {
-      let url = "https://gis.detroitmi.gov/arcgis/rest/services/DPW/All_Services/MapServer/0/query?where=&text=&objectIds=&time=&geometry=" + location.location.x + "%2C+" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+      let url = "https://gis.detroitmi.gov/arcgis/rest/services/DPW/2019Services/MapServer/0/query?where=&text=&objectIds=&time=&geometry=" + location.location.x + "%2C+" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
       fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         let todaysMonth =  moment().month() + 1;
         let todaysYear = moment().year();
-        let url = null;
-        (data.features.length > 1) ? url = 'https://apis.detroitmi.gov/waste_schedule/details/' + data.features[0].attributes.FID + ',' + data.features[1].attributes.FID + ',' + data.features[2].attributes.FID + '/year/' + todaysYear + '/month/' + todaysMonth + '/' : url = 'https://apis.detroitmi.gov/waste_schedule/details/' + data.features[0].attributes.FID  + '/year/' + todaysYear + '/month/' + todaysMonth + '/';
+        let url = `https://apis.detroitmi.gov/waste_schedule/details/${data.features[0].attributes.FID}/year/${todaysYear}/month/${todaysMonth}/`;
         return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) {

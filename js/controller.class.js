@@ -3,7 +3,6 @@ import Map from './map.class.js';
 import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';
 import Geocoder from './geocoder.class.js';
-import mapboxgl from 'mapbox-gl';
 const turf = require('@turf/turf');
 const moment = require('moment');
 export default class Controller {
@@ -45,12 +44,12 @@ export default class Controller {
       },
       dmanager:{
         name: null,
-        url: '/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1',
+        url: `/departments/department-of-neighborhoods/district-${data.dataSets.council.data}#block-views-block-contacts-special-block-1`,
         phone: null
       },
       ddmanager: {
         name: null,
-        url: null,
+        url: `/departments/department-of-neighborhoods/district-${data.dataSets.council.data}#block-views-block-contacts-special-block-1`,
         phone: null
       },
       bliaision:{
@@ -76,12 +75,10 @@ export default class Controller {
         data.dataSets.districtManagers.forEach((item)=>{
           if(item.field_contact_position.includes('District 1 Manager')){
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = item.field_telephone;
           }
-          if(item.field_contact_position.includes('Deputy District 1 Manager')){
+          if(item.field_contact_position.includes('District 1 Deputy Manager')){
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-1#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('District 1 Business Liaison')){
@@ -109,12 +106,10 @@ export default class Controller {
         data.dataSets.districtManagers.forEach((item)=>{
           if(item.field_contact_position.includes('District 2 Manager')){
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = item.field_telephone;
           }
-          if(item.field_contact_position.includes('Deputy District 2 Manager')){
+          if(item.field_contact_position.includes('District 2 Deputy Manager')){
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('District 2 Business Liaison')){
@@ -142,12 +137,10 @@ export default class Controller {
         data.dataSets.districtManagers.forEach((item)=>{
           if(item.field_contact_position.includes('District 3 Manager')){
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-3#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = item.field_telephone;
           }
-          if(item.field_contact_position.includes('Deputy District 3 Manager')){
+          if(item.field_contact_position.includes('District 3 Deputy Manager')){
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-2#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('District 3 Business Liaison')){
@@ -175,12 +168,10 @@ export default class Controller {
         data.dataSets.districtManagers.forEach((item)=>{
           if(item.field_contact_position.includes('District 4 Manager')){
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = item.field_telephone;
           }
-          if(item.field_contact_position.includes('Deputy District 4 Manager')){
+          if(item.field_contact_position.includes('District 4 Deputy Manager')){
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-4#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('District 4 Business Liaison')){
@@ -208,12 +199,10 @@ export default class Controller {
           data.dataSets.districtManagers.forEach((item)=>{
             if(item.field_contact_position.includes('District 5 Manager')){
               councilData.dmanager.name = item.title;
-              councilData.dmanager.url = `/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1`;
               councilData.dmanager.phone = item.field_telephone;
             }
-            if(item.field_contact_position.includes('Deputy District 5 Manager')){
+            if(item.field_contact_position.includes('District 5 Deputy Manager')){
               councilData.ddmanager.name = item.title;
-              councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-5#block-views-block-contacts-special-block-1`;
               councilData.ddmanager.phone = item.field_telephone;
             }
             if(item.field_contact_position.includes('District 5 Business Liaison')){
@@ -246,14 +235,12 @@ export default class Controller {
             let cleanPhone = item.field_telephone.replace(/ /g,'-');
             cleanPhone = cleanPhone.replace(/[()]/g,'');
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
           }
-          if(item.field_contact_position.includes('Deputy District 6 Manager')){
+          if(item.field_contact_position.includes('District 6 Deputy Manager')){
             let cleanPhone = item.field_telephone.replace(/ /g,'-');
             cleanPhone = cleanPhone.replace(/[()]/g,'');
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-6#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
           }
           if(item.field_contact_position.includes('District 6 Business Liaison')){
@@ -283,12 +270,10 @@ export default class Controller {
         data.dataSets.districtManagers.forEach((item)=>{
           if(item.field_contact_position.includes('District 7 Manager')){
             councilData.dmanager.name = item.title;
-            councilData.dmanager.url = `/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1`;
             councilData.dmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('Deputy District 7 Manager')){
             councilData.ddmanager.name = item.title;
-            councilData.ddmanager.url = `/departments/department-of-neighborhoods/district-7#block-views-block-contacts-special-block-1`;
             councilData.ddmanager.phone = item.field_telephone;
           }
           if(item.field_contact_position.includes('District 7 Business Liaison')){
