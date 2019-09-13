@@ -8,7 +8,6 @@ export default class DataManager {
   
   buildData(location, controller){
     let dataObj = {title: location.address};
-    let simplePolygon = null;
     // -------------------------------------------------------------------------
     // NOTE: Fetching all the data sets.
     // -------------------------------------------------------------------------
@@ -50,7 +49,7 @@ export default class DataManager {
       });
     });
     let districtManagers = new Promise((resolve, reject) => {
-      let url = "https://detroitmi.gov/rest/district-managers?_format=hal_json";
+      let url = "/rest/district-managers?_format=json";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -60,7 +59,7 @@ export default class DataManager {
       });
     });
     let districtInspectors = new Promise((resolve, reject) => {
-      let url = "https://detroitmi.gov/rest/district-inspectors?_format=hal_json";
+      let url = "/rest/district-inspectors?_format=json";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -70,7 +69,7 @@ export default class DataManager {
       });
     });
     let councilMembers = new Promise((resolve, reject) => {
-      let url = "https://detroitmi.gov/rest/council-members?_format=hal_json";
+      let url = "/rest/council-members?_format=json";
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -236,41 +235,36 @@ export default class DataManager {
         console.log(err);
       });
     });
+    // ,districtManagers,districtInspectors,councilMembers
     if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
       Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
+        console.log(values);
         let dataSets = {};
-        let initalLoadInfo = {};
-        let initialLoadChecker = true;
-        values.forEach(function(value) {
-          if(value != null) {
-            dataSets[value.id] = value;
-            initalLoadInfo[value.id] = value.data;
+        for (let key in values) {
+          if(values[key] != null) {
+            dataSets[values[key].id] = values[key];
           }else{
             initialLoadChecker = false;
           }
-        });
-        dataObj.dataSets = dataSets;
-        controller.buildCouncilData(dataObj, controller);
-        // controller.panel.creatPanel(dataObj, controller);
+        }
+        dataSets['title'] = location.address;
+        controller.buildCouncilData(dataSets, controller);
       }).catch(reason => {
         console.log(reason);
       });
     }else{
-      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,,districtManagers,districtInspectors,councilMembers]).then(values => {
+      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
+        console.log(values);
         let dataSets = {};
-        let initalLoadInfo = {};
-        let initialLoadChecker = true;
-        values.forEach(function(value) {
-          if(value != null) {
-            dataSets[value.id] = value;
-            initalLoadInfo[value.id] = value.data;
+        for (let key in values) {
+          if(values[key] != null) {
+            dataSets[values[key].id] = values[key];
           }else{
             initialLoadChecker = false;
           }
-        });
-        dataObj.dataSets = dataSets;
-        controller.buildCouncilData(dataObj, controller);
-        // controller.panel.creatPanel(dataObj, controller);
+        }
+        dataSets['title'] = location.address;
+        controller.buildCouncilData(dataSets, controller);
       }).catch(reason => {
         console.log(reason);
       });
