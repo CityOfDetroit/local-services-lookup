@@ -27,7 +27,7 @@ export default class Panel {
 
   creatPanel(data, controller){
     // console.log(data);
-    let markup = controller.panel.createMarkup(data.dataSets, controller);
+    let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
