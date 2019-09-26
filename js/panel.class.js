@@ -250,6 +250,7 @@ export default class Panel {
       <article class="info-section">
       <span>RENTAL ENFORCEMENT STATUS</span>`;
     }
+    console.log(values['rental-data'].data);
     if(values['rental-data'] && values['rental-data'].data.features.length){
       values['rental-data'].data.features.forEach(function(value){
         tempHTML += `
