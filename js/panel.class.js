@@ -26,7 +26,6 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    // console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -63,7 +62,6 @@ export default class Panel {
   }
 
   createMarkup(values, controller){
-    // console.log(values);
     let siteURL = window.location.hostname;
     let tempHTML = `
     <article class="info-section">
@@ -250,8 +248,6 @@ export default class Panel {
       <article class="info-section">
       <span>RENTAL ENFORCEMENT STATUS</span>`;
     }
-    console.log(values['rental-data'].data);
-    console.log(values['rental-cert-data'].data);
     if(values['rental-data'] && values['rental-data'].data.features.length){
       values['rental-data'].data.features.forEach(function(value){
         tempHTML += `
@@ -272,7 +268,6 @@ export default class Panel {
     tempHTML += `</article>
     <article class="info-section">
     <span>BLIGHT TICKETS</span>`;
-    console.log(values['blight-data'].data);
     if(values['blight-data'] && values['blight-data'].data.features.length){
       values['blight-data'].data.features.forEach(function(value){
         tempHTML += `
@@ -342,7 +337,6 @@ export default class Panel {
       tempHTML += `<article class="info-section">
       <span>DEMOLITION STATUS</span>`;
       values['demo-status'].data.features.forEach(function(value){
-        console.log(value);
         
         tempHTML += `
           <div>
@@ -359,7 +353,6 @@ export default class Panel {
     tempHTML += `
     <article class="info-section">
     <span>DEMOLITIONS NEAR YOU</span>`;
-    console.log(values['demos-data'].data);
     if(values['demos-data'].data.features.length){
       values['demos-data'].data.features.forEach(function(value){
         tempHTML += `
@@ -384,7 +377,6 @@ export default class Panel {
       </div>
       </article>`;
     }
-    console.log(values['improve-det'].data);
     if(values['improve-det'].data.features.length){
       tempHTML += `
       <article class="info-section">
