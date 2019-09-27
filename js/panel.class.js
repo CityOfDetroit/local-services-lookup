@@ -251,12 +251,13 @@ export default class Panel {
       <span>RENTAL ENFORCEMENT STATUS</span>`;
     }
     console.log(values['rental-data'].data);
+    console.log(values['rental-cert-data'].data);
     if(values['rental-data'] && values['rental-data'].data.features.length){
       values['rental-data'].data.features.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>REGISTER:</strong> ${moment(value.properties.csa_date3).format('MMM DD, YYYY')}</p>
-          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].properties.csa_date3).format('MMM DD, YYYY')}` : `Not certified`}</p>
+          <p><strong>REGISTER:</strong> ${moment(value.attributes.date).format('MMM DD, YYYY')}</p>
+          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.date).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
       });
@@ -271,17 +272,18 @@ export default class Panel {
     tempHTML += `</article>
     <article class="info-section">
     <span>BLIGHT TICKETS</span>`;
-    if(values['blight-data'] && values['blight-data'].data.length){
-      values['blight-data'].data.forEach(function(value){
+    console.log(values['blight-data'].data);
+    if(values['blight-data'] && values['blight-data'].data.features.length){
+      values['blight-data'].data.features.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>TICKET ID:</strong> ${value.ticket_number}</p>
-          <p><strong>FINE AMOUNT:</strong> $${value.fine_amount}</p>
-          <p><strong>AGENCY NAME:</strong> ${value.agency_name}</p>
-          <p><strong>DISPOSITION:</strong> ${value.disposition}</p>
-          <p><strong>DESCRIPTION:</strong> ${value.violation_description}</p>
-          <p><strong>HEARING DATE:</strong> ${moment(value.hearing_date).format('MMM DD, YYYY')}</p>
-          <p><strong>HEARING TIME:</strong> ${value.hearing_time}</p>
+          <p><strong>TICKET ID:</strong> ${value.attributes.ticket_number}</p>
+          <p><strong>FINE AMOUNT:</strong> $${value.attributes.fine_amount}</p>
+          <p><strong>AGENCY NAME:</strong> ${value.attributes.agency_name}</p>
+          <p><strong>DISPOSITION:</strong> ${value.attributes.disposition}</p>
+          <p><strong>DESCRIPTION:</strong> ${value.attributes.violation_description}</p>
+          <p><strong>HEARING DATE:</strong> ${moment(value.attributes.hearing_date).format('MMM DD, YYYY')}</p>
+          <p><strong>HEARING TIME:</strong> ${value.attributes.hearing_time}</p>
         </div>
         `;
       });
@@ -314,17 +316,17 @@ export default class Panel {
     tempHTML += `</article>
     <article class="info-section">
     <span>BUILDING PERMITS</span>`;
-    if(values['permit-data'] && values['permit-data'].data.length){
-      values['permit-data'].data.forEach(function(value){
+    if(values['permit-data'] && values['permit-data'].data.features.length){
+      values['permit-data'].data.features.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>PERMIT NUMBER:</strong> ${value.permit_no}</p>
-          <p><strong>PERMIT TYPE:</strong> ${value.bld_permit_type}</p>
-          <p><strong>PERMIT BUILDING TYPE:</strong> ${value.residential}</p>
-          <p><strong>PERMIT STATUS:</strong> ${value.permit_status}</p>
-          <p><strong>PERMIT ISSUED:</strong> ${moment(value.permit_issued).format('MMM DD, YYYY')}</p>
-          <p><strong>PERMIT EXPIRED:</strong> ${moment(value.permit_expire).format('MMM DD, YYYY')}</p>
-          <p><strong>PERMIT DESCRIPTION:</strong> ${value.bld_permit_desc}</p>
+          <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
+          <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
+          <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.type_of_construction}</p>
+          <p><strong>PERMIT STATUS:</strong> ${value.attributes.status}</p>
+          <p><strong>PERMIT ISSUED:</strong> ${moment(value.attributes.permit_issue_date).format('MMM DD, YYYY')}</p>
+          <p><strong>PERMIT EXPIRED:</strong> ${moment(value.attributes.date_expiration).format('MMM DD, YYYY')}</p>
+          <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.permit_description}</p>
         </div>
         `;
       });
@@ -336,17 +338,17 @@ export default class Panel {
       </div>`;
     }
     tempHTML += `</article>`;
-    if(values['demo-status'] && values['demo-status'].data.length){
+    if(values['demo-status'] && values['demo-status'].data.features.length){
       tempHTML += `<article class="info-section">
       <span>DEMOLITION STATUS</span>`;
-      values['demo-status'].data.forEach(function(value){
+      values['demo-status'].data.features.forEach(function(value){
         console.log(value);
         
         tempHTML += `
           <div>
             <p><STRONG>WARNING!</STRONG></p>
             <p>SCHEDULED FOR DEMOLITION ON</p> 
-            <p><strong>${moment(value.demolish_by_date).format('MMM DD, YYYY')}</stron></p>
+            <p><strong>${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</stron></p>
           </div>
         `;
       });
@@ -357,18 +359,19 @@ export default class Panel {
     tempHTML += `
     <article class="info-section">
     <span>DEMOLITIONS NEAR YOU</span>`;
-    if(values['demos-data'].data.length){
-      values['demos-data'].data.forEach(function(value){
+    console.log(values['demos-data'].data);
+    if(values['demos-data'].data.features.length){
+      values['demos-data'].data.features.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>ADDRESS:</strong> ${value.address}</p>
-          <p><strong>COMMERCIAL:</strong> ${value.commercial}</p>
-          <p><strong>PRICE:</strong> $${parseInt(value.price).toLocaleString()}</p>
-          <p><strong>PARCEL:</strong> ${value.parcel_id}</p>
-          <p><strong>CONTRACTOR:</strong> ${value.contractor_name}</p>
-          <p><strong>COUNCIL DISTRICT:</strong> ${value.council_district}</p>
-          <p><strong>NEIGHBORHOOD:</strong> ${value.neighborhood}</p>
-          <p><strong>EXPECTED DATE:</strong> ${moment(value.demolish_by_date).format('MMM DD, YYYY')}</p>
+          <p><strong>ADDRESS:</strong> ${value.attributes.address}</p>
+          <p><strong>COMMERCIAL:</strong> ${value.attributescommercial}</p>
+          <p><strong>PRICE:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
+          <p><strong>PARCEL:</strong> ${value.attributes.parcel_id}</p>
+          <p><strong>CONTRACTOR:</strong> ${value.attributes.contractor_name}</p>
+          <p><strong>COUNCIL DISTRICT:</strong> ${value.attributes.council_district}</p>
+          <p><strong>NEIGHBORHOOD:</strong> ${value.attributes.neighborhood}</p>
+          <p><strong>EXPECTED DATE:</strong> ${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</p>
         </div>`;
       });
       tempHTML += `
@@ -381,17 +384,18 @@ export default class Panel {
       </div>
       </article>`;
     }
-    if(values['improve-det'].data.length){
+    console.log(values['improve-det'].data);
+    if(values['improve-det'].data.features.length){
       tempHTML += `
       <article class="info-section">
       <span>IMPROVE DETROIT ISSUES NEAR YOU</span>`;
-      values['improve-det'].data.forEach(function(value){
+      values['improve-det'].data.features.forEach(function(value){
         tempHTML += `
         <div>
-          <p><strong>ID:</strong> <a href="${value.web_url}" target="_blank">${value.id}</a></p>
-          <p><strong>TYPE:</strong> ${value.request_type_title}</p>
-          <p><strong>STATUS:</strong> ${value.status}</p>
-          <p><strong>REPORTED ON:</strong> ${moment(value.created_at).format('MMM DD, YYYY')}</p>
+          <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
+          <p><strong>TYPE:</strong> ${value.attributes.request_type_title}</p>
+          <p><strong>STATUS:</strong> ${value.attributes.status}</p>
+          <p><strong>REPORTED ON:</strong> ${moment(value.attributes.created_at).format('MMM DD, YYYY')}</p>
         </div>`;
       });
       tempHTML += `
