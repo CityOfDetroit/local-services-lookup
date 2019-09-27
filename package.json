@@ -13,18 +13,17 @@
   "author": "Edgar Montes",
   "license": "MIT",
   "dependencies": {
-    "@mapbox/mapbox-gl-draw": "^1.1.1",
-    "@mapbox/mapbox-gl-geocoder": "^2.3.0",
+    "@mapbox/mapbox-gl-draw": "^1.1.2",
+    "@mapbox/mapbox-gl-geocoder": "^4.4.2",
     "@turf/simplify": "^5.1.5",
     "@turf/turf": "^5.1.6",
     "babel-polyfill": "^6.26.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
-    "mapbox-gl": "^0.51.0",
+    "mapbox-gl": "^1.3.2",
     "moment": "^2.24.0",
     "request": "^2.88.0",
-    "terraformer-arcgis-parser": "^1.1.0",
-    "terraformer-wkt-parser": "^1.1.2"
+    "terraformer-arcgis-parser": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -33,7 +32,7 @@
     "caniuse-lite": "^1.0.30000941",
     "cssnano": "^4.1.10",
     "fetch-polyfill": "^0.8.2",
-    "firebase": "^5.8.5",
+    "firebase": "^6.6.2",
     "jsonfile": "^4.0.0",
     "request-promise": "^4.2.4",
     "sass": "^1.17.2"
