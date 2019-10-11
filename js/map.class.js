@@ -2,7 +2,7 @@
 import mapboxgl from 'mapbox-gl';
 const MapboxDraw = require('@mapbox/mapbox-gl-draw');
 const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder');
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2l0eW9mZGV0cm9pdCIsImEiOiJjajd3MGlodXIwZ3piMnhudmlzazVnNm44In0.BL29_7QRvcnOrVuXX_hD9A';
+mapboxgl.accessToken = 'pk.eyJ1IjoiY2l0eW9mZGV0cm9pdCIsImEiOiJjazFtOHdtcHMwYjhlM2NwaWFhc2RuNXV3In0.Zv7snEjNY01li7zYq1gGXw';
 const detroitBBox = [-83.3437,42.2102,-82.8754,42.5197];
 export default class Map {
   constructor(init, controller) {
