@@ -15,8 +15,8 @@ export default class DataManager {
       let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/CouncilDistricts/FeatureServer/0/query?where=&objectIds=&time=&geometry=" + location.location.x + "%2C" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=name&returnGeometry=false&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
       // console.log(url);
       return fetch(url)
-      .then((resp) => resp.json()) // Transform the data into json
-      .then(function(data) {
+      .then(resp => resp.json()) // Transform the data into json
+      .then((data) => {
         let councilInfo = {"id": "council", "data": null};
         // console.log(data);
         switch (data.features[0].attributes.Name) {
@@ -50,7 +50,7 @@ export default class DataManager {
     let districtManagers = new Promise((resolve, reject) => {
       let url = "/rest/district-managers?_format=json";
       return fetch(url)
-      .then((resp) => resp.json()) // Transform the data into json
+      .then(resp => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "districtManagers", "data": data});
       }).catch( err => {
@@ -60,8 +60,9 @@ export default class DataManager {
     let districtInspectors = new Promise((resolve, reject) => {
       let url = "/rest/district-inspectors?_format=json";
       return fetch(url)
-      .then((resp) => resp.json()) // Transform the data into json
+      .then(resp => resp.json()) // Transform the data into json
       .then(function(data) {
+        console.log(data);
         resolve({"id": "districtInspectors", "data": data});
       }).catch( err => {
         console.log(err);
@@ -236,7 +237,7 @@ export default class DataManager {
     });
     // ,districtManagers,districtInspectors,councilMembers
     if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
+      Promise.all([council,neighborhoods,assessorsData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
         console.log(values);
         let dataSets = {};
         for (let key in values) {
