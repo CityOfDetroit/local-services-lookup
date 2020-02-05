@@ -1,6 +1,5 @@
 'use strict';
 import mapboxgl from 'mapbox-gl';
-const MapboxDraw = require('@mapbox/mapbox-gl-draw');
 const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder');
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2l0eW9mZGV0cm9pdCIsImEiOiJjazFtOHdtcHMwYjhlM2NwaWFhc2RuNXV3In0.Zv7snEjNY01li7zYq1gGXw';
 const detroitBBox = [-83.3437,42.2102,-82.8754,42.5197];
@@ -43,21 +42,6 @@ export default class Map {
     this.map.appController = controller;
     if(init.controls){
       this.map.addControl(new mapboxgl.NavigationControl());
-    }
-    if(init.draw){
-      this.drawTool = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          point: true,
-          line_string: true,
-          polygon: true,
-          trash: true
-        }
-      });
-      this.map.addControl(this.drawTool);
-      this.map.on('draw.create', controller.mapToolEvent);
-      this.map.on('draw.delete', controller.mapToolEvent);
-      this.map.on('draw.update', controller.mapToolEvent);
     }
     this.styleURL = init.styleURL;
     this.baseLayers = {

@@ -3,7 +3,6 @@ import Map from './map.class.js';
 import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';
 import Geocoder from './geocoder.class.js';
-const turf = require('@turf/turf');
 const moment = require('moment');
 export default class Controller {
   constructor(map, router) {
@@ -28,7 +27,6 @@ export default class Controller {
   }
 
   buildCouncilData(data, _controller){
-    console.log(data);
     let councilData = {
       district: `District ${data.council.data}`,
       districtURL: null,

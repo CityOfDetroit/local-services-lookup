@@ -7,18 +7,29 @@
     "type": "git",
     "url": "https://github.com/CityOfDetroit/local-services-lookup.git"
   },
+  "keywords": [
+    "Parcel",
+    "Geospatial",
+    "Parcel",
+    "JS",
+    "Mapbox",
+    "Services"
+  ],
+  "bugs": {
+    "url": "https://github.com/CityOfDetroit/local-services-lookup/issues"
+  },
+  "homepage": "https://github.com/CityOfDetroit/local-services-lookup#readme",
   "scripts": {
-    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+    "start": "parcel index.html --https --no-cache -p 3000",
+    "build": "parcel build index.js --no-cache --public-url '.' -d build"
   },
   "author": "Edgar Montes",
   "license": "MIT",
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.1.2",
-    "@mapbox/mapbox-gl-geocoder": "^4.4.2",
+    "@mapbox/mapbox-gl-geocoder": "^4.5.0",
     "@turf/simplify": "^5.1.5",
     "@turf/turf": "^5.1.6",
-    "babel-polyfill": "^6.26.0",
-    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.4.1",
     "moment": "^2.24.0",
@@ -26,15 +37,16 @@
     "terraformer-arcgis-parser": "^1.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.7.7",
     "babel-preset-env": "^1.7.0",
-    "browserslist": "^4.4.2",
+    "browserslist": "^4.8.2",
     "caniuse-lite": "^1.0.30000999",
     "cssnano": "^4.1.10",
     "fetch-polyfill": "^0.8.2",
     "firebase": "^6.6.2",
     "jsonfile": "^4.0.0",
-    "request-promise": "^4.2.4",
+    "request-promise": "^4.2.5",
     "sass": "^1.23.0"
   }
 }
