@@ -1,5 +1,8 @@
 'use strict';
 import Controller from './js/controller.class';
+import './node_modules/mapbox-gl/dist/mapbox-gl.css';
+import './node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import './scss/styles.scss';
 (function(){
   let controller = new Controller({
     styleURL: 'mapbox://styles/mapbox',

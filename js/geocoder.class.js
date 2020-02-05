@@ -1,6 +1,4 @@
 'use strict';
-// import firebase from "firebase";
-// require("firebase/functions");
 export default class Geocoder {
   constructor(container, controller) {
     this.form = null;
@@ -11,17 +9,6 @@ export default class Geocoder {
   }
 
   init(container, geocoder){
-    // firebase.initializeApp(geocoder.config);
-    // firebase.auth().onAuthStateChanged(function(user) {
-    //     if (user) {
-    //       geocoder.user = user;
-    //       // ...
-    //     } else {
-    //       // User is signed out.
-    //       // ...
-    //     }
-    //     // ...
-    // });
     
     let form = document.createElement('form');
     let label = document.createElement('label');
@@ -36,20 +23,20 @@ export default class Geocoder {
     label.innerText = "My Home Info:";
     label.setAttribute("for", "geocoder-input"); 
     input.type = 'text';
-    input.setAttribute('list','addresses');
+    input.setAttribute('list','addresses-list');
     input.placeholder = 'Enter address';
     input.setAttribute('id', 'geocoder-input');
     input.setAttribute('autocomplete', 'off');
     input.addEventListener('keyup', (ev)=>{
         this.inputChange(ev, geocoder);
     });
-    list.setAttribute('id','addresses');
+    list.setAttribute('id','addresses-list');
     
 
     form.appendChild(label);
     form.appendChild(input);
     form.appendChild(icon);
-    form.appendChild(suggestions);
+    // form.appendChild(suggestions);
     form.appendChild(list);
     container.appendChild(form);
     this.form = form;
@@ -63,7 +50,6 @@ export default class Geocoder {
   }
 
   supplementGeocoder(address, geocoder, type){
-    // if(type !== 'suggestions')geocoder.controller.panel.loaderToggle(true);
     let tempAddr = address.split(",");
     tempAddr = tempAddr[0];
     tempAddr = tempAddr.split(" ");
@@ -73,12 +59,6 @@ export default class Geocoder {
       newTempAddr += item;
       ((index < size) && (index + 1) !== size) ? newTempAddr += '+': 0;
     });
-    // console.log(newTempAddr);
-    // let getSuggestions = firebase.functions().httpsCallable('getSuggestions');
-    // getSuggestions(address).then(function(result) {
-    //     // Read result of the Cloud Function.
-    //     console.log(result);
-    // });
     let url = `https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=${newTempAddr}&category=&outFields=User_fld&maxLocations=4&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json`;
     
     try {
@@ -88,12 +68,12 @@ export default class Geocoder {
             // console.log(data);
             if(type === 'suggestions'){
                 data.candidates.forEach((item)=>{
-                    let sugg = document.createElement('li');
+                    let sugg = document.createElement('option');
                     if(item.attributes.User_fld === ''){
-                        sugg.innerHTML = item.address;
+                        sugg.value = item.address;
                         sugg.setAttribute('data-parsel', 'no-parcel');
                     }else{
-                        sugg.innerHTML = `${item.address} <span class="geo-recomended">RECOMMENDED</span>`;
+                        sugg.value = `${item.address} RECOMMENDED`;
                         sugg.setAttribute('data-parsel', item.attributes.User_fld);
                     }
                     
@@ -111,6 +91,7 @@ export default class Geocoder {
                         if(city.features.length){
                             geocoder.controller.panel.createErrorPanel(address, false);
                             let parcel = null;
+                            let location;
                             data.candidates.forEach((item) => {
                                 if(item.attributes.User_fld !== ''){
                                     if(geocoder.controller.checkParcelValid(item.attributes.User_fld)){
@@ -118,15 +99,15 @@ export default class Geocoder {
                                     }
                                 }
                             });
+                            (parcel == null) ? location = data.candidates[0].location : location = null; 
                             if(parcel === null){
-                                geocoder.needGeocode(address, geocoder);
-                                // geocoder.controller.panel.loaderToggle(false);
+                                geocoder.needGeocode(address, geocoder, location);
                                 geocoder.clearSuggestions(geocoder);
                                 geocoder.controller.panel.loaderToggle(true);
                                 geocoder.controller.panel.clearPanel();
                                 geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
                             }else{
-                                // geocoder.controller.panel.loaderToggle(false);
+                                geocoder.needGeocode(address, geocoder, location);
                                 geocoder.clearSuggestions(geocoder);
                                 geocoder.controller.panel.loaderToggle(true);
                                 geocoder.controller.panel.clearPanel();
@@ -156,7 +137,6 @@ export default class Geocoder {
     if(selection.attributes[0].value === 'no-parcel'){
         geocoder.clearSuggestions(geocoder);
         geocoder.supplementGeocoder(selection.innerText, geocoder, 'submit');
-        // geocoder.needGeocode(selection.innerText, geocoder);
     }else{
         geocoder.supplementGeocoder(selection.innerText, geocoder, 'submit');
     }
@@ -165,7 +145,7 @@ export default class Geocoder {
   inputChange (ev, geocoder){
     switch (ev.key) {
         case 'Enter':
-            
+            (ev.target.value != '' && ev.target.value != undefined) ? geocoder.supplementGeocoder(ev.target.value, geocoder, 'submit') : 0;
             break;
     
         case 'ArrowDown':
@@ -184,6 +164,10 @@ export default class Geocoder {
 
             break;
 
+        case undefined:
+            (ev.target.value != '' && ev.target.value != undefined) ? geocoder.supplementGeocoder(ev.target.value, geocoder, 'submit') : 0;
+            break;
+
         default:
             geocoder.clearSuggestions(geocoder);
             geocoder.supplementGeocoder(ev.target.value, geocoder, 'suggestions');
@@ -197,13 +181,10 @@ export default class Geocoder {
     }
   }
 
-  needGeocode(address, geocoder){
-    // geocoder.controller.panel.clearPanel();
-    // geocoder.controller.panel.createErrorPanel(address, true);
+  needGeocode(address, geocoder, location){
     fetch('https://us-central1-detroit-iet.cloudfunctions.net/getToken')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
-        // console.log(data);
         let params = [
             {
               "attributes" : {
@@ -215,6 +196,10 @@ export default class Geocoder {
               }
             }
         ];
+        if(location != null){
+            params[0].geometry.x = location.x;
+            params[0].geometry.y = location.y;
+        }
         let request = new Request(`https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/addressvalidator/FeatureServer/0/addFeatures?token=${data.access_token}&features=${encodeURIComponent(JSON.stringify(params))}&f=json`, {
             method: 'POST',
             body: '',

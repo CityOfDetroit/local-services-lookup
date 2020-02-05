@@ -129,19 +129,24 @@ export default class Panel {
       <article class="info-section">
         <span>POLICE</span>
         <div>
-          <h5>NEIGHBORHOOD POLICE OFFICER (NPO)</h5>
-          <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.NPO_Office}</p>
-          <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.Phone}</p>
-          <p><strong>Email:</strong> ${values['npo'].data.features[0].attributes.Email}</p>
-        </div>`;
-      if(values['npo'].data.features[0].attributes.Sgt_Phone != "0"){
-        tempHTML += `
+          <h5>PRECINCT</h5>
+          <p><strong>NUMBER:</strong> ${values['npo'].data.features[0].attributes.precinct}</p>
+          <p><strong>ADDRESS</strong> ${values['npo'].data.features[0].attributes.precinct_location}</p>
+        </div>
         <div>
-          <h5>SERGEANT</h5>
-          <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.Sergeant}</p>
-          <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.Sgt_Phone}</p>
+          <h5>NEIGHBORHOOD POLICE OFFICER (NPO)</h5>
+          <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.police_officer}</p>
+          <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.phone_number}</p>
+          <p><strong>EMAIL:</strong> ${values['npo'].data.features[0].attributes.email}</p>
         </div>`;
-      }
+      // if(values['npo'].data.features[0].attributes.Sgt_Phone != "0"){
+      //   tempHTML += `
+      //   <div>
+      //     <h5>SERGEANT</h5>
+      //     <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.Sergeant}</p>
+      //     <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.Sgt_Phone}</p>
+      //   </div>`;
+      // }
       tempHTML += `</article>`;
     }else{
       tempHTML += `

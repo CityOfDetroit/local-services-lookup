@@ -6,7 +6,6 @@ export default class DataManager {
   constructor() {}
   
   buildData(location, controller){
-    let dataObj = {title: location.address};
     // -------------------------------------------------------------------------
     // NOTE: Fetching all the data sets.
     // -------------------------------------------------------------------------
@@ -45,6 +44,8 @@ export default class DataManager {
 
         }
         resolve(councilInfo);
+      }).catch( err => {
+        // console.log(err);
       });
     });
     let districtManagers = new Promise((resolve, reject) => {
@@ -54,7 +55,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "districtManagers", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let districtInspectors = new Promise((resolve, reject) => {
@@ -64,7 +65,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "districtInspectors", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let councilMembers = new Promise((resolve, reject) => {
@@ -74,7 +75,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "councilMembers", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let neighborhoods = new Promise((resolve, reject) => {
@@ -84,7 +85,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "neighborhood", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let assessorsData = new Promise((resolve, reject) => {
@@ -94,7 +95,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "assessors-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let permitData = new Promise((resolve, reject) => {
@@ -104,7 +105,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "permit-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let rentalData = new Promise((resolve, reject) => {
@@ -114,7 +115,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "rental-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let rentalCertData = new Promise((resolve, reject) => {
@@ -124,7 +125,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "rental-cert-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let blightData = new Promise((resolve, reject) => {
@@ -134,7 +135,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "blight-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let salesHistoryData = new Promise((resolve, reject) => {
@@ -144,7 +145,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "sales-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let demosData = new Promise((resolve, reject) => {
@@ -158,7 +159,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "demos-data", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let demoStatus = new Promise((resolve, reject) => {
@@ -168,7 +169,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "demo-status", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let pSchools = new Promise((resolve, reject) => {
@@ -182,15 +183,17 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id" : "schools", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let npo = new Promise((resolve, reject) => {
-      let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Neighborhood_Police_Officers/FeatureServer/0/query?where=&objectIds=&time=&geometry=" + location.location.x + "%2C" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Neighborhood_Police_Officers_(NPOs)/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id" : "npo", "data": data});
+      }).catch( err => {
+        // console.log(err);
       });
     });
     let improveDet = new Promise((resolve, reject) => {
@@ -204,7 +207,7 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id": "improve-det", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let recycling = new Promise((resolve, reject) => {
@@ -221,7 +224,7 @@ export default class DataManager {
           resolve({"id": "recycling", "data": data});
         });
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     let historicDistrict = new Promise((resolve, reject) => {
@@ -231,13 +234,12 @@ export default class DataManager {
       .then(function(data) {
         resolve({"id" : "historicDistrict", "data": data});
       }).catch( err => {
-        console.log(err);
+        // console.log(err);
       });
     });
     // ,districtManagers,districtInspectors,councilMembers
     if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
       Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-        console.log(values);
         let dataSets = {};
         for (let key in values) {
           if(values[key] != null) {
@@ -249,11 +251,10 @@ export default class DataManager {
         dataSets['title'] = location.address;
         controller.buildCouncilData(dataSets, controller);
       }).catch(reason => {
-        console.log(reason);
+        // console.log(reason);
       });
     }else{
       Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-        console.log(values);
         let dataSets = {};
         for (let key in values) {
           if(values[key] != null) {
@@ -265,7 +266,7 @@ export default class DataManager {
         dataSets['title'] = location.address;
         controller.buildCouncilData(dataSets, controller);
       }).catch(reason => {
-        console.log(reason);
+        // console.log(reason);
       });
     }
     
