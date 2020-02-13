@@ -1,15 +1,13 @@
 'use strict';
-import Map from './map.class.js';
 import Panel from './panel.class.js';
 import DataManager from './data-manager.class.js';
 import Geocoder from './geocoder.class.js';
 const moment = require('moment');
 export default class Controller {
-  constructor(map, router) {
-    this.defaultSettings = {department: 'All'};
+  constructor() {
+    this.defaultSettings = {};
     this.panel = new Panel();
     this.dataManager = new DataManager();
-    this.map = new Map(map, this);
     this.geocoder = new Geocoder('geocoder', this);
     this.initialLoad(this);
   }

@@ -4,8 +4,8 @@ Simple app to lookup city services based on a location
 ## Getting Started
 
 This project was created using:
-    [Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/) for web map rendering.
-    [Parcel](https://parceljs.org/) as a web application bundler.
+
+[Parcel](https://parceljs.org/) as a web application bundler.
 
 ## Setup Local Environment.
 
@@ -21,7 +21,7 @@ This project was created using:
 
 3. Run local instance.
     ```
-    $ parcel index.html
+    $ parcel start
     ```
 ## Resources
 
