@@ -340,7 +340,10 @@ export default class DataManager {
       }
       dataSets['title'] = location.address;
       console.log(dataSets);
-      controller.buildCouncilData(dataSets, controller);
+      if(filters.includes('council')){
+        dataSets = controller.buildCouncilData(dataSets, controller);
+      }
+      controller.panel.creatPanel(dataSets, controller);
     }).catch(reason => {
       // console.log(reason);
     });

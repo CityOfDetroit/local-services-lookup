@@ -285,6 +285,6 @@ export default class Controller {
         break;
     }
     data.council.data = councilData;
-    _controller.panel.creatPanel(data, _controller);
+    return data;
   }
 }
