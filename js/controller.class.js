@@ -14,6 +14,7 @@ export default class Controller {
   initialLoad(controller){
     controller.defaultSettings.startDate = moment().format('YYYY-MM-DD');
     controller.defaultSettings.endDate = moment().add(5,'months').format('YYYY-MM-DD');
+    controller.defaultSettings.filters = document.getElementById('local-services-filters').value;
   }
 
   checkParcelValid(parcel){
