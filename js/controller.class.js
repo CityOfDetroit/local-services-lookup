@@ -14,6 +14,7 @@ export default class Controller {
   initialLoad(controller){
     controller.defaultSettings.startDate = moment().format('YYYY-MM-DD');
     controller.defaultSettings.endDate = moment().add(5,'months').format('YYYY-MM-DD');
+    controller.defaultSettings.filters = document.getElementById('local-services-filters').value;
   }
 
   checkParcelValid(parcel){
@@ -48,8 +49,8 @@ export default class Controller {
         email: null
       },
       enforcement: {
-        name: 'Edna Keys',
-        phone: '(313)588-2137'
+        name: null,
+        phone: null
       }
     };
     switch (data.council.data) {
@@ -209,6 +210,7 @@ export default class Controller {
         break;
         
       case 6:
+        console.log('loading council 6');
         councilData.districtURL = `/taxonomy/term/1491`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1491'){
@@ -283,7 +285,6 @@ export default class Controller {
         console.log('not inside city');
         break;
     }
-    data.council.data = councilData;
-    _controller.panel.creatPanel(data, _controller);
+    return councilData;
   }
 }

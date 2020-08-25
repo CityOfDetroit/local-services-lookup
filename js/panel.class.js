@@ -61,44 +61,40 @@ export default class Panel {
     document.getElementById('local-services-results').className = 'active';
   }
 
-  createMarkup(values, controller){
+  buildCouncil(value){
     let siteURL = window.location.hostname;
     let tempHTML = `
-    <article class="info-section">
-      <span>GOVERNMENT</span>`;
-    if(Object.keys(values['council'].data).length != 0 && values['council'].data.constructor === Object){
-      tempHTML += `
-        <div>
-          <p><strong>COUNCIL:</strong> <a href="${values['council'].data.districtURL}" target="_blank">${values['council'].data.district}</a></p>
-          <p><strong>COUNCIL MEMBER:</strong> <a href="http://${siteURL}${values['council'].data.council.url}" target="_blank">${values['council'].data.council.name}</a></p>
-          <p><strong>COUNCIL MEMBER PHONE:</strong> ${values['council'].data.council.phone}</p>
-          <p><strong>DISTRICT MANAGER:</strong> <a href="${values['council'].data.dmanager.url}" target="_blank">${values['council'].data.dmanager.name}</a></p>
-          <p><strong>DISTRICT MANAGER PHONE:</strong> ${values['council'].data.dmanager.phone}</p>
-          <p><strong>DEPUTY MANAGER:</strong> <a href="${values['council'].data.ddmanager.url}" target="_blank">${values['council'].data.ddmanager.name}</a></p>
-          <p><strong>DEPUTY MANAGER PHONE:</strong> ${values['council'].data.ddmanager.phone}</p>
-          <p><strong>BUSINESS LIAISON:</strong> ${values['council'].data.bliaision.name}</p>
-          <p><strong>BUSINESS LIAISON PHONE:</strong> ${values['council'].data.bliaision.email}</p>
-          <p><strong>ENFORCEMENT INSPECTOR:</strong> ${values['council'].data.enforcement.name}</p>
-          <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${values['council'].data.enforcement.phone}</p>
-        </div>
-      </article>`;
-    }else{
-      tempHTML += `
-        <div>
-          <p>NO GOVERNMENT INFO FOUND</p>
-        </div>
-      </article>`;
-    }
-    if(Object.keys(values['neighborhood'].data).length != 0 && values['neighborhood'].data.constructor === Object){
-      tempHTML += `
+      <article class="info-section">
+      <span>GOVERNMENT</span>
+      <div>
+        <p><strong>COUNCIL:</strong> <a href="${value.data.districtURL}" target="_blank">${value.data.district}</a></p>
+        <p><strong>COUNCIL MEMBER:</strong> <a href="http://${siteURL}${value.data.council.url}" target="_blank">${value.data.council.name}</a></p>
+        <p><strong>COUNCIL MEMBER PHONE:</strong> ${value.data.council.phone}</p>
+        <p><strong>DISTRICT MANAGER:</strong> <a href="${value.data.dmanager.url}" target="_blank">${value.data.dmanager.name}</a></p>
+        <p><strong>DISTRICT MANAGER PHONE:</strong> ${value.data.dmanager.phone}</p>
+        <p><strong>DEPUTY MANAGER:</strong> <a href="${value.data.ddmanager.url}" target="_blank">${value.data.ddmanager.name}</a></p>
+        <p><strong>DEPUTY MANAGER PHONE:</strong> ${value.data.ddmanager.phone}</p>
+        <p><strong>BUSINESS LIAISON:</strong> ${value.data.bliaision.name}</p>
+        <p><strong>BUSINESS LIAISON PHONE:</strong> ${value.data.bliaision.email}</p>
+        <p><strong>ENFORCEMENT INSPECTOR:</strong> ${value.data.enforcement.name}</p>
+        <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${value.data.enforcement.phone}</p>
+      </div>
+    </article>`;
+    return tempHTML;
+  }
+
+  buildNeighborhood(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
+      tempHTML = `
       <article class="info-section">
         <span>NEIGHBORHOOD</span>
         <div>
-          <p><strong>NAME:</strong> ${values['neighborhood'].data.features[0].attributes.NHood_Name}</p>
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.NHood_Name}</p>
         </div>
       </article>`;
     }else{
-      tempHTML += `
+      tempHTML = `
       <article class="info-section">
         <span>NEIGHBORHOOD</span>
         <div>
@@ -106,17 +102,22 @@ export default class Panel {
         </div>
       </article>`;
     }
-    if(Object.keys(values['historicDistrict'].data).length != 0 && values['historicDistrict'].data.constructor === Object && values['historicDistrict'].data.features.length > 0){
-      tempHTML += `
+    return tempHTML;
+  }
+
+  buildHistoricDistrict(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
+      tempHTML = `
       <article class="info-section">
         <span>LOCAL HISTORIC DISTRICT</span>
         <div>
-          <p><strong>NAME:</strong> ${values['historicDistrict'].data.features[0].attributes.Name}</p>
-          <p><strong>DESIGNATED ON:</strong> ${moment(values['historicDistrict'].data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.Name}</p>
+          <p><strong>DESIGNATED ON:</strong> ${moment(value.data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
         </div>
       </article>`;
     }else{
-      tempHTML += `
+      tempHTML = `
       <article class="info-section">
         <span>HISTORIC DISTRICT</span>
         <div>
@@ -124,32 +125,29 @@ export default class Panel {
         </div>
       </article>`;
     }
-    if(Object.keys(values['npo'].data).length != 0 && values['npo'].data.constructor === Object){
-      tempHTML += `
+    return tempHTML;
+  }
+
+  buildNPO(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
+      tempHTML = `
       <article class="info-section">
         <span>POLICE</span>
         <div>
           <h5>PRECINCT</h5>
-          <p><strong>NUMBER:</strong> ${values['npo'].data.features[0].attributes.precinct}</p>
-          <p><strong>ADDRESS</strong> ${values['npo'].data.features[0].attributes.precinct_location}</p>
+          <p><strong>NUMBER:</strong> ${value.data.features[0].attributes.precinct}</p>
+          <p><strong>ADDRESS</strong> ${value.data.features[0].attributes.precinct_location}</p>
         </div>
         <div>
           <h5>NEIGHBORHOOD POLICE OFFICER (NPO)</h5>
-          <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.police_officer}</p>
-          <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.phone_number}</p>
-          <p><strong>EMAIL:</strong> ${values['npo'].data.features[0].attributes.email}</p>
-        </div>`;
-      // if(values['npo'].data.features[0].attributes.Sgt_Phone != "0"){
-      //   tempHTML += `
-      //   <div>
-      //     <h5>SERGEANT</h5>
-      //     <p><strong>NAME:</strong> ${values['npo'].data.features[0].attributes.Sergeant}</p>
-      //     <p><strong>PHONE:</strong> ${values['npo'].data.features[0].attributes.Sgt_Phone}</p>
-      //   </div>`;
-      // }
-      tempHTML += `</article>`;
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.police_officer}</p>
+          <p><strong>PHONE:</strong> ${value.data.features[0].attributes.phone_number}</p>
+          <p><strong>EMAIL:</strong> ${value.data.features[0].attributes.email}</p>
+        </div>
+      </article>`;
     }else{
-      tempHTML += `
+      tempHTML = `
       <article class="info-section">
         <span>POLICE</span>
         <div>
@@ -157,13 +155,18 @@ export default class Panel {
         </div>
       </article>`;
     }
-    if(Object.keys(values['recycling'].data).length != 0 && values['recycling'].data.constructor === Object){
+    return tempHTML;
+  }
+
+  buildRecycling(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
       let contractorInfo = {
         name: null,
         url: null,
         phone: null
       };
-      if(values['recycling'].data.next_pickups.trash.contractor === 'gfl'){
+      if(value.data.next_pickups.trash.contractor === 'gfl'){
         contractorInfo.name = 'GFL';
         contractorInfo.url =  'http://gflusa.com/residential/detroit/';
         contractorInfo.phone = '(844) 464-3587';
@@ -172,22 +175,21 @@ export default class Panel {
         contractorInfo.url =  'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
         contractorInfo.phone = ' (844) 233-8764';
       }
-      tempHTML += `
+      tempHTML = `
       <article class="info-section">
         <span>TRASH & RECYCLING</span>
         <div>
           <p><strong>PROVIDER:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
-          <p><strong>NEXT TRASH:</strong> ${moment(values['recycling'].data.next_pickups.trash.next_pickup).format('MMM DD, YYYY')}</p>
-          <p><strong>NEXT RECYCLING:</strong> ${moment(values['recycling'].data.next_pickups.recycling.next_pickup).format('MMM DD, YYYY')}</p>
-          <p><strong>NEXT BULK:</strong> ${moment(values['recycling'].data.next_pickups.bulk.next_pickup).format('MMM DD, YYYY')}</p>`;
-      if('yard waste' in values['recycling'].data.next_pickups){
-        tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(values['recycling'].data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>`;
-      }
-      tempHTML += `</div>
+          <p><strong>NEXT TRASH:</strong> ${moment(value.data.next_pickups.trash.next_pickup).format('MMM DD, YYYY')}</p>
+          <p><strong>NEXT RECYCLING:</strong> ${moment(value.data.next_pickups.recycling.next_pickup).format('MMM DD, YYYY')}</p>
+          <p><strong>NEXT BULK:</strong> ${moment(value.data.next_pickups.bulk.next_pickup).format('MMM DD, YYYY')}</p>
+          ${('yard waste' in value.data.next_pickups) ?
+          tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(value.data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>` : ``}
+        </div>
       <h4><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
-      tempHTML += `
+      tempHTML = `
       <article class="info-section">
         <span>TRASH & RECYCLING</span>
         <div>
@@ -195,7 +197,12 @@ export default class Panel {
         </div>
       </article>`;
     }
-    if(values['assessors-data'] && Object.keys(values['assessors-data'].data).length != 0 && values['assessors-data'].data.constructor === Object && values['assessors-data'].data.detail !== "Not found."){
+    return tempHTML;
+  }
+
+  buildAssessors(value){
+    let tempHTML = '';
+    if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
       let property = {
         year: null,
         value: null,
@@ -206,36 +213,34 @@ export default class Panel {
       <article class="info-section">
         <span>OWNER'S ADDRESS</span>
         <div>
-          <p><strong>CITY:</strong> ${values['assessors-data'].data.ownercity}</p>
-          <p><strong>STATE:</strong> ${values['assessors-data'].data.ownerstate}</p>
-          <p><strong>ADDRESS:</strong> ${values['assessors-data'].data.ownerstreetaddr}</p>
-          <p><strong>ZIP:</strong> ${values['assessors-data'].data.ownerzip}</p>
+          <p><strong>CITY:</strong> ${value.data.ownercity}</p>
+          <p><strong>STATE:</strong> ${value.data.ownerstate}</p>
+          <p><strong>ADDRESS:</strong> ${value.data.ownerstreetaddr}</p>
+          <p><strong>ZIP:</strong> ${value.data.ownerzip}</p>
         </div>
       </article>`;
-      if(values['assessors-data'].data.resb_bldgclass === 0){
-        property.year = values['assessors-data'].data.cib_yearbuilt;
-        property.value = values['assessors-data'].data.cib_value;
-        property.floor = values['assessors-data'].data.cib_yearbuilt;
-        property.buildingClass = values['assessors-data'].data.cib_yearbuilt;
+      if(value.data.resb_bldgclass === 0){
+        property.year = value.data.cib_yearbuilt;
+        property.value = value.data.cib_value;
+        property.floor = value.data.cib_yearbuilt;
+        property.buildingClass = value.data.cib_yearbuilt;
       }else{
-        property.year = values['assessors-data'].data.resb_yearbuilt;
-        property.value = values['assessors-data'].data.resb_value;
-        property.floor = values['assessors-data'].data.resb_floorarea;
-        property.buildingClass = values['assessors-data'].data.resb_bldgclass;
+        property.year = value.data.resb_yearbuilt;
+        property.value = value.data.resb_value;
+        property.floor = value.data.resb_floorarea;
+        property.buildingClass = value.data.resb_bldgclass;
       }
       tempHTML += `
       <article class="info-section">
         <span>PROPERTY</span>
         <div>
-          <p><strong>PARCEL NUMBER:</strong> ${values['assessors-data'].data.pnum}</p>
+          <p><strong>PARCEL NUMBER:</strong> ${value.data.pnum}</p>
           <p><strong>YEAR BUILD:</strong> ${property.year}</p>
           <p><strong>CALCULATED VALUE:</strong> $${property.value.toLocaleString()}</p>
           <p><strong>FLOOR AREA:</strong> ${property.floor.toLocaleString()} SQFT</p>
           <p><strong>BUILDING CLASS:</strong> ${property.buildingClass}</p>
         </div>
-      </article>
-      <article class="info-section">
-      <span>RENTAL ENFORCEMENT STATUS</span>`;
+      </article>`;
     }else{
       tempHTML += `
       <article class="info-section">
@@ -249,33 +254,47 @@ export default class Panel {
         <div>
           <p>NO PROPERTY INFO FOUND</p>
         </div>
-      </article>
-      <article class="info-section">
-      <span>RENTAL ENFORCEMENT STATUS</span>`;
+      </article>`;
     }
-    if(values['rental-data'] && values['rental-data'].data.features.length){
-      values['rental-data'].data.features.forEach(function(value){
+    return tempHTML;
+  }
+
+  buildRental(value){
+    let tempHTML = '';
+    if(value && value.data.features.length){
+      value.data.features.forEach(function(value){
         tempHTML += `
+        
+        <article class="info-section">
+        <span>RENTAL ENFORCEMENT STATUS</span>
         <div>
           <p><strong>REGISTER:</strong> ${moment(value.attributes.date).format('MMM DD, YYYY')}</p>
           <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.date).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
       });
-      tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>`;
+      tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>
+      </article>`;
     }else{
       tempHTML += `
+      <article class="info-section">
+        <span>RENTAL ENFORCEMENT STATUS</span>
       <div>
         <p><strong>REGISTER:</strong> Not registered</p>
         <p><strong>CERTIFIED:</strong> Not certified</p>
-      </div>`;
+      </div>
+      </article>`;
     }
-    tempHTML += `</article>
-    <article class="info-section">
-    <span>BLIGHT TICKETS</span>`;
-    if(values['blight-data'] && values['blight-data'].data.features.length){
-      values['blight-data'].data.features.forEach(function(value){
+    return tempHTML;
+  }
+
+  buildBlight(value){
+    let tempHTML = '';
+    if(value && value.data.features.length){
+      value.data.features.forEach(function(value){
         tempHTML += `
+        <article class="info-section">
+        <span>BLIGHT TICKETS</span>
         <div>
           <p><strong>TICKET ID:</strong> ${value.attributes.ticket_number}</p>
           <p><strong>FINE AMOUNT:</strong> $${value.attributes.fine_amount}</p>
@@ -287,38 +306,26 @@ export default class Panel {
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/s7hj-n86v" target="_blank">MORE INFO</a></h4>`;
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/s7hj-n86v" target="_blank">MORE INFO</a></h4></article>`;
     }else{
       tempHTML += `
+      <article class="info-section">
+      <span>BLIGHT TICKETS</span>
       <div>
         <p>NO BLIGHT TICKETS FOUND</p>
-      </div>`;
+      </div>
+      </article>`;
     }
-    tempHTML += `</article>`;
-    // <article class="info-section">
-    // <span>PROPERTY SALES HISTORY</span>`;
-    // if(values[5].data.length){
-    //   values[5].data.forEach(function(value){
-    //     tempHTML += `
-    //     <div>
-    //       <p><strong>SALE DATE:</strong> ${moment(value.sale_date).format('MMM DD, YYYY')}</p>
-    //       <p><strong>SALE PRICE:</strong> $${parseInt(value.sale_price).toLocaleString()}</p>
-    //     </div>
-    //     `;
-    //   });
-    //   tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/9xku-658c" target="_blank">MORE INFO</a></h4>`;
-    // }else{
-    //   tempHTML += `
-    //   <div>
-    //     <p>NO PROPERTY SALES HISTORY FOUND</p>
-    //   </div>`;
-    // }
-    tempHTML += `</article>
-    <article class="info-section">
-    <span>BUILDING PERMITS</span>`;
-    if(values['permit-data'] && values['permit-data'].data.features.length){
-      values['permit-data'].data.features.forEach(function(value){
+    return tempHTML;
+  }
+
+  buildPermit(value){
+    let tempHTML = '';
+    if(value && value.data.features.length){
+      value.data.features.forEach(function(value){
         tempHTML += `
+        <article class="info-section">
+        <span>BUILDING PERMITS</span>
         <div>
           <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
           <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
@@ -330,40 +337,52 @@ export default class Panel {
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/but4-ky7y" target="_blank">MORE INFO</a></h4>`;
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/but4-ky7y" target="_blank">MORE INFO</a></h4>
+      </article>`;
     }else{
       tempHTML += `
+      <article class="info-section">
+        <span>BUILDING PERMITS</span>
       <div>
         <p>NO BUILDING PERMITS FOUND</p>
-      </div>`;
-    }
-    tempHTML += `</article>`;
-    if(values['demo-status'] && values['demo-status'].data.features.length){
-      tempHTML += `<article class="info-section">
-      <span>DEMOLITION STATUS</span>`;
-      values['demo-status'].data.features.forEach(function(value){
-        
-        tempHTML += `
-          <div>
-            <p><STRONG>WARNING!</STRONG></p>
-            <p>SCHEDULED FOR DEMOLITION ON</p> 
-            <p><strong>${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</stron></p>
-          </div>
-        `;
-      });
-      tempHTML += `
-      <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+      </div>
       </article>`;
     }
+    return tempHTML;
+  }
+
+  buildDemoStatus(value){
+    let tempHTML = '';
+    if(value.data.features.length){
+      tempHTML = `<article class="info-section">
+    <span>DEMOLITION STATUS</span>`;
+    value.data.features.forEach(function(value){
+      tempHTML += `
+        <div>
+          <p><STRONG>WARNING!</STRONG></p>
+          <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
+          ${(value.attributes.demolish_by_date == null) ? `Date to be determined`:`<p><strong>${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</stron></p>`}
+        </div>
+      `;
+    });
     tempHTML += `
-    <article class="info-section">
-    <span>DEMOLITIONS NEAR YOU</span>`;
-    if(values['demos-data'].data.features.length){
-      values['demos-data'].data.features.forEach(function(value){
+    <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+    </article>`;
+    }
+
+    return tempHTML;
+  }
+
+  buildDemosNear(value){
+    let tempHTML = '';
+    if(value.data.features.length){
+      value.data.features.forEach(function(value){
         tempHTML += `
+        <article class="info-section">
+        <span>DEMOLITIONS NEAR YOU</span>
         <div>
           <p><strong>ADDRESS:</strong> ${value.attributes.address}</p>
-          <p><strong>COMMERCIAL:</strong> ${value.attributescommercial}</p>
+          <p><strong>COMMERCIAL:</strong> ${value.attributes.commercial_building}</p>
           <p><strong>PRICE:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
           <p><strong>PARCEL:</strong> ${value.attributes.parcel_id}</p>
           <p><strong>CONTRACTOR:</strong> ${value.attributes.contractor_name}</p>
@@ -377,16 +396,23 @@ export default class Panel {
       </article>`;
     }else{
       tempHTML += `
+      <article class="info-section">
+      <span>DEMOLITIONS NEAR YOU</span>
       <div>
         <p>NO DEMOLITIONS FOUND</p>
       </div>
       </article>`;
     }
-    if(values['improve-det'].data.features.length){
+    return tempHTML;
+  }
+
+  buildImproveDet(value){
+    let tempHTML = '';
+    if(value.data.features.length){
       tempHTML += `
       <article class="info-section">
       <span>IMPROVE DETROIT ISSUES NEAR YOU</span>`;
-      values['improve-det'].data.features.forEach(function(value){
+      value.data.features.forEach(function(value){
         tempHTML += `
         <div>
           <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
@@ -410,7 +436,65 @@ export default class Panel {
       </div>
       </article>`;
     }
+    return tempHTML;
+  }
 
+  createMarkup(values, controller){
+    let tempHTML = '';
+    for (const [key, value] of Object.entries(values)) {
+      switch (key) {
+        case 'council':
+          tempHTML += controller.panel.buildCouncil(values.councilData);
+          break;
+
+        case 'neighborhood':
+          tempHTML += controller.panel.buildNeighborhood(value);
+          break;
+
+        case 'assessors-data':
+          tempHTML += controller.panel.buildAssessors(value);
+          break;
+
+        case 'permit-data':
+          tempHTML += controller.panel.buildPermit(value);
+          break;
+
+        case 'rental-data':
+          tempHTML += controller.panel.buildRental(value);
+          break;
+
+        case 'blight-data':
+          tempHTML += controller.panel.buildBlight(value);
+          break;
+
+        case 'demos-data':
+          tempHTML += controller.panel.buildDemosNear(value);
+          break;
+
+        case 'demo-status':
+          tempHTML += controller.panel.buildDemoStatus(value);
+          break;
+
+        case 'npo':
+          tempHTML += controller.panel.buildNPO(value);
+          break;
+
+        case 'improve-det':
+          tempHTML += controller.panel.buildImproveDet(value);
+          break;
+
+        case 'recycling':
+          tempHTML += controller.panel.buildRecycling(value);
+          break;
+
+        case 'historicDistrict':
+          tempHTML += controller.panel.buildHistoricDistrict(value);
+          break;
+      
+        default:
+          break;
+      }
+    }
     return tempHTML;
   }
 }

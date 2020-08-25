@@ -109,7 +109,7 @@ export default class DataManager {
       });
     });
     let rentalData = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Rental_Registrations_(Combined)/FeatureServer/0/query?where=parcel_number+%3D+%27${location.attributes.User_fld}%27+and+date+<>+null&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/RentalStatuses/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27+and+date+<>+null&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -119,7 +119,7 @@ export default class DataManager {
       });
     });
     let rentalCertData = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Residential_Inspections_(combined)/FeatureServer/0/query?where=parcel_number+%3D+%27${location.attributes.User_fld}%27+and+date+<>+null+and+result+%3D+%27OK%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/ResidentialInspections/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27+and+date+<>+null+and+result+%3D+%27OK%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -238,37 +238,144 @@ export default class DataManager {
       });
     });
     // ,districtManagers,districtInspectors,councilMembers
-    if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-      Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-        let dataSets = {};
-        for (let key in values) {
-          if(values[key] != null) {
-            dataSets[values[key].id] = values[key];
-          }else{
-            initialLoadChecker = false;
+    let filters = controller.defaultSettings.filters.split(',');
+    let callList = [];
+    filters.forEach(f => {
+      console.log(f);
+      switch (f) {
+        case 'council':
+          callList.push(council);
+          break;
+
+        case 'neighborhood':
+          callList.push(neighborhoods);
+          break;
+
+        case 'assessors-data':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(assessorsData);
           }
-        }
-        dataSets['title'] = location.address;
-        controller.buildCouncilData(dataSets, controller);
-      }).catch(reason => {
-        // console.log(reason);
-      });
-    }else{
-      Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-        let dataSets = {};
-        for (let key in values) {
-          if(values[key] != null) {
-            dataSets[values[key].id] = values[key];
-          }else{
-            initialLoadChecker = false;
+          break;
+
+        case 'permit-data':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(permitData);
           }
+          break;
+
+        case 'blight-data':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(blightData);
+          }
+          break;
+
+        case 'salesHistoryData':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(salesHistoryData);
+          }
+          break;
+
+        case 'demosData':
+          callList.push(demosData);
+          break;
+
+        case 'npo':
+          callList.push(npo);
+          break;
+
+        case 'improve-det':
+          callList.push(improveDet);
+          break;
+
+        case 'recycling':
+          callList.push(recycling);
+          break;
+
+        case 'rentalData':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(rentalData);
+          }
+          break;
+
+        case 'rentalCertData':
+          callList.push(rentalCertData);
+          break;
+
+        case 'demoStatus':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(demoStatus);
+          }
+          break;
+
+        case 'historicDistrict':
+          callList.push(historicDistrict);
+          break;
+
+        case 'districtManagers':
+          callList.push(districtManagers);
+          break;
+
+        case 'districtInspectors':
+          callList.push(districtInspectors);
+          break;
+
+        case 'councilMembers':
+          callList.push(councilMembers);
+          break;
+      
+        default:
+          break;
+      }
+    });
+    Promise.all(callList).then(values => {
+      let dataSets = {};
+      for (let key in values) {
+        if(values[key] != null) {
+          dataSets[values[key].id] = values[key];
+        }else{
+          initialLoadChecker = false;
         }
-        dataSets['title'] = location.address;
-        controller.buildCouncilData(dataSets, controller);
-      }).catch(reason => {
-        // console.log(reason);
-      });
-    }
+      }
+      dataSets['title'] = location.address;
+      if(filters.includes('council')){
+        let councilData = controller.buildCouncilData(dataSets, controller);
+        dataSets.councilData = {id: 'councilData', data: councilData};
+      }
+      controller.panel.creatPanel(dataSets, controller);
+    }).catch(reason => {
+      // console.log(reason);
+    });
+    // if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+    //   Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
+    //     let dataSets = {};
+    //     for (let key in values) {
+    //       if(values[key] != null) {
+    //         dataSets[values[key].id] = values[key];
+    //       }else{
+    //         initialLoadChecker = false;
+    //       }
+    //     }
+    //     dataSets['title'] = location.address;
+    //     controller.buildCouncilData(dataSets, controller);
+    //   }).catch(reason => {
+    //     // console.log(reason);
+    //   });
+    // }else{
+    //   Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
+    //     let dataSets = {};
+    //     for (let key in values) {
+    //       if(values[key] != null) {
+    //         dataSets[values[key].id] = values[key];
+    //       }else{
+    //         initialLoadChecker = false;
+    //       }
+    //     }
+    //     dataSets['title'] = location.address;
+    //     controller.buildCouncilData(dataSets, controller);
+    //   }).catch(reason => {
+    //     // console.log(reason);
+    //   });
+    // }
     
   }
 }
