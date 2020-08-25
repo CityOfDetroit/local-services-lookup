@@ -28,6 +28,7 @@
   "dependencies": {
     "@turf/simplify": "^5.1.5",
     "@turf/turf": "^5.1.6",
+    "is-obj": "^2.0.0",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "request": "^2.88.2",

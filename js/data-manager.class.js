@@ -247,23 +247,23 @@ export default class DataManager {
           callList.push(council);
           break;
 
-        case 'neighborhoods':
+        case 'neighborhood':
           callList.push(neighborhoods);
           break;
 
-        case 'assessorsData':
+        case 'assessors-data':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
             callList.push(assessorsData);
           }
           break;
 
-        case 'permitData':
+        case 'permit-data':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
             callList.push(permitData);
           }
           break;
 
-        case 'blightData':
+        case 'blight-data':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
             callList.push(blightData);
           }
@@ -283,7 +283,7 @@ export default class DataManager {
           callList.push(npo);
           break;
 
-        case 'improveDet':
+        case 'improve-det':
           callList.push(improveDet);
           break;
 
@@ -327,10 +327,8 @@ export default class DataManager {
           break;
       }
     });
-    console.log(callList);
     Promise.all(callList).then(values => {
       let dataSets = {};
-      console.log(values);
       for (let key in values) {
         if(values[key] != null) {
           dataSets[values[key].id] = values[key];
@@ -339,9 +337,9 @@ export default class DataManager {
         }
       }
       dataSets['title'] = location.address;
-      console.log(dataSets);
       if(filters.includes('council')){
-        dataSets = controller.buildCouncilData(dataSets, controller);
+        let councilData = controller.buildCouncilData(dataSets, controller);
+        dataSets.councilData = {id: 'councilData', data: councilData};
       }
       controller.panel.creatPanel(dataSets, controller);
     }).catch(reason => {
