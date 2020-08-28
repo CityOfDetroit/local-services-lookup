@@ -366,7 +366,7 @@ export default class Panel {
       `;
     });
     tempHTML += `
-    <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+    <h4><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
     </article>`;
     }
 
@@ -392,7 +392,7 @@ export default class Panel {
         </div>`;
       });
       tempHTML += `
-      <h4><a href="https://data.detroitmi.gov/resource/nfx3-ihbp" target="_blank">MORE INFO</a></h4>
+      <h4><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML += `
