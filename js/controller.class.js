@@ -210,7 +210,6 @@ export default class Controller {
         break;
         
       case 6:
-        console.log('loading council 6');
         councilData.districtURL = `/taxonomy/term/1491`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1491'){

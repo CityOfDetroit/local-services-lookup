@@ -306,7 +306,7 @@ export default class Panel {
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/s7hj-n86v" target="_blank">MORE INFO</a></h4></article>`;
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/datasets/blight-violations" target="_blank">MORE INFO</a></h4></article>`;
     }else{
       tempHTML += `
       <article class="info-section">
@@ -333,11 +333,11 @@ export default class Panel {
           <p><strong>PERMIT STATUS:</strong> ${value.attributes.status}</p>
           <p><strong>PERMIT ISSUED:</strong> ${moment(value.attributes.permit_issue_date).format('MMM DD, YYYY')}</p>
           <p><strong>PERMIT EXPIRED:</strong> ${moment(value.attributes.date_expiration).format('MMM DD, YYYY')}</p>
-          <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.permit_description}</p>
+          <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.description_of_work}</p>
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/resource/but4-ky7y" target="_blank">MORE INFO</a></h4>
+      tempHTML += `<h4><a href="https://data.detroitmi.gov/datasets/building-permits" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML += `
