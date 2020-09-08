@@ -5,8 +5,8 @@ Simple app to lookup city services based on a location
 
 This project was created using:
 
-[Parcel](https://parceljs.org/) as a web application bundler.
-[Yarn](https://classic.yarnpkg.com/en/) to manage project dependencies.
+- [Parcel](https://parceljs.org/) as a web application bundler.
+- [Yarn](https://classic.yarnpkg.com/en/) to manage project dependencies.
 
 ## Setup Local Environment.
 
