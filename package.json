@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/CityOfDetroit/local-services-lookup#readme",
   "scripts": {
-    "start": "parcel index.html --https --no-cache -p 3000 --open",
-    "build": "parcel build index.js --no-cache --public-url '.' -d build"
+    "start": "parcel index.html --no-cache -p 3000 --open",
+    "build": "parcel build index.js --no-cache --public-url '.' --no-source-maps -d build"
   },
   "author": "Edgar Montes",
   "license": "MIT",
