@@ -89,17 +89,21 @@ export default class DataManager {
       });
     });
     let assessorsData = new Promise((resolve, reject) => {
-      let url = "https://apis.detroitmi.gov/assessments/parcel/" + location.attributes.User_fld + "/";
-      return fetch(url)
-      .then((resp) => resp.json()) // Transform the data into json
-      .then(function(data) {
-        resolve({"id": "assessors-data", "data": data});
-      }).catch( err => {
-        // console.log(err);
-      });
+      if(location.attributes.User_fld == 'CONDO BUILDING'){
+        resolve({"id": "assessors-data", "data": null});
+      }else{
+        let url = "https://apis.detroitmi.gov/assessments/parcel/" + location.attributes.User_fld + "/";
+        return fetch(url)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function(data) {
+          resolve({"id": "assessors-data", "data": data});
+        }).catch( err => {
+          // console.log(err);
+        });
+      }
     });
     let permitData = new Promise((resolve, reject) => {
-      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/BuildingPermits/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/BuildingPermits/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=2&f=json`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -109,7 +113,12 @@ export default class DataManager {
       });
     });
     let rentalData = new Promise((resolve, reject) => {
-      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/RentalStatuses/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      let url;
+      if(location.attributes.User_fld != 'CONDO BUILDING'){
+        url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/RentalStatuses/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      }else{
+        url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/RentalStatuses/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C+${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIndexIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      }
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -119,7 +128,12 @@ export default class DataManager {
       });
     });
     let rentalCertData = new Promise((resolve, reject) => {
-      let url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/CertificateOfCompliance/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      let url;
+      if(location.attributes.User_fld != 'CONDO BUILDING'){
+        url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/CertificateOfCompliance/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      }else{
+        url = `https://gis.detroitmi.gov/arcgis/rest/services/OpenData/CertificateOfCompliance/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C+${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIndexIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
+      }
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -252,7 +266,10 @@ export default class DataManager {
 
         case 'assessors-data':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-            callList.push(assessorsData);
+            if(location.attributes.User_fld == 'CONDO BUILDING'){
+            }else{
+              callList.push(assessorsData);
+            }
           }
           break;
 
@@ -290,13 +307,13 @@ export default class DataManager {
           callList.push(recycling);
           break;
 
-        case 'rentalData':
+        case 'rental-data':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
             callList.push(rentalData);
           }
           break;
 
-        case 'rentalCertData':
+        case 'rental-cert':
           callList.push(rentalCertData);
           break;
 
@@ -344,37 +361,5 @@ export default class DataManager {
     }).catch(reason => {
       // console.log(reason);
     });
-    // if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-    //   Promise.all([council,neighborhoods,assessorsData,permitData,blightData,salesHistoryData,demosData,npo,improveDet,recycling,rentalData,rentalCertData,demoStatus,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-    //     let dataSets = {};
-    //     for (let key in values) {
-    //       if(values[key] != null) {
-    //         dataSets[values[key].id] = values[key];
-    //       }else{
-    //         initialLoadChecker = false;
-    //       }
-    //     }
-    //     dataSets['title'] = location.address;
-    //     controller.buildCouncilData(dataSets, controller);
-    //   }).catch(reason => {
-    //     // console.log(reason);
-    //   });
-    // }else{
-    //   Promise.all([council,neighborhoods,demosData,npo,improveDet,recycling,historicDistrict,districtManagers,districtInspectors,councilMembers]).then(values => {
-    //     let dataSets = {};
-    //     for (let key in values) {
-    //       if(values[key] != null) {
-    //         dataSets[values[key].id] = values[key];
-    //       }else{
-    //         initialLoadChecker = false;
-    //       }
-    //     }
-    //     dataSets['title'] = location.address;
-    //     controller.buildCouncilData(dataSets, controller);
-    //   }).catch(reason => {
-    //     // console.log(reason);
-    //   });
-    // }
-    
   }
 }

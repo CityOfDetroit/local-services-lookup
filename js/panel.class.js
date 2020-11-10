@@ -259,20 +259,17 @@ export default class Panel {
     return tempHTML;
   }
 
-  buildRental(value){
+  buildRental(value, values){
     let tempHTML = '';
     if(value && value.data.features.length){
-      value.data.features.forEach(function(value){
-        tempHTML += `
-        
+      tempHTML += `
         <article class="info-section">
         <span>RENTAL ENFORCEMENT STATUS</span>
         <div>
-          <p><strong>REGISTER:</strong> ${moment(value.attributes.date).format('MMM DD, YYYY')}</p>
-          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.date).format('MMM DD, YYYY')}` : `Not certified`}</p>
+          <p><strong>REGISTER:</strong> ${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}</p>
+          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.date_status).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
-      });
       tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
@@ -291,10 +288,11 @@ export default class Panel {
   buildBlight(value){
     let tempHTML = '';
     if(value && value.data.features.length){
+      tempHTML += `
+      <article class="info-section">
+      <span>BLIGHT TICKETS</span>`;
       value.data.features.forEach(function(value){
         tempHTML += `
-        <article class="info-section">
-        <span>BLIGHT TICKETS</span>
         <div>
           <p><strong>TICKET ID:</strong> ${value.attributes.ticket_number}</p>
           <p><strong>FINE AMOUNT:</strong> $${value.attributes.fine_amount}</p>
@@ -322,10 +320,11 @@ export default class Panel {
   buildPermit(value){
     let tempHTML = '';
     if(value && value.data.features.length){
+      tempHTML += `
+        <article class="info-section">
+        <span>BUILDING PERMITS</span>`;
       value.data.features.forEach(function(value){
         tempHTML += `
-        <article class="info-section">
-        <span>BUILDING PERMITS</span>
         <div>
           <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
           <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
@@ -460,7 +459,7 @@ export default class Panel {
           break;
 
         case 'rental-data':
-          tempHTML += controller.panel.buildRental(value);
+          tempHTML += controller.panel.buildRental(value, values);
           break;
 
         case 'blight-data':
