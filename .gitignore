@@ -60,3 +60,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# local dev files
+local/
+
+# cache
+.cache
+.parcel-cache
