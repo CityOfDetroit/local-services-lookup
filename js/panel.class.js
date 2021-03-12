@@ -90,7 +90,7 @@ export default class Panel {
       <article class="info-section">
         <span>NEIGHBORHOOD</span>
         <div>
-          <p><strong>NAME:</strong> ${value.data.features[0].attributes.NHood_Name}</p>
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.nhood_name}</p>
         </div>
       </article>`;
     }else{
