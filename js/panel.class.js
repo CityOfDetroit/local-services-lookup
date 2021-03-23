@@ -26,6 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
+    console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -285,6 +286,23 @@ export default class Panel {
     return tempHTML;
   }
 
+  buildFireEscrow(value){
+    console.log(value);
+    let tempHTML = '';
+    if(value && value.data.features.length){
+      tempHTML += `
+        <article class="info-section">
+        <span>FIRE ESCROW</span>
+        <div>
+          <p><strong>STATUS:</strong> Fire Escrow found</p>
+        </div>
+        </article>`;
+    }else{
+      tempHTML += ``;
+    }
+    return tempHTML;
+  }
+
   buildBlight(value){
     let tempHTML = '';
     if(value && value.data.features.length){
@@ -488,6 +506,10 @@ export default class Panel {
 
         case 'historicDistrict':
           tempHTML += controller.panel.buildHistoricDistrict(value);
+          break;
+
+        case 'fireEscrow':
+          tempHTML += controller.panel.buildFireEscrow(value);
           break;
       
         default:
