@@ -251,7 +251,16 @@ export default class DataManager {
         // console.log(err);
       });
     });
-    // ,districtManagers,districtInspectors,councilMembers
+    let fireEscrow = new Promise((resolve, reject) => {
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Fire_Escrow_Properties/FeatureServer/0/query?where=Parcel_ID%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "fireEscrow", "data": data});
+      }).catch( err => {
+        // console.log(err);
+      });
+    });
     let filters = controller.defaultSettings.filters.split(',');
     let callList = [];
     filters.forEach(f => {
@@ -288,6 +297,12 @@ export default class DataManager {
         case 'salesHistoryData':
           if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
             callList.push(salesHistoryData);
+          }
+          break;
+
+        case 'fireEscrow':
+          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+            callList.push(fireEscrow);
           }
           break;
 
