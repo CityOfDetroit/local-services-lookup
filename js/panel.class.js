@@ -26,7 +26,6 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -287,7 +286,6 @@ export default class Panel {
   }
 
   buildFireEscrow(value){
-    console.log(value);
     let tempHTML = '';
     if(value && value.data.features.length){
       tempHTML += `
