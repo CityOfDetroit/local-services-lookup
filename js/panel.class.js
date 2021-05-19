@@ -128,6 +128,29 @@ export default class Panel {
     return tempHTML;
   }
 
+  buildNEZ(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
+      tempHTML = `
+      <article class="info-section">
+        <span>NEZ Homestead Zone</span>
+        <div>
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.RNNAME}</p>
+          <p><strong>ID:</strong> ${value.data.features[0].attributes.RID}</p>
+        </div>
+      </article>`;
+    }else{
+      tempHTML = `
+      <article class="info-section">
+        <span>NEZ Homestead Zone</span>
+        <div>
+          <p>NO NEZ Homestead Zone FOUND</p>
+        </div>
+      </article>`;
+    }
+    return tempHTML;
+  }
+
   buildNPO(value){
     let tempHTML = '';
     if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
@@ -464,6 +487,10 @@ export default class Panel {
 
         case 'neighborhood':
           tempHTML += controller.panel.buildNeighborhood(value);
+          break;
+
+        case 'nez':
+          tempHTML += controller.panel.buildNEZ(value);
           break;
 
         case 'assessors-data':
