@@ -38,7 +38,7 @@
     "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
     "babel-preset-env": "^1.7.0",
-    "browserslist": "^4.14.0",
+    "browserslist": "^4.16.5",
     "caniuse-lite": "^1.0.30001117",
     "cssnano": "^4.1.10",
     "fetch-polyfill": "^0.8.2",
