@@ -128,25 +128,73 @@ export default class Panel {
     return tempHTML;
   }
 
-  buildNEZ(value){
+  buildNEZ(nez, nezOld){
     let tempHTML = '';
-    if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
-      tempHTML = `
-      <article class="info-section">
-        <span>NEZ Homestead Zone</span>
-        <div>
-          <p><strong>NAME:</strong> ${value.data.features[0].attributes.RNNAME}</p>
-          <p><strong>ID:</strong> ${value.data.features[0].attributes.RID}</p>
-        </div>
-      </article>`;
+
+    if(Object.keys(nez.data).length != 0 && nez.data.constructor === Object && nez.data.features.length > 0){
+      if(Object.keys(nezOld.data).length != 0 && nezOld.data.constructor === Object && nezOld.data.features.length > 0){
+        tempHTML = `
+        <article class="info-section">
+          <span>Current NEZ Homestead Zone</span>
+          <div>
+            <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
+            <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
+            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+          </div>
+          <span>New NEZ Homestead Zone</span>
+          <div>
+            <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
+            <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
+            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+          </div>
+        </article>`;
+      }else{
+        tempHTML = `
+        <article class="info-section">
+          <span>Current NEZ Homestead Zone</span>
+          <div>
+            <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
+            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+          </div>
+          <span>New NEZ Homestead Zone</span>
+          <div>
+            <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
+            <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
+            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+          </div>
+        </article>`;
+      }
     }else{
-      tempHTML = `
-      <article class="info-section">
-        <span>NEZ Homestead Zone</span>
-        <div>
-          <p>NO NEZ Homestead Zone FOUND</p>
-        </div>
-      </article>`;
+      if(Object.keys(nezOld.data).length != 0 && nezOld.data.constructor === Object && nezOld.data.features.length > 0){
+        tempHTML = `
+        <article class="info-section">
+          <span>Current NEZ Homestead Zone</span>
+          <div>
+            <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
+            <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
+            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+          </div>
+          <span>New NEZ Homestead Zone</span>
+          <div>
+            <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
+            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+          </div>
+        </article>`;
+      }else{
+        tempHTML = `
+        <article class="info-section">
+          <span>Current NEZ Homestead Zone</span>
+          <div>
+            <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
+            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+          </div>
+          <span>New NEZ Homestead Zone</span>
+          <div>
+            <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
+            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+          </div>
+        </article>`;
+      }
     }
     return tempHTML;
   }
@@ -490,7 +538,7 @@ export default class Panel {
           break;
 
         case 'nez':
-          tempHTML += controller.panel.buildNEZ(value);
+          tempHTML += controller.panel.buildNEZ(value, values.nezOld);
           break;
 
         case 'assessors-data':
