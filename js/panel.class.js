@@ -26,6 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
+    console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -195,6 +196,28 @@ export default class Panel {
           </div>
         </article>`;
       }
+    }
+    return tempHTML;
+  }
+
+  buildNRSA(value){
+    let tempHTML = '';
+    if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
+      tempHTML = `
+      <article class="info-section">
+        <span>NEIGHBORHOOD REVITALIZATION STRATEGY AREAS (NRSA)</span>
+        <div>
+          <p><strong>ZONE:</strong> ${value.data.features[0].attributes.Name}</p>
+        </div>
+      </article>`;
+    }else{
+      tempHTML = `
+      <article class="info-section">
+        <span>NEIGHBORHOOD REVITALIZATION STRATEGY AREAS (NRSA)</span>
+        <div>
+          <p>NO NRSA FOUND</p>
+        </div>
+      </article>`;
     }
     return tempHTML;
   }
@@ -539,6 +562,10 @@ export default class Panel {
 
         case 'nez':
           tempHTML += controller.panel.buildNEZ(value, values.nezOld);
+          break;
+
+        case 'nrsa':
+          tempHTML += controller.panel.buildNRSA(value);
           break;
 
         case 'assessors-data':
