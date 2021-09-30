@@ -32,13 +32,28 @@ export default class Panel {
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
     controller.panel.loaderToggle(false);
-    document.querySelector('#local-services-results .data-form').innerHTML = `<a href="https://app.smartsheet.com/b/form/5d291f237bbe41c88d44bfcd56e5b620" target="_blank"><button>REPORT DATA ISSUES</button></a>`;
+    document.querySelector('#local-services-results .data-form').innerHTML = `<a href="https://app.smartsheet.com/b/form/5d291f237bbe41c88d44bfcd56e5b620" target="_blank"><button class="noprint">REPORT DATA ISSUES</button></a><button id="print-home-info" class="noprint">PRINT</button>`;
     document.getElementById('local-services-results').className = 'active';
+    document.getElementById('print-home-info').addEventListener('click', (ev) => {
+      this.printInfo(ev);
+    });
   }
 
   clearPanel(){
     document.querySelector('.local-address').innerHTML = `INFO FOR:`;
     document.querySelector('#local-services-results .local-content').innerHTML = '';
+  }
+
+  printInfo(ev) {
+    let divContents = document.getElementById('local-services-results').innerHTML;
+    let a = window.open('', '', 'height=500, width=500');
+    a.document.write('<html>');
+    a.document.write('<head><style>@media print {.noprint { visibility: hidden;}; .local-content {column-count: 3;} }</style></head>');
+    a.document.write('<body >');
+    a.document.write(divContents);
+    a.document.write('</body>');
+    a.document.close();
+    a.print();
   }
 
   createErrorPanel(address, toggle){
@@ -136,32 +151,32 @@ export default class Panel {
       if(Object.keys(nezOld.data).length != 0 && nezOld.data.constructor === Object && nezOld.data.features.length > 0){
         tempHTML = `
         <article class="info-section">
-          <span>Current NEZ Homestead Zone</span>
+          <span>CURRENT NEZ HOMESTEAD ZONE</span>
           <div>
             <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
             <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
             <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
           </div>
-          <span>New NEZ Homestead Zone</span>
+          <span>NEW NEZ HOMESTEAD ZONE</span>
           <div>
             <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
             <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
-            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
           </div>
         </article>`;
       }else{
         tempHTML = `
         <article class="info-section">
-          <span>Current NEZ Homestead Zone</span>
+          <span>Current NEZ HOMESTEAD ZONE</span>
           <div>
             <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
-            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
           </div>
-          <span>New NEZ Homestead Zone</span>
+          <span>NEW NEZ HOMESTEAD ZONE</span>
           <div>
             <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
             <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
-            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
           </div>
         </article>`;
       }
@@ -173,12 +188,12 @@ export default class Panel {
           <div>
             <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
             <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
-            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
           </div>
           <span>New NEZ Homestead Zone</span>
           <div>
             <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
-            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
           </div>
         </article>`;
       }else{
@@ -187,12 +202,12 @@ export default class Panel {
           <span>Current NEZ Homestead Zone</span>
           <div>
             <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
-            <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
           </div>
           <span>New NEZ Homestead Zone</span>
           <div>
             <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
-            <p><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
+            <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
           </div>
         </article>`;
       }
@@ -280,7 +295,7 @@ export default class Panel {
           ${('yard waste' in value.data.next_pickups) ?
           tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(value.data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>` : ``}
         </div>
-      <h4><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
+      <h4 class="noprint"><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML = `
@@ -414,7 +429,7 @@ export default class Panel {
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/datasets/blight-violations" target="_blank">MORE INFO</a></h4></article>`;
+      tempHTML += `<h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/blight-violations" target="_blank">MORE INFO</a></h4></article>`;
     }else{
       tempHTML += `
       <article class="info-section">
@@ -446,7 +461,7 @@ export default class Panel {
         </div>
         `;
       });
-      tempHTML += `<h4><a href="https://data.detroitmi.gov/datasets/building-permits" target="_blank">MORE INFO</a></h4>
+      tempHTML += `<h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/building-permits" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML += `
@@ -475,7 +490,7 @@ export default class Panel {
       `;
     });
     tempHTML += `
-    <h4><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
+    <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
     </article>`;
     }
 
@@ -501,7 +516,7 @@ export default class Panel {
         </div>`;
       });
       tempHTML += `
-      <h4><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
+      <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
       </article>`;
     }else{
       tempHTML += `
@@ -531,7 +546,7 @@ export default class Panel {
         </div>`;
       });
       tempHTML += `
-      <h4>
+      <h4 class="noprint">
       <a href="https://seeclickfix.com/enhanced_watch_areas/674" target="_blank">MORE INFO</a>
       <a href="/webapp/improve-detroit-report-issue-online" target="_blank">REPORT ISSUE</a>
       </h4>
