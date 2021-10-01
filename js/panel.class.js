@@ -376,7 +376,7 @@ export default class Panel {
         <span>RENTAL ENFORCEMENT STATUS</span>
         <div>
           <p><strong>REGISTER:</strong> ${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}</p>
-          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.date_status).format('MMM DD, YYYY')}` : `Not certified`}</p>
+          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.record_status_date).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
       tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>

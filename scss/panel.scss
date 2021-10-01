@@ -19,6 +19,10 @@ $lg: new-breakpoint(min-width 1024px);
   display: none;
 }
 
+#print-home-info{
+  margin-left: 1em;
+}
+
 #local-services-results.active{
   display: block;
   position: relative;
