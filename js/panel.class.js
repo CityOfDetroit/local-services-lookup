@@ -370,12 +370,12 @@ export default class Panel {
 
   buildRental(value, values){
     let tempHTML = '';
-    if(value && value.data.features.length){
+    if((value && value.data.features.length) || (values['rental-cert-data'] && values['rental-cert-data'].data.features.length)){
       tempHTML += `
         <article class="info-section">
         <span>RENTAL ENFORCEMENT STATUS</span>
         <div>
-          <p><strong>REGISTER:</strong> ${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}</p>
+          <p><strong>REGISTER:</strong> ${value.data.features.length ? `${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}` : `Not registered`}</p>
           <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.record_status_date).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
