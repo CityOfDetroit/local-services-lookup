@@ -22,8 +22,8 @@ exports.getToken = functions.https.onRequest((request, response) => {
             "Access-Control-Allow-Headers": "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
         },
         form:
-        { client_id: functions.config().badaddress.id,
-        client_secret: functions.config().badaddress.secret,
+        { client_id: functions.config().localserviceslookup.id,
+        client_secret: functions.config().localserviceslookup.secret,
         grant_type: 'client_credentials' } };
         
         requestGlobal(options, function (error, results, body) {
