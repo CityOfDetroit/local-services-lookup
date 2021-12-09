@@ -1,5 +1,5 @@
 'use strict';
-import Controller from './js/controller.class';
+import Controller from './components/controller.class';
 import './scss/styles.scss';
 (function(){
   let controller = new Controller();
