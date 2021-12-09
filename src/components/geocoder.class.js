@@ -42,13 +42,6 @@ export default class Geocoder {
     this.form = form;
   }
 
-  writeUserData(userId, name, pass) {
-    firebase.database().ref('users/' + userId).set({
-      username: name,
-      password: pass
-    });
-  }
-
   supplementGeocoder(address, geocoder, type){
     let tempAddr = address.split(",");
     tempAddr = tempAddr[0];
@@ -182,7 +175,7 @@ export default class Geocoder {
   }
 
   needGeocode(address, geocoder, location){
-    fetch('https://us-central1-detroit-iet.cloudfunctions.net/getToken')
+    fetch('https://us-central1-local-services-loopkup.cloudfunctions.net/getToken')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
         let params = [
