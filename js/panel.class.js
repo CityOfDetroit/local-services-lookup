@@ -26,7 +26,6 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -568,63 +567,138 @@ export default class Panel {
     for (const [key, value] of Object.entries(values)) {
       switch (key) {
         case 'council':
-          tempHTML += controller.panel.buildCouncil(values.councilData);
+          try {
+            tempHTML += controller.panel.buildCouncil(values.councilData);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'neighborhood':
-          tempHTML += controller.panel.buildNeighborhood(value);
+          try {
+            tempHTML += controller.panel.buildNeighborhood(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'nez':
-          tempHTML += controller.panel.buildNEZ(value, values.nezOld);
+          try {
+            tempHTML += controller.panel.buildNEZ(value, values.nezOld);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'nrsa':
-          tempHTML += controller.panel.buildNRSA(value);
+          try {
+            tempHTML += controller.panel.buildNRSA(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'assessors-data':
-          tempHTML += controller.panel.buildAssessors(value);
+          try {
+            tempHTML += controller.panel.buildAssessors(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'permit-data':
-          tempHTML += controller.panel.buildPermit(value);
+          try {
+            tempHTML += controller.panel.buildPermit(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'rental-data':
-          tempHTML += controller.panel.buildRental(value, values);
+          try {
+            tempHTML += controller.panel.buildRental(value, values);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'blight-data':
-          tempHTML += controller.panel.buildBlight(value);
+          try {
+            tempHTML += controller.panel.buildBlight(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'demos-data':
-          tempHTML += controller.panel.buildDemosNear(value);
+          try {
+            tempHTML += controller.panel.buildDemosNear(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'demo-status':
-          tempHTML += controller.panel.buildDemoStatus(value);
+          try {
+            tempHTML += controller.panel.buildDemoStatus(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'npo':
-          tempHTML += controller.panel.buildNPO(value);
+          try {
+            tempHTML += controller.panel.buildNPO(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'improve-det':
-          tempHTML += controller.panel.buildImproveDet(value);
+          try {
+            tempHTML += controller.panel.buildImproveDet(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'recycling':
-          tempHTML += controller.panel.buildRecycling(value);
+          try {
+            tempHTML += controller.panel.buildRecycling(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'historicDistrict':
-          tempHTML += controller.panel.buildHistoricDistrict(value);
+          try {
+            tempHTML += controller.panel.buildHistoricDistrict(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
 
         case 'fireEscrow':
-          tempHTML += controller.panel.buildFireEscrow(value);
+          try {
+            tempHTML += controller.panel.buildFireEscrow(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
           break;
       
         default:

@@ -42,13 +42,6 @@ export default class Geocoder {
     this.form = form;
   }
 
-  writeUserData(userId, name, pass) {
-    firebase.database().ref('users/' + userId).set({
-      username: name,
-      password: pass
-    });
-  }
-
   supplementGeocoder(address, geocoder, type){
     let tempAddr = address.split(",");
     tempAddr = tempAddr[0];
