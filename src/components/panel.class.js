@@ -266,7 +266,33 @@ export default class Panel {
     return tempHTML;
   }
 
-  buildRecycling(value){
+  checkRecyclingStatus(data){
+    let yardStart = null;
+    let yardEnd = null;
+    data.details.forEach((item)=>{
+      if(item.type == 'start-date' && item.service == 'yard waste'){
+        if(item.normalDay != null){
+          yardStart = item.normalDay;
+        }else{
+          yardStart = item.newDay;
+        }
+      }
+      if(item.type == 'end-date' && item.service == 'yard waste'){
+        if(item.normalDay != null){
+          yardEnd = item.normalDay;
+        }else{
+          yardEnd = item.newDay;
+        }
+      }
+    });
+    if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  buildRecycling(value, panel){
     let tempHTML = '';
     if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
       let contractorInfo = {
@@ -291,8 +317,7 @@ export default class Panel {
           <p><strong>NEXT TRASH:</strong> ${moment(value.data.next_pickups.trash.next_pickup).format('MMM DD, YYYY')}</p>
           <p><strong>NEXT RECYCLING:</strong> ${moment(value.data.next_pickups.recycling.next_pickup).format('MMM DD, YYYY')}</p>
           <p><strong>NEXT BULK:</strong> ${moment(value.data.next_pickups.bulk.next_pickup).format('MMM DD, YYYY')}</p>
-          ${('yard waste' in value.data.next_pickups) ?
-          tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(value.data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>` : ``}
+          ${(panel.checkRecyclingStatus(value.data)) ?  tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(value.data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>` : ``}
         </div>
       <h4 class="noprint"><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
       </article>`;
@@ -676,7 +701,7 @@ export default class Panel {
 
         case 'recycling':
           try {
-            tempHTML += controller.panel.buildRecycling(value);
+            tempHTML += controller.panel.buildRecycling(value, controller.panel);
           } catch (error) {
             console.log(error);
             tempHTML += '';
