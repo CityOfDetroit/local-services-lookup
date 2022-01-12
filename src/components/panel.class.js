@@ -26,6 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
+    console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -267,26 +268,30 @@ export default class Panel {
   }
 
   checkRecyclingStatus(data){
-    let yardStart = null;
-    let yardEnd = null;
-    data.details.forEach((item)=>{
-      if(item.type == 'start-date' && item.service == 'yard waste'){
-        if(item.normalDay != null){
-          yardStart = item.normalDay;
-        }else{
-          yardStart = item.newDay;
+    if(data.next_pickups['yard waste']){
+      let yardStart = null;
+      let yardEnd = null;
+      data.details.forEach((item)=>{
+        if(item.type == 'start-date' && item.service == 'yard waste'){
+          if(item.normalDay != null){
+            yardStart = item.normalDay;
+          }else{
+            yardStart = item.newDay;
+          }
         }
-      }
-      if(item.type == 'end-date' && item.service == 'yard waste'){
-        if(item.normalDay != null){
-          yardEnd = item.normalDay;
-        }else{
-          yardEnd = item.newDay;
+        if(item.type == 'end-date' && item.service == 'yard waste'){
+          if(item.normalDay != null){
+            yardEnd = item.normalDay;
+          }else{
+            yardEnd = item.newDay;
+          }
         }
+      });
+      if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
+        return true;
+      }else{
+        return false;
       }
-    });
-    if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
-      return true;
     }else{
       return false;
     }
