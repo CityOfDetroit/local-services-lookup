@@ -26,7 +26,7 @@ export default class Panel {
   }
 
   creatPanel(data, controller){
-    console.log(data);
+    // console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
@@ -115,6 +115,59 @@ export default class Panel {
         <span>NEIGHBORHOOD</span>
         <div>
           <p>NO NEIGHBORHOOD FOUND</p>
+        </div>
+      </article>`;
+    }
+    return tempHTML;
+  }
+
+  buildDWSDBackupProtection(values){
+    let tempHTML = '';
+    let validNeighborhoods = ['Aviation Sub', 'Barton McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale'];
+    if(values['neighborhood'] && values['neighborhood'].data.features.length){
+      if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.nhood_name)){
+        tempHTML = `
+        <article class="info-section">
+          <span>DWSD Basement Backup Protection Program</span>
+          <div>
+            <p>You qualify for the DWSD Basement Backup Protection Program.</p>
+            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277" target="_blank"><button>Apply Now</button></a>
+          </div>
+        </article>`;
+      }else{
+        tempHTML = `
+        <article class="info-section">
+          <span>DWSD Basement Backup Protection Program</span>
+          <div>
+            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
+          </div>
+        </article>`;
+      }
+    }else if(values['DWSDBackupProtection'] && values['DWSDBackupProtection'].data.features.length){
+      if (validNeighborhoods.includes(values['DWSDBackupProtection'].data.features[0].attributes.nhood_name)){
+        tempHTML = `
+        <article class="info-section">
+          <span>DWSD Basement Backup Protection Program</span>
+          <div>
+            <p>You qualify for the DWSD Basement Backup Protection Program.</p>
+            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277" target="_blank"><button>Apply Now</button></a>
+          </div>
+        </article>`;
+      }else{
+        tempHTML = `
+        <article class="info-section">
+          <span>DWSD Basement Backup Protection Program</span>
+          <div>
+            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
+          </div>
+        </article>`;
+      }
+    }else{
+      tempHTML = `
+      <article class="info-section">
+        <span>DWSD Basement Backup Protection Program</span>
+        <div>
+          <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
         </div>
       </article>`;
     }
@@ -268,31 +321,35 @@ export default class Panel {
   }
 
   checkRecyclingStatus(data){
-    if(data.next_pickups['yard waste']){
-      let yardStart = null;
-      let yardEnd = null;
-      data.details.forEach((item)=>{
-        if(item.type == 'start-date' && item.service == 'yard waste'){
-          if(item.normalDay != null){
-            yardStart = item.normalDay;
-          }else{
-            yardStart = item.newDay;
+    try {
+      if(data.next_pickups['yard waste']){
+        let yardStart = null;
+        let yardEnd = null;
+        data.details.forEach((item)=>{
+          if(item.type == 'start-date' && item.service == 'yard waste'){
+            if(item.normalDay != null){
+              yardStart = item.normalDay;
+            }else{
+              yardStart = item.newDay;
+            }
           }
-        }
-        if(item.type == 'end-date' && item.service == 'yard waste'){
-          if(item.normalDay != null){
-            yardEnd = item.normalDay;
-          }else{
-            yardEnd = item.newDay;
+          if(item.type == 'end-date' && item.service == 'yard waste'){
+            if(item.normalDay != null){
+              yardEnd = item.normalDay;
+            }else{
+              yardEnd = item.newDay;
+            }
           }
+        });
+        if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
+          return true;
+        }else{
+          return false;
         }
-      });
-      if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
-        return true;
       }else{
         return false;
       }
-    }else{
+    } catch (error) {
       return false;
     }
   }
@@ -725,6 +782,15 @@ export default class Panel {
         case 'fireEscrow':
           try {
             tempHTML += controller.panel.buildFireEscrow(value);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
+          break;
+
+        case 'DWSDBackupProtection':
+          try {
+            tempHTML += controller.panel.buildDWSDBackupProtection(values);
           } catch (error) {
             console.log(error);
             tempHTML += '';
