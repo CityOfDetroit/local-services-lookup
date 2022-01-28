@@ -123,7 +123,7 @@ export default class Panel {
 
   buildDWSDBackupProtection(values){
     let tempHTML = '';
-    let validNeighborhoods = ['Aviation Sub', 'Barton McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
+    let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
     if(values['neighborhood'] && values['neighborhood'].data.features.length){
       if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.nhood_name)){
         tempHTML = `
