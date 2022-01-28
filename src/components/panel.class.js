@@ -122,6 +122,7 @@ export default class Panel {
   }
 
   buildDWSDBackupProtection(values){
+    console.log(values);
     let tempHTML = '';
     let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
     if(values['neighborhood'] && values['neighborhood'].data.features.length){
@@ -131,7 +132,7 @@ export default class Panel {
           <span>DWSD Basement Backup Protection Program</span>
           <div>
             <p>You qualify for the DWSD Basement Backup Protection Program.</p>
-            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277" target="_blank"><button>Apply Now</button></a>
+            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['neighborhood'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
           </div>
         </article>`;
       }else{
@@ -139,7 +140,7 @@ export default class Panel {
         <article class="info-section">
           <span>DWSD Basement Backup Protection Program</span>
           <div>
-            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
+            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
           </div>
         </article>`;
       }
@@ -150,7 +151,7 @@ export default class Panel {
           <span>DWSD Basement Backup Protection Program</span>
           <div>
             <p>You qualify for the DWSD Basement Backup Protection Program.</p>
-            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277" target="_blank"><button>Apply Now</button></a>
+            <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['DWSDBackupProtection'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
           </div>
         </article>`;
       }else{
@@ -158,7 +159,7 @@ export default class Panel {
         <article class="info-section">
           <span>DWSD Basement Backup Protection Program</span>
           <div>
-            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
+            <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
           </div>
         </article>`;
       }
@@ -167,7 +168,7 @@ export default class Panel {
       <article class="info-section">
         <span>DWSD Basement Backup Protection Program</span>
         <div>
-          <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/water">visit our page.</a></p>
+          <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
         </div>
       </article>`;
     }
