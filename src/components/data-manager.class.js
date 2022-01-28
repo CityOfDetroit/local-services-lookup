@@ -88,6 +88,16 @@ export default class DataManager {
         // console.log(err);
       });
     });
+    let DWSDBackupProtection = new Promise((resolve, reject) => {
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Current_City_of_Detroit_Neighborhoods/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "DWSDBackupProtection", "data": data});
+      }).catch( err => {
+        // console.log(err);
+      });
+    });
     let nrsa = new Promise((resolve, reject) => {
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/NRSA_2020/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
       return fetch(url)
@@ -393,6 +403,12 @@ export default class DataManager {
         case 'councilMembers':
           callList.push(councilMembers);
           break;
+        
+        case 'DWSDBackupProtection':
+          if(!filters.includes('neighborhood')){
+            callList.push(DWSDBackupProtection);
+          }
+          break;
       
         default:
           break;
@@ -411,6 +427,15 @@ export default class DataManager {
       if(filters.includes('council')){
         let councilData = controller.buildCouncilData(dataSets, controller);
         dataSets.councilData = {id: 'councilData', data: councilData};
+      }
+      if(filters.includes('DWSDBackupProtection')){
+        try {
+          if(!dataSets.DWSDBackupProtection){
+            dataSets.DWSDBackupProtection = {id: 'DWSDBackupProtection', data: dataSets['neighborhood'].data};
+          }
+        } catch (error) {
+          // console.log(error);
+        }
       }
       controller.panel.creatPanel(dataSets, controller);
     }).catch(reason => {
