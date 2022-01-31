@@ -489,10 +489,17 @@ export default class Panel {
         <span>FIRE ESCROW</span>
         <div>
           <p><strong>STATUS:</strong> Fire Escrow found</p>
+          <p><a href="https://detroitmi.gov/taxonomy/term/8501"><button>Start Process</button></a></p>
         </div>
         </article>`;
     }else{
-      tempHTML += ``;
+      tempHTML += `
+      <article class="info-section">
+        <span>FIRE ESCROW</span>
+        <div>
+          <p><strong>STATUS:</strong> Fire Escrow not found</p>
+        </div>
+        </article>`;
     }
     return tempHTML;
   }
