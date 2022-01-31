@@ -178,10 +178,11 @@ export default class Geocoder {
     fetch('https://us-central1-local-services-loopkup.cloudfunctions.net/getToken')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) {
+        let cleanAddress = address.split(' RECOMMENDED')[0];
         let params = [
             {
               "attributes" : {
-                "user_input" : address
+                "user_input" : cleanAddress
               },
               "geometry" : {
                 "x" : 0,
