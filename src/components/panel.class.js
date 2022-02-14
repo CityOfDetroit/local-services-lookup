@@ -463,7 +463,7 @@ export default class Panel {
         <span>RENTAL ENFORCEMENT STATUS</span>
         <div>
           <p><strong>REGISTER:</strong> ${value.data.features.length ? `${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}` : `Not registered`}</p>
-          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.record_status_date).format('MMM DD, YYYY')}` : `Not certified`}</p>
+          <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.issued_date).format('MMM DD, YYYY')}` : `Not certified`}</p>
         </div>
         `;
       tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>
@@ -543,14 +543,15 @@ export default class Panel {
         <article class="info-section">
         <span>BUILDING PERMITS</span>`;
       value.data.features.forEach(function(value){
+        // <p><strong>PERMIT EXPIRED:</strong> ${moment(value.attributes.date_expiration).format('MMM DD, YYYY')}</p>
         tempHTML += `
         <div>
           <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
           <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
-          <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.type_of_construction}</p>
+          <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.permit_type}</p>
           <p><strong>PERMIT STATUS:</strong> ${value.attributes.status}</p>
-          <p><strong>PERMIT ISSUED:</strong> ${moment(value.attributes.permit_issue_date).format('MMM DD, YYYY')}</p>
-          <p><strong>PERMIT EXPIRED:</strong> ${moment(value.attributes.date_expiration).format('MMM DD, YYYY')}</p>
+          <p><strong>PERMIT ISSUED:</strong> ${moment(value.attributes.issued_date).format('MMM DD, YYYY')}</p>
+          
           <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.description_of_work}</p>
         </div>
         `;
