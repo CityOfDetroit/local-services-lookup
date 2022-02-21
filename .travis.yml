@@ -11,10 +11,9 @@ jobs:
   include:
     - script: yarn build
       name: "Build app"
-    - script: yarn test
+    - script: yarn test:app
       name: "Test app"
       script:
         - yarn cypress install
-        - yarn start &
-        - yarn wait-on "http-get://localhost:3000" && yarn cypress run
+        - yarn test
         - kill $(jobs -p) || true
