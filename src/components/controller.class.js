@@ -54,7 +54,7 @@ export default class Controller {
       }
     };
     switch (data.council.data) {
-      case 1:
+      case "1":
         councilData.districtURL = `/taxonomy/term/1276`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1276'){
@@ -85,7 +85,7 @@ export default class Controller {
         });
         break;
         
-      case 2:
+      case "2":
         councilData.districtURL = `/taxonomy/term/1476`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1476'){
@@ -116,7 +116,7 @@ export default class Controller {
         });
         break;
         
-      case 3:
+      case "3":
         councilData.districtURL = `/taxonomy/term/1481`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1481'){
@@ -147,7 +147,7 @@ export default class Controller {
         });
         break;
         
-      case 4:
+      case "4":
         councilData.districtURL = `/taxonomy/term/1486`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1486'){
@@ -178,7 +178,7 @@ export default class Controller {
         });
         break;
         
-      case 5:
+      case "5":
           councilData.districtURL = `/taxonomy/term/1346`;
           data.councilMembers.data.forEach((item)=>{
             if(item.tid == '1346'){
@@ -209,7 +209,7 @@ export default class Controller {
         });
         break;
         
-      case 6:
+      case "6":
         councilData.districtURL = `/taxonomy/term/1491`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1491'){
@@ -249,7 +249,7 @@ export default class Controller {
         });
         break;
 
-      case 7:
+      case "7":
         councilData.districtURL = `/taxonomy/term/1511`;
         data.councilMembers.data.forEach((item)=>{
           if(item.tid == '1511'){

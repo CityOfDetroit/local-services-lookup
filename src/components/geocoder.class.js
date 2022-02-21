@@ -52,7 +52,7 @@ export default class Geocoder {
       newTempAddr += item;
       ((index < size) && (index + 1) !== size) ? newTempAddr += '+': 0;
     });
-    let url = `https://gis.detroitmi.gov/arcgis/rest/services/DoIT/CompositeGeocoder/GeocodeServer/findAddressCandidates?Street=&City=&ZIP=&SingleLine=${newTempAddr}&category=&outFields=User_fld&maxLocations=4&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json`;
+    let url = `https://opengis.detroitmi.gov/opengis/rest/services/BaseUnits/BaseUnitGeocoder/GeocodeServer/findAddressCandidates?Address=&Address2=&Address3=&Neighborhood=&City=&Subregion=&Region=&Postal=&PostalExt=&CountryCode=&SingleLine=${newTempAddr}&outFields=*&maxLocations=&matchOutOfRange=true&langCode=&locationType=&sourceCountry=&category=&location=&distance=&searchExtent=&outSR=&magicKey=&f=json`;
     
     try {
         fetch(url)
@@ -62,12 +62,12 @@ export default class Geocoder {
             if(type === 'suggestions'){
                 data.candidates.forEach((item)=>{
                     let sugg = document.createElement('option');
-                    if(item.attributes.User_fld === ''){
+                    if(item.attributes.parcel_id === ''){
                         sugg.value = item.address;
                         sugg.setAttribute('data-parsel', 'no-parcel');
                     }else{
                         sugg.value = `${item.address} RECOMMENDED`;
-                        sugg.setAttribute('data-parsel', item.attributes.User_fld);
+                        sugg.setAttribute('data-parsel', item.attributes.parcel_id);
                     }
                     
                     sugg.onclick = (ev) => {
@@ -86,8 +86,8 @@ export default class Geocoder {
                             let parcel = null;
                             let location;
                             data.candidates.forEach((item) => {
-                                if(item.attributes.User_fld !== ''){
-                                    if(geocoder.controller.checkParcelValid(item.attributes.User_fld)){
+                                if(item.attributes.parcel_id !== ''){
+                                    if(geocoder.controller.checkParcelValid(item.attributes.parcel_id)){
                                         parcel = item;
                                     }
                                 }
