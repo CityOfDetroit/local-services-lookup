@@ -122,7 +122,6 @@ export default class Panel {
   }
 
   buildDWSDBackupProtection(values){
-    console.log(values);
     let tempHTML = '';
     let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
     if(values['neighborhood'] && values['neighborhood'].data.features.length){

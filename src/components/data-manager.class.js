@@ -10,43 +10,7 @@ export default class DataManager {
     // NOTE: Fetching all the data sets.
     // -------------------------------------------------------------------------
     let council = new Promise((resolve, reject) => {
-
-      let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/CouncilDistricts/FeatureServer/0/query?where=&objectIds=&time=&geometry=" + location.location.x + "%2C" + location.location.y + "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=name&returnGeometry=false&returnCentroid=false&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
-      // console.log(url);
-      return fetch(url)
-      .then((resp) => resp.json()) // Transform the data into json
-      .then(function(data) {
-        let councilInfo = {"id": "council", "data": null};
-        // console.log(data);
-        switch (data.features[0].attributes.Name) {
-          case "District 1":
-            councilInfo.data = 1;
-            break;
-          case "District 2":
-            councilInfo.data = 2;
-            break;
-          case "District 3":
-            councilInfo.data = 3;
-            break;
-          case "District 4":
-            councilInfo.data = 4;
-            break;
-          case "District 5":
-            councilInfo.data = 5;
-            break;
-          case "District 6":
-            councilInfo.data = 6;
-            break;
-          case "District 7":
-            councilInfo.data = 7;
-            break;
-          default:
-
-        }
-        resolve(councilInfo);
-      }).catch( err => {
-        // console.log(err);
-      });
+      return resolve({"id": "council", "data": null});
     });
     let districtManagers = new Promise((resolve, reject) => {
       let url = "/rest/district-managers?_format=json";
@@ -129,10 +93,10 @@ export default class DataManager {
       });
     });
     let assessorsData = new Promise((resolve, reject) => {
-      if(location.attributes.User_fld == 'CONDO BUILDING'){
+      if(location.attributes.parcel_id == 'CONDO BUILDING'){
         resolve({"id": "assessors-data", "data": null});
       }else{
-        let url = "https://apis.detroitmi.gov/assessments/parcel/" + location.attributes.User_fld + "/";
+        let url = "https://apis.detroitmi.gov/assessments/parcel/" + location.attributes.parcel_id + "/";
         return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data) {
@@ -143,7 +107,7 @@ export default class DataManager {
       }
     });
     let permitData = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/BuildingPermits/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=3&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/BuildingPermits/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=3&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -154,8 +118,8 @@ export default class DataManager {
     });
     let rentalData = new Promise((resolve, reject) => {
       let url;
-      if(location.attributes.User_fld != 'CONDO BUILDING'){
-        url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/RentalStatuses/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
+      if(location.attributes.parcel_id != 'CONDO BUILDING'){
+        url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/RentalStatuses/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
       }else{
         url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/RentalStatuses/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C+${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIndexIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
       }
@@ -169,8 +133,8 @@ export default class DataManager {
     });
     let rentalCertData = new Promise((resolve, reject) => {
       let url;
-      if(location.attributes.User_fld != 'CONDO BUILDING'){
-        url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/CertificateOfCompliance/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=1&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
+      if(location.attributes.parcel_id != 'CONDO BUILDING'){
+        url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/CertificateOfCompliance/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=1&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
       }else{
         url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/CertificateOfCompliance/FeatureServer/0/query?where=&objectIds=&time=&geometry=${location.location.x}%2C+${location.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIndexIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=json`;
       }
@@ -183,7 +147,7 @@ export default class DataManager {
       });
     });
     let blightData = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Blight_Violations_(DAH)/FeatureServer/0/query?where=parcelno%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=violation_date&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=2&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Blight_Violations_(DAH)/FeatureServer/0/query?where=parcelno%3D%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=violation_date&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=2&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -193,7 +157,7 @@ export default class DataManager {
       });
     });
     let salesHistoryData = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Property_Sales/FeatureServer/0/query?where=PARCEL_NO%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=SALE_DATE&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=2&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Property_Sales/FeatureServer/0/query?where=PARCEL_NO%3D%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=SALE_DATE&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=2&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -207,7 +171,7 @@ export default class DataManager {
       let buffer = turf.buffer(point, 1, {units: 'miles'});
       let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=demolish_by_date+%3E%3D+%27${controller.defaultSettings.startDate}%27+and+demolish_by_date+%3C+%27${controller.defaultSettings.endDate}%27+and+parcel_id+%3C%3E+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=demolish_by_date+%3E%3D+%27${controller.defaultSettings.startDate}%27+and+demolish_by_date+%3C+%27${controller.defaultSettings.endDate}%27+and+parcel_id+%3C%3E+%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -217,7 +181,7 @@ export default class DataManager {
       });
     });
     let demoStatus = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=demolish_by_date&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=1&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=parcel_id+%3D+%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=demolish_by_date&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=1&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -292,7 +256,7 @@ export default class DataManager {
       });
     });
     let fireEscrow = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/fie_properties_final/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.User_fld}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/fie_properties_final/FeatureServer/0/query?where=parcel_id%3D%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
@@ -314,8 +278,8 @@ export default class DataManager {
           break;
 
         case 'assessors-data':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
-            if(location.attributes.User_fld == 'CONDO BUILDING'){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
+            if(location.attributes.parcel_id == 'CONDO BUILDING'){
             }else{
               callList.push(assessorsData);
             }
@@ -323,25 +287,25 @@ export default class DataManager {
           break;
 
         case 'permit-data':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(permitData);
           }
           break;
 
         case 'blight-data':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(blightData);
           }
           break;
 
         case 'salesHistoryData':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(salesHistoryData);
           }
           break;
 
         case 'fireEscrow':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(fireEscrow);
           }
           break;
@@ -373,7 +337,7 @@ export default class DataManager {
           break;
 
         case 'rental-data':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(rentalData);
           }
           break;
@@ -383,7 +347,7 @@ export default class DataManager {
           break;
 
         case 'demoStatus':
-          if(location.attributes.User_fld != null && location.attributes.User_fld != ''){
+          if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(demoStatus);
           }
           break;
@@ -425,6 +389,7 @@ export default class DataManager {
       }
       dataSets['title'] = location.address;
       if(filters.includes('council')){
+        dataSets.council.data = location.attributes.council_district;
         let councilData = controller.buildCouncilData(dataSets, controller);
         dataSets.councilData = {id: 'councilData', data: councilData};
       }
