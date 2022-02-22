@@ -1,4 +1,4 @@
-# Local Services Lookup
+# Local Services Lookup [![Build Status](https://app.travis-ci.com/CityOfDetroit/local-services-lookup.svg?branch=dev)](https://travis-ci.com/CityOfDetroit/local-services-lookup)
 Simple app to lookup city services based on a location
 
 ## Getting Started
@@ -6,6 +6,8 @@ Simple app to lookup city services based on a location
 This project was created using:
  - [Webpack](https://webpack.js.org/) as a web application bundler.
  - [Yarn](https://classic.yarnpkg.com/en/) to manage project dependencies.
+ - [Cypress](https://www.cypress.io/) for testing.
+ - [TravisCI](https://www.travis-ci.com/) for continuous integration.
 
 ## Setup Local Environment.
 
@@ -24,7 +26,12 @@ This project was created using:
     $ yarn start
     ```
 
-4. Build production code.
+4. Run tests.
+    ```
+    $ yarn test
+    ```
+
+5. Build production code.
     ```
     $ yarn build
     ```
