@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = function(_env, argv) {
@@ -16,7 +15,7 @@ module.exports = function(_env, argv) {
     output: {
       path: path.resolve(__dirname, "build"),
       filename: "assets/js/[name].js",
-      publicPath: "/"
+      publicPath: ""
     },
     module: {
       rules: [
