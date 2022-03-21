@@ -73,7 +73,7 @@ export default class Panel {
     <h3>No Information found.</h3>
     ` : ``}
     `;
-    document.querySelector('#local-services-results .data-form').innerHTML = '';
+    document.querySelector('#local-services-results .data-form').innerHTML = `<a href="https://app.smartsheet.com/b/form/5d291f237bbe41c88d44bfcd56e5b620?Address=${address}&Home%20Info%20Data=Invalid%20Address" target="_blank"><button class="noprint">REPORT DATA ISSUES</button></a>`;
     document.getElementById('local-services-results').className = 'active';
   }
 
