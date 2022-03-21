@@ -66,3 +66,7 @@ local/
 # cache
 .cache
 .parcel-cache
+
+# Cypress
+cypress/videos
+cypress/screenshots
