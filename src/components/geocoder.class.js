@@ -3,7 +3,7 @@ export default class Geocoder {
   constructor(container, controller) {
     this.form = null;
     this.controller = controller;
-    
+    this.parcelStatus = 'Invalid';
     this.user = null;
     this.init(document.getElementById(container), this);
   }
@@ -101,6 +101,7 @@ export default class Geocoder {
                                     geocoder.controller.panel.clearPanel();
                                     geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
                                 }else{
+                                    geocoder.parcelStatus = 'Valid'; 
                                     geocoder.needGeocode(address, geocoder, location);
                                     geocoder.clearSuggestions(geocoder);
                                     geocoder.controller.panel.loaderToggle(true);
@@ -108,18 +109,22 @@ export default class Geocoder {
                                     geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
                                 }
                             }else{
+                                geocoder.needGeocode(address, geocoder, location);
                                 geocoder.controller.panel.createErrorPanel(address, true);
                             }
                         });
                     }catch (error) {
+                        geocoder.needGeocode(address, geocoder, location);
                         geocoder.controller.panel.createErrorPanel(address, true);
                     }
                 }else{
+                    geocoder.needGeocode(address, geocoder, location);
                     geocoder.controller.panel.createErrorPanel(address, true);
                 }
             }
         });
     } catch (error) {
+        geocoder.needGeocode(address, geocoder, location);
         geocoder.controller.panel.createErrorPanel(address, true);
     }
   }
@@ -186,6 +191,7 @@ export default class Geocoder {
         let params = [
             {
               "attributes" : {
+                "valid_parcel_status": geocoder.parcelStatus,
                 "user_input" : cleanAddress
               },
               "geometry" : {
