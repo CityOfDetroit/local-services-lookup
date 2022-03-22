@@ -95,6 +95,7 @@ export default class Geocoder {
                                 });
                                 (parcel == null) ? location = data.candidates[0].location : location = null; 
                                 if(parcel === null){
+                                    geocoder.parcelStatus = 'Invalid'; 
                                     geocoder.needGeocode(address, geocoder, location);
                                     geocoder.clearSuggestions(geocoder);
                                     geocoder.controller.panel.loaderToggle(true);
@@ -109,21 +110,25 @@ export default class Geocoder {
                                     geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
                                 }
                             }else{
+                                geocoder.parcelStatus = 'Invalid';
                                 geocoder.needGeocode(address, geocoder, location);
                                 geocoder.controller.panel.createErrorPanel(address, true);
                             }
                         });
                     }catch (error) {
+                        geocoder.parcelStatus = 'Invalid';
                         geocoder.needGeocode(address, geocoder, location);
                         geocoder.controller.panel.createErrorPanel(address, true);
                     }
                 }else{
+                    geocoder.parcelStatus = 'Invalid';
                     geocoder.needGeocode(address, geocoder, location);
                     geocoder.controller.panel.createErrorPanel(address, true);
                 }
             }
         });
     } catch (error) {
+        geocoder.parcelStatus = 'Invalid';
         geocoder.needGeocode(address, geocoder, location);
         geocoder.controller.panel.createErrorPanel(address, true);
     }
