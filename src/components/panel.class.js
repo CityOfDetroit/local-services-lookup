@@ -367,7 +367,7 @@ export default class Panel {
         contractorInfo.url =  'http://gflusa.com/residential/detroit/';
         contractorInfo.phone = '(844) 464-3587';
       }else{
-        contractorInfo.name = 'ADVANCED';
+        contractorInfo.name = 'WM';
         contractorInfo.url =  'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
         contractorInfo.phone = ' (844) 233-8764';
       }
