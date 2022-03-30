@@ -362,7 +362,7 @@ export default class Panel {
         url: null,
         phone: null
       };
-      if(value.data.next_pickups.trash.contractor === 'gfl'){
+      if(value.data.next_pickups.trash.contractor === 'GFL'){
         contractorInfo.name = 'GFL';
         contractorInfo.url =  'http://gflusa.com/residential/detroit/';
         contractorInfo.phone = '(844) 464-3587';
