@@ -1,4 +1,6 @@
 'use strict';
+import Display from './Display';
+customElements.define('app-display', Display);
 const moment = require('moment');
 export default class Panel {
   constructor() {
@@ -28,6 +30,8 @@ export default class Panel {
   creatPanel(data, controller){
     // console.log(data);
     let markup = controller.panel.createMarkup(data, controller);
+    let display = new Display();
+    document.querySelector('body').appendChild(display);
     document.querySelector('#geocoder input').value = ``;
     document.querySelector('.local-address').innerHTML = `INFO FOR: ${data.title}`;
     document.querySelector('#local-services-results .local-content').innerHTML = markup;
