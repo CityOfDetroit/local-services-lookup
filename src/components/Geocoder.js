@@ -94,7 +94,7 @@ export default class Geocoder extends HTMLElement {
                                     .then((resp) => resp.json()) // Transform the data into json
                                     .then(function (city) {
                                         if (city.features.length) {
-                                            geocoder.controller.panel.createErrorPanel(address, false);
+                                            const app = document.getElementsByTagName('my-home-info');
                                             let parcel = null;
                                             let location;
                                             data.candidates.forEach((item) => {
@@ -109,16 +109,18 @@ export default class Geocoder extends HTMLElement {
                                                 geocoder.parcelStatus = 'Invalid';
                                                 geocoder.needGeocode(address, geocoder, location);
                                                 geocoder.clearSuggestions(geocoder);
-                                                geocoder.controller.panel.loaderToggle(true);
-                                                geocoder.controller.panel.clearPanel();
-                                                geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
+                                                app[0].setAttribute('data-parcel-id', data.candidates[0]);
+                                                // geocoder.controller.panel.loaderToggle(true);
+                                                // geocoder.controller.panel.clearPanel();
+                                                // geocoder.controller.dataManager.buildData(data.candidates[0], geocoder.controller);
                                             } else {
                                                 geocoder.parcelStatus = 'Valid';
                                                 geocoder.needGeocode(address, geocoder, location);
                                                 geocoder.clearSuggestions(geocoder);
-                                                geocoder.controller.panel.loaderToggle(true);
-                                                geocoder.controller.panel.clearPanel();
-                                                geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
+                                                app[0].setAttribute('data-parcel-id', parcel);
+                                                // geocoder.controller.panel.loaderToggle(true);
+                                                // geocoder.controller.panel.clearPanel();
+                                                // geocoder.controller.dataManager.buildData(parcel, geocoder.controller);
                                             }
                                         } else {
                                             geocoder.parcelStatus = 'Invalid';

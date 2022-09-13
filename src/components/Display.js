@@ -58,6 +58,33 @@ export default class Display extends HTMLElement {
 
             case 'active':
                 break;
+
+            case 'loading':
+                const loadingScreen = document.createElement('article');
+                loadingScreen.innerHTML = `
+                <article class="loader-container">
+                    <article>
+                    <div class="loader">
+                        <div class="loader__bar"></div>
+                        <div class="loader__bar"></div>
+                        <div class="loader__bar"></div>
+                        <div class="loader__bar"></div>
+                        <div class="loader__bar"></div>
+                        <div class="loader__ball"></div>
+                    </div>
+                    <p>LOADING</p>
+                    </article>
+                </article>`;
+                displayWrapper.appendChild(loadingScreen);
+                shadow.appendChild(loadingScreen);
+                break;
+
+            case 'results':
+                const results = document.createElement('p');
+                results.innerText = 'results screen';
+                displayWrapper.appendChild(results);
+                shadow.appendChild(displayWrapper);
+                break;
         
             default:
                 break;

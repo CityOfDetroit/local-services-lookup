@@ -6,7 +6,7 @@ customElements.define('app-geocoder', Geocoder);
 
 export default class MyHomeInfo extends HTMLElement {
     static get observedAttributes() {
-        return ['data-app-state'];
+        return ['data-app-state', 'data-parcel-id'];
     }
 
     constructor() {
@@ -28,9 +28,24 @@ export default class MyHomeInfo extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         const shadow = this.shadowRoot;
         console.log(`attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
-        if(oldValue != null){
-            this.clearApp(this);
-            this.loadApp(this);
+        switch (name) {
+            case 'data-app-state':
+                if(oldValue != null){
+                    this.clearApp(this);
+                    this.loadApp(this);
+                }
+                break;
+
+            case 'data-parcel-id':
+                if(oldValue != null){
+                    this.setAttribute('data-app-state', 'results');
+                }else{
+                    this.setAttribute('data-app-state', 'active-screen');
+                }
+                break;
+        
+            default:
+                break;
         }
     }
 
@@ -56,6 +71,11 @@ export default class MyHomeInfo extends HTMLElement {
             case 'active-screen':
                 const geocoder = document.createElement('app-geocoder');
                 appWrapper.appendChild(geocoder);
+                break;
+
+            case 'results':
+                display.setAttribute('data-display-type', 'results');
+                appWrapper.appendChild(display);
                 break;
         
             default:
