@@ -27,7 +27,7 @@ export default class MyHomeInfo extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         const shadow = this.shadowRoot;
-        console.log(`attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+        console.log(`App - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
         switch (name) {
             case 'data-app-state':
                 if(oldValue != null){
@@ -37,10 +37,10 @@ export default class MyHomeInfo extends HTMLElement {
                 break;
 
             case 'data-parcel-id':
-                if(oldValue != null){
+                if(newValue != 'none'){
                     this.setAttribute('data-app-state', 'results');
                 }else{
-                    this.setAttribute('data-app-state', 'active-screen');
+                    this.setAttribute('data-app-state', 'welcome-screen');
                 }
                 break;
         

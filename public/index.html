@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Local Services Lookup</title>
   <meta name="description" content="App to lookup city services based on a location.">
   <meta name="author" content="Edgar Montes">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 </head>
 <body>
   <!-- Old stuff -->
@@ -22,8 +22,7 @@
     <article class="error-container"></article>
     <article class="data-form" class="noprint"></article>
   </section> -->
-  <input type="hidden" id="active-data" value="recycling,assessors-data,npo,rental-data,rental-cert"></input>
-  <my-home-info data-app-state="welcome-screen" data-parcel-id="null"></my-home-info>
+  <my-home-info data-use-type="multi-datasets" data-app-state="welcome-screen" data-parcel-id="none" data-active-sets="recycling,assessors-data,npo,rental-data,rental-cert"></my-home-info>
   <script src="index.js"></script>
 </body>
 </html>
