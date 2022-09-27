@@ -12,29 +12,24 @@ export default class Display extends HTMLElement {
         // Create a shadow root
         const shadow = this.attachShadow({mode: 'open'});
 
-        // Create result section
+        // Creating images
+        this.neighborhoodImage = document.createElement('img');
+        this.neighborhoodImage.src = neighborhoodImage;
+        this.neighborhoodImage.setAttribute('alt', '');
+
+        // Creating display styles
+        this.welcomeStyle = document.createElement('style');
+        this.welcomeStyle.textContent = `
+            #display-wrapper { display: flex; padding: 1em; }
+            #display-wrapper > img { max-width: 100%; }
+            #display-wrapper p { text-align: center; }
+            #display-wrapper button { padding: 1em 2em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
+            p.display-title { font-weight: bold; font-size: 1.25em; }
+            
+        `;
+
+        // Start loading display content
         this.loadDisplay(this);
-        // const displayWrapper = document.createElement('section');
-        // displayWrapper.id = 'display-wrapper';
-        // console.log('adding text');
-        // const image = document.createElement('img');
-        // image.src = neighborhoodImage;
-        // image.setAttribute('alt', '');
-        // displayWrapper.appendChild(image);
-        // const title = document.createElement('p');
-        // title.setAttribute('aria-label', 'title');
-        // title.innerText = 'It’s all here. All in one place.';
-        // displayWrapper.appendChild(title)
-        // const btn = document.createElement('button');
-        // btn.innerText = 'Start';
-        // btn.addEventListener('click', (ev)=>{
-        //     console.log(ev);
-        //     const app = document.getElementsByTagName('my-home-info');
-        //     console.log(app[0]);
-        //     app[0].setAttribute('data-app-state', 'active-screen');
-        // })
-        // displayWrapper.appendChild(btn)
-        // shadow.appendChild(displayWrapper);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -59,30 +54,18 @@ export default class Display extends HTMLElement {
         displayWrapper.id = 'display-wrapper';
         switch (this.getAttribute('data-display-type')) {
             case 'welcome':
-                const style = document.createElement('style');
-                style.textContent = `
-                    #display-wrapper { display: flex; padding: 1em; }
-                    #display-wrapper > img { max-width: 100%; }
-                    #display-wrapper p { text-align: center; }
-                    #display-wrapper button { padding: 1em 2em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
-                    p.display-title { font-weight: bold; font-size: 1.25em; }
-                    
-                `;
-                displayWrapper.appendChild(style);
-                const image = document.createElement('img');
-                image.src = neighborhoodImage;
-                image.setAttribute('alt', '');
-                displayWrapper.appendChild(image);
-                const textWrapper = document.createElement('article');
-                displayWrapper.appendChild(textWrapper);
-                const title = document.createElement('p');
-                title.setAttribute('aria-label', 'title');
-                title.innerText = 'It’s all here. All in one place.';
-                title.className = 'display-title';
-                textWrapper.appendChild(title)
-                const text = document.createElement('p');
-                text.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
-                textWrapper.appendChild(text)
+                displayWrapper.appendChild(display.welcomeStyle);
+                displayWrapper.appendChild(this.neighborhoodImage);
+                const textWrapperWelcome = document.createElement('article');
+                displayWrapper.appendChild(textWrapperWelcome);
+                const titleWelcome = document.createElement('p');
+                titleWelcome.setAttribute('aria-label', 'title');
+                titleWelcome.innerText = 'It’s all here. All in one place.';
+                titleWelcome.className = 'display-title';
+                textWrapperWelcome.appendChild(titleWelcome)
+                const textWelcome = document.createElement('p');
+                textWelcome.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
+                textWrapperWelcome.appendChild(textWelcome)
                 const btn = document.createElement('button');
                 btn.innerText = 'Start';
                 btn.addEventListener('click', (ev)=>{
@@ -91,7 +74,7 @@ export default class Display extends HTMLElement {
                     console.log(app[0]);
                     app[0].setAttribute('data-app-state', 'active-screen');
                 })
-                textWrapper.appendChild(btn)
+                textWrapperWelcome.appendChild(btn)
                 shadow.appendChild(displayWrapper);
                 break;
 
@@ -119,6 +102,19 @@ export default class Display extends HTMLElement {
                 break;
 
             case 'results':
+                displayWrapper.appendChild(display.welcomeStyle);
+                displayWrapper.appendChild(this.neighborhoodImage);
+                const textWrapperResults = document.createElement('article');
+                displayWrapper.appendChild(textWrapperResults);
+                const titleResults = document.createElement('p');
+                titleResults.setAttribute('aria-label', 'title');
+                titleResults.innerText = 'It’s all here. All in one place.';
+                titleResults.className = 'display-title';
+                textWrapperResults.appendChild(titleResults)
+                const textResults = document.createElement('p');
+                textResults.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
+                textWrapperResults.appendChild(textResults)
+                shadow.appendChild(displayWrapper);
                 const results = document.createElement('p');
                 results.innerText = 'results screen';
                 displayWrapper.appendChild(results);
