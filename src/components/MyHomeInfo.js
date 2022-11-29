@@ -2,13 +2,15 @@
 import Display from './Display';
 import Geocoder from './Geocoder';
 import DataLoader from './DataLoader';
+import NavigationTools from './NavigationTools';
 customElements.define('app-display', Display);
 customElements.define('app-geocoder', Geocoder);
 customElements.define('app-data-loader', DataLoader);
+customElements.define('app-nav-tools', NavigationTools);
 
 export default class MyHomeInfo extends HTMLElement {
     static get observedAttributes() {
-        return ['data-app-state', 'data-parcel-id'];
+        return ['data-app-state', 'data-parcel-id', 'data-active-sets', 'data-active-section', 'data-api-datasets'];
     }
 
     constructor() {
@@ -45,6 +47,12 @@ export default class MyHomeInfo extends HTMLElement {
                     this.setAttribute('data-app-state', 'welcome-screen');
                 }
                 break;
+
+            case 'data-api-datasets':
+                if(newValue != 'none'){
+                    this.setAttribute('data-app-state', 'results');
+                }
+                break;
         
             default:
                 break;
@@ -65,6 +73,8 @@ export default class MyHomeInfo extends HTMLElement {
         appWrapper.id = 'app-wrapper';
         const display = document.createElement('app-display');
         const geocoder = document.createElement('app-geocoder');
+        const dataLoader = document.createElement('app-data-loader');
+        const navTools = document.createElement('app-nav-tools');
         switch (app.getAttribute('data-app-state')) {
             case 'welcome-screen':
                 display.setAttribute('data-display-type', 'welcome');
@@ -79,14 +89,14 @@ export default class MyHomeInfo extends HTMLElement {
 
             case 'loading-screen':
                 display.setAttribute('data-display-type', 'loading');
-                const dataLoader = document.createElement('app-data-loader');
+                dataLoader.setAttribute('data-loader-state', 'active');
                 appWrapper.appendChild(display);
-                appWrapper.appendChild(geocoder);
                 appWrapper.appendChild(dataLoader);
                 break;
 
             case 'results':
                 display.setAttribute('data-display-type', 'results');
+                appWrapper.appendChild(navTools);
                 appWrapper.appendChild(display);
                 break;
         
