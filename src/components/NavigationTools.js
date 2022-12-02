@@ -11,12 +11,7 @@ export default class NavigationTools extends HTMLElement {
         // Creating display styles
         this.navToolsStyle = document.createElement('style');
         this.navToolsStyle.textContent = `
-            #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap;}
-            #display-wrapper > img { max-width: 100%; }
-            #display-wrapper p { text-align: center; }
-            #display-wrapper button { padding: 1em 2em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
-            p.display-title { font-weight: bold; font-size: 1.25em; }
-            #data-results{ width: 100%}
+            button.clear { font-size: 1.25em; width: 2em; height: 2em; background-color: #FEB70D; cursor: pointer }
         `;
 
         // Start loading display content
@@ -34,11 +29,13 @@ export default class NavigationTools extends HTMLElement {
     loadNavTools(navTools) {
         console.log('loading navigation');
         const shadow = navTools.shadowRoot;
+        shadow.appendChild(navTools.navToolsStyle);
         const navToolsWrapper = document.createElement('section');
         navToolsWrapper.id = 'nav-tools-wrapper';
         const clearResultsBtn = document.createElement('button');
+        clearResultsBtn.className = 'clear';
         clearResultsBtn.innerText = 'x';
-        clearResultsBtn.addEventListener((ev) => {
+        clearResultsBtn.addEventListener('click', (ev) => {
             const app = document.getElementsByTagName('my-home-info');
             app[0].setAttribute('data-app-state', 'welcome-screen');
             app[0].setAttribute('data-parcel-id', 'none');

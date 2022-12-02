@@ -228,6 +228,15 @@ export default class Display extends HTMLElement {
        }       
         `;
 
+        this.resultsStyle = document.createElement('style');
+        this.resultsStyle.textContent = `
+          #data-results { background-color: #e6e6e6 }
+          .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .25em; margin: 0 }
+          .result-address {background-color: #fff; border: solid 0.1em; padding: 0.5em;}
+          .data-block-title { padding: .25em; background-color: #FEB70D; }
+          .data-block-content { padding: .25em; margin-bottom: .5em; background-color: #fff}
+        `;
+
         // Start loading display content
         this.loadDisplay(this);
     }
@@ -567,7 +576,8 @@ export default class Display extends HTMLElement {
       }
     
       buildAssessors(value){
-        let tempHTML = '';
+        console.log(value);
+        let dataParsing = {title: "Assessor's Data", content: null};
         if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
           let property = {
             year: null,
@@ -575,16 +585,12 @@ export default class Display extends HTMLElement {
             floor: null,
             buildingClass: null
           }
-          tempHTML += `
-          <article class="info-section">
-            <span>OWNER'S ADDRESS</span>
-            <div>
-              <p><strong>CITY:</strong> ${value.data.ownercity}</p>
-              <p><strong>STATE:</strong> ${value.data.ownerstate}</p>
-              <p><strong>ADDRESS:</strong> ${value.data.ownerstreetaddr}</p>
-              <p><strong>ZIP:</strong> ${value.data.ownerzip}</p>
-            </div>
-          </article>`;
+          dataParsing.content = `
+            <p><strong>Owner's address:</strong> ${value.data.ownerstreetaddr}</p>
+            <p><strong>Owner's city:</strong> ${value.data.ownercity}</p>
+            <p><strong>Owner's state:</strong> ${value.data.ownerstate}</p>
+            <p><strong>Owner's zip:</strong> ${value.data.ownerzip}</p>
+          `;
           if(value.data.resb_bldgclass === 0){
             property.year = value.data.cib_yearbuilt;
             property.value = value.data.cib_value;
@@ -596,33 +602,16 @@ export default class Display extends HTMLElement {
             property.floor = value.data.resb_floorarea;
             property.buildingClass = value.data.resb_bldgclass;
           }
-          tempHTML += `
-          <article class="info-section">
-            <span>PROPERTY</span>
-            <div>
-              <p><strong>PARCEL NUMBER:</strong> ${value.data.pnum}</p>
-              <p><strong>YEAR BUILD:</strong> ${property.year}</p>
-              <p><strong>CALCULATED VALUE:</strong> $${property.value.toLocaleString()}</p>
-              <p><strong>FLOOR AREA:</strong> ${property.floor.toLocaleString()} SQFT</p>
-              <p><strong>BUILDING CLASS:</strong> ${property.buildingClass}</p>
-            </div>
-          </article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-            <span>OWNER</span>
-            <div>
-              <p>NO OWNER INFO</p>
-            </div>
-          </article>
-          <article class="info-section">
-            <span>PROPERTY</span>
-            <div>
-              <p>NO PROPERTY INFO FOUND</p>
-            </div>
-          </article>`;
+          dataParsing.content += `
+            <p><strong>Parcel number:</strong> ${value.data.pnum}</p>
+            <p><strong>Year build:</strong> ${property.year}</p>
+            <p><strong>Calculated value:</strong> $${property.value.toLocaleString()}</p>
+            <p><strong>Floor area:</strong> ${property.floor.toLocaleString()} SQFT</p>
+            <p><strong>Building class:</strong> ${property.buildingClass}</p>
+          `;
         }
-        return tempHTML;
+        console.log(dataParsing);
+        return dataParsing;
       }
     
       buildRental(value, values){
@@ -828,166 +817,176 @@ export default class Display extends HTMLElement {
         return tempHTML;
       }
 
-      checkDataBlockType(values){
-        let tempHTML = '';
-        for (const [key, value] of Object.entries(values)) {
-          switch (key) {
+      selectDataBlockType(display, value){
+        console.log(display, value);
+          switch (value.id) {
             case 'council':
               try {
-                tempHTML += controller.panel.buildCouncil(values.councilData);
+                return display.buildCouncil(values.councilData);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'neighborhood':
               try {
-                tempHTML += controller.panel.buildNeighborhood(value);
+                return display.buildNeighborhood(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'nez':
               try {
-                tempHTML += controller.panel.buildNEZ(value, values.nezOld);
+                return display.buildNEZ(value, values.nezOld);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'nrsa':
               try {
-                tempHTML += controller.panel.buildNRSA(value);
+                return display.buildNRSA(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'assessors-data':
               try {
-                tempHTML += controller.panel.buildAssessors(value);
+                return display.buildAssessors(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'permit-data':
               try {
-                tempHTML += controller.panel.buildPermit(value);
+                return display.buildPermit(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'rental-data':
               try {
-                tempHTML += controller.panel.buildRental(value, values);
+                return display.buildRental(value, values);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'blight-data':
               try {
-                tempHTML += controller.panel.buildBlight(value);
+                return display.buildBlight(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'demos-data':
               try {
-                tempHTML += controller.panel.buildDemosNear(value);
+                return display.buildDemosNear(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'demo-status':
               try {
-                tempHTML += controller.panel.buildDemoStatus(value);
+                return display.buildDemoStatus(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'npo':
               try {
-                tempHTML += controller.panel.buildNPO(value);
+                return display.buildNPO(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'improve-det':
               try {
-                tempHTML += controller.panel.buildImproveDet(value);
+                return display.buildImproveDet(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'recycling':
               try {
-                tempHTML += controller.panel.buildRecycling(value, controller.panel);
+                return display.buildRecycling(value, display);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'historicDistrict':
               try {
-                tempHTML += controller.panel.buildHistoricDistrict(value);
+                return display.buildHistoricDistrict(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'fireEscrow':
               try {
-                tempHTML += controller.panel.buildFireEscrow(value);
+                return display.buildFireEscrow(value);
               } catch (error) {
                 console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
     
             case 'DWSDBackupProtection':
               try {
-                tempHTML += controller.panel.buildDWSDBackupProtection(values);
+                return display.buildDWSDBackupProtection(values);
               } catch (error) {
-                console.log(error);
-                tempHTML += '';
+                return '';
               }
               break;
           
             default:
               break;
           }
-        }
-        return tempHTML;
       }
 
     buildDataBlock(display, dataSet) {
         console.log(dataSet);
         const dataBlock = document.createElement('article');
         dataBlock.className = 'data-block';
-        return dataBlock;
+        let datasetValues = display.selectDataBlockType(display, dataSet);
+        console.log(datasetValues);
+        if(datasetValues.content == null){
+          return '';
+        }else{
+          const dataBlockTitle = document.createElement('p');
+          dataBlockTitle.className = 'data-block-title';
+          dataBlockTitle.innerText = datasetValues.title;
+          dataBlock.appendChild(dataBlockTitle);
+          const dataBlockContent = document.createElement('article');
+          dataBlockContent.className = 'data-block-content';
+          dataBlockContent.innerHTML = datasetValues.content;
+          dataBlock.appendChild(dataBlockContent);
+          return dataBlock;
+        }
     }
 
     buildDataSection(display) {
@@ -995,14 +994,15 @@ export default class Display extends HTMLElement {
         const results = document.createElement('section');
         results.id = 'data-results';
         const sectionTitle = document.createElement('p');
-        sectionTitle.className = 'data-block-title';
+        sectionTitle.className = 'data-title';
         sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
         results.appendChild(sectionTitle);
 
         const apiDataSets = JSON.parse(app[0].getAttribute('data-api-datasets'));
         for (const dataSet in apiDataSets) {
             if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
-                results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
+              console.log(apiDataSets[dataSet]);
+              results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
             }
         }
         return results;
@@ -1055,8 +1055,6 @@ export default class Display extends HTMLElement {
                 break;
 
             case 'loading':
-                console.log(display);
-                console.log(display.loadingStyle);
                 displayWrapper.appendChild(display.welcomeStyle);
                 displayWrapper.appendChild(display.loadingStyle);
                 const loadingScreen = document.createElement('article');
@@ -1079,11 +1077,17 @@ export default class Display extends HTMLElement {
                 break;
 
             case 'results':
-                displayWrapper.appendChild(display.welcomeStyle);
-                const results = display.buildDataSection(display);
-                displayWrapper.appendChild(results);
-                shadow.appendChild(displayWrapper);
-                break;
+              const app = document.getElementsByTagName('my-home-info');
+              let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+              displayWrapper.appendChild(display.resultsStyle);
+              const addressBox = document.createElement('article');
+              addressBox.className = 'result-address';
+              addressBox.innerText = parcelData.address;
+              displayWrapper.appendChild(addressBox);
+              const results = display.buildDataSection(display);
+              displayWrapper.appendChild(results);
+              shadow.appendChild(displayWrapper);
+              break;
         
             default:
                 break;

@@ -1,4 +1,6 @@
 'use strict';
+const turf = require('@turf/turf');
+const arcGIS = require('terraformer-arcgis-parser');
 
 export default class DataLoader extends HTMLElement {
     static get observedAttributes() {
@@ -39,30 +41,22 @@ export default class DataLoader extends HTMLElement {
         const parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
 
         let assessorsData = new Promise((resolve, reject) => {
-            console.log(parcelData);
-            if(parcelData.attributes.parcel_id == 'CONDO BUILDING'){
-              resolve({"id": "assessors-data", "data": null});
-            }else{
-              let url = "https://apis.detroitmi.gov/assessments/parcel/" + parcelData.attributes.parcel_id + "/";
-              return fetch(url)
-              .then((resp) => resp.json()) // Transform the data into json
-              .then(function(data) {
-                resolve({"id": "assessors-data", "data": data});
-              }).catch( err => {
-                // console.log(err);
-              });
-            }
-        });
-
-        let neighborhoods = new Promise((resolve, reject) => {
-            let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Current_City_of_Detroit_Neighborhoods/FeatureServer/0/query?where=&objectIds=&time=&geometry=${parcelData.location.x}%2C${parcelData.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
+          if(parcelData.attributes.parcel_id == 'CONDO BUILDING'){
+            resolve({"id": "assessors-data", "data": null});
+          }else{
+            let url = "https://apis.detroitmi.gov/assessments/parcel/" + parcelData.attributes.parcel_id + "/";
             return fetch(url)
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
-              resolve({"id": "neighborhood", "data": data});
+              resolve({"id": "assessors-data", "data": data});
             }).catch( err => {
               // console.log(err);
             });
+          }
+        });
+
+        let neighborhoods = new Promise((resolve, reject) => {
+          resolve({"id": "neighborhood", "data": parcelData});
         });
 
         let council = new Promise((resolve, reject) => {
@@ -199,11 +193,14 @@ export default class DataLoader extends HTMLElement {
             });
           });
           let demosData = new Promise((resolve, reject) => {
+            let today = new Date();
+            let start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}}`;
+            let end = `${today.getFullYear()}-${today.getMonth() + 6}-${today.getDate()}}`;
             let point = turf.point([parcelData.location.x, parcelData.location.y]);
             let buffer = turf.buffer(point, 1, {units: 'miles'});
             let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
             let arcsimplePolygon = arcGIS.convert(simplePolygon);
-            let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=demolish_by_date+%3E%3D+%27${controller.defaultSettings.startDate}%27+and+demolish_by_date+%3C+%27${controller.defaultSettings.endDate}%27+and+parcel_id+%3C%3E+%27${parcelData.attributes.parcel_id}%27&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
+            let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=demolish_by_date+%3E%3D+%27${start}%27+and+demolish_by_date+%3C+%27${end}%27+and+parcel_id+%3C%3E+%27${parcelData.attributes.parcel_id}%27&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
             return fetch(url)
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
@@ -265,8 +262,9 @@ export default class DataLoader extends HTMLElement {
             fetch(url)
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
-              let todaysMonth =  moment().month() + 1;
-              let todaysYear = moment().year();
+              let today = new Date();
+              let todaysMonth =  today.getMonth() + 1;
+              let todaysYear = today.getFullYear();
               let url = `https://apis.detroitmi.gov/waste_schedule/details/${data.features[0].attributes.FID}/year/${todaysYear}/month/${todaysMonth}/`;
               return fetch(url)
               .then((resp) => resp.json()) // Transform the data into json
