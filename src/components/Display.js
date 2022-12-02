@@ -1,5 +1,9 @@
 'use strict';
 import neighborhoodImage from '../images/neighborhood.png';
+import Geocoder from './Geocoder';
+import NavigationTools from './NavigationTools';
+customElements.define('app-geocoder', Geocoder);
+customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
     static get observedAttributes() {
         return ['data-display-type'];
@@ -230,11 +234,13 @@ export default class Display extends HTMLElement {
 
         this.resultsStyle = document.createElement('style');
         this.resultsStyle.textContent = `
-          #data-results { background-color: #e6e6e6 }
-          .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .25em; margin: 0 }
-          .result-address {background-color: #fff; border: solid 0.1em; padding: 0.5em;}
-          .data-block-title { padding: .25em; background-color: #FEB70D; }
-          .data-block-content { padding: .25em; margin-bottom: .5em; background-color: #fff}
+          .results-container{ display: flex; }
+          #data-results { background-color: #e6e6e6; padding: 1em }
+          .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; }
+          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.6em;}
+          .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; }
+          .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
+          .data-block-content p { margin: 0; }
         `;
 
         // Start loading display content
@@ -280,25 +286,17 @@ export default class Display extends HTMLElement {
       }
     
       buildNeighborhood(value){
-        let tempHTML = '';
-        if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
-          tempHTML = `
-          <article class="info-section">
-            <span>NEIGHBORHOOD</span>
-            <div>
-              <p><strong>NAME:</strong> ${value.data.features[0].attributes.nhood_name}</p>
-            </div>
-          </article>`;
-        }else{
-          tempHTML = `
-          <article class="info-section">
-            <span>NEIGHBORHOOD</span>
-            <div>
-              <p>NO NEIGHBORHOOD FOUND</p>
-            </div>
-          </article>`;
+        let dataParsing = {title: "Neighborhood", content: null};
+        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
+          dataParsing.content = `
+            <p><strong>Neighborhood name:</strong> ${value.data.attributes.neighborhood_name}</p>
+          `;
+        }else {
+          dataParsing.content = `
+            <p>No neighborhood found</p>
+          `;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       buildDWSDBackupProtection(values){
@@ -576,7 +574,6 @@ export default class Display extends HTMLElement {
       }
     
       buildAssessors(value){
-        console.log(value);
         let dataParsing = {title: "Assessor's Data", content: null};
         if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
           let property = {
@@ -609,8 +606,9 @@ export default class Display extends HTMLElement {
             <p><strong>Floor area:</strong> ${property.floor.toLocaleString()} SQFT</p>
             <p><strong>Building class:</strong> ${property.buildingClass}</p>
           `;
+        }else {
+          dataParsing.content = `<p>No data found</p>`;
         }
-        console.log(dataParsing);
         return dataParsing;
       }
     
@@ -1011,10 +1009,12 @@ export default class Display extends HTMLElement {
     loadDisplay(display) {
         const shadow = display.shadowRoot;
         const displayWrapper = document.createElement('section');
+        const geocoder = document.createElement('app-geocoder');
+        const navTools = document.createElement('app-nav-tools');
         displayWrapper.id = 'display-wrapper';
         switch (this.getAttribute('data-display-type')) {
             case 'welcome':
-                displayWrapper.appendChild(display.welcomeStyle);
+                shadow.appendChild(display.welcomeStyle);
                 displayWrapper.appendChild(this.neighborhoodImage);
                 const textWrapperWelcome = document.createElement('article');
                 displayWrapper.appendChild(textWrapperWelcome);
@@ -1039,7 +1039,7 @@ export default class Display extends HTMLElement {
                 break;
 
             case 'active':
-                displayWrapper.appendChild(display.welcomeStyle);
+                shadow.appendChild(display.welcomeStyle);
                 displayWrapper.appendChild(this.neighborhoodImage);
                 const textWrapperActive = document.createElement('article');
                 displayWrapper.appendChild(textWrapperActive);
@@ -1051,12 +1051,13 @@ export default class Display extends HTMLElement {
                 const textActive = document.createElement('p');
                 textActive.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
                 textWrapperActive.appendChild(textActive)
+                displayWrapper.appendChild(geocoder);
                 shadow.appendChild(displayWrapper);
                 break;
 
             case 'loading':
-                displayWrapper.appendChild(display.welcomeStyle);
-                displayWrapper.appendChild(display.loadingStyle);
+                shadow.appendChild(display.welcomeStyle);
+                shadow.appendChild(display.loadingStyle);
                 const loadingScreen = document.createElement('article');
                 loadingScreen.innerHTML = `
                 <article class="loader-container">
@@ -1079,13 +1080,20 @@ export default class Display extends HTMLElement {
             case 'results':
               const app = document.getElementsByTagName('my-home-info');
               let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
-              displayWrapper.appendChild(display.resultsStyle);
+              shadow.appendChild(display.resultsStyle);
+              const resultsContainer = document.createElement('section');
+              resultsContainer.className = 'results-container';
+              resultsContainer.appendChild(navTools);
+              const dataSetResults = document.createElement('article');
+              dataSetResults.className = 'dataset-results';
               const addressBox = document.createElement('article');
               addressBox.className = 'result-address';
               addressBox.innerText = parcelData.address;
-              displayWrapper.appendChild(addressBox);
+              dataSetResults.appendChild(addressBox);
               const results = display.buildDataSection(display);
-              displayWrapper.appendChild(results);
+              dataSetResults.appendChild(results);
+              resultsContainer.appendChild(dataSetResults);
+              displayWrapper.appendChild(resultsContainer);
               shadow.appendChild(displayWrapper);
               break;
         

@@ -1,4 +1,6 @@
 'use strict';
+import homeImage from '../images/home.png';
+import govImage from '../images/government.png';
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -11,7 +13,12 @@ export default class NavigationTools extends HTMLElement {
         // Creating display styles
         this.navToolsStyle = document.createElement('style');
         this.navToolsStyle.textContent = `
-            button.clear { font-size: 1.25em; width: 2em; height: 2em; background-color: #FEB70D; cursor: pointer }
+            #nav-tools-wrapper { display: flex; flex-direction: column;}
+            button.clear { font-size: 1.25em; width: 2em; height: 2em; background-color: #FEB70D; cursor: pointer; border: none; }
+            button.nav { width: 3em; height: 3em; border: none; cursor: pointer;background: #fff; }
+            button.nav:hover { background-color: #e6e6e6; transition: all 500ms cubic-bezier(.64,.09,.08,1); }
+            button.nav.active { background-color: #9fd5b3; }
+            button.nav img { width: 100%; }
         `;
 
         // Start loading display content
@@ -27,11 +34,14 @@ export default class NavigationTools extends HTMLElement {
     }
 
     loadNavTools(navTools) {
+        const app = document.getElementsByTagName('my-home-info');
         console.log('loading navigation');
         const shadow = navTools.shadowRoot;
         shadow.appendChild(navTools.navToolsStyle);
         const navToolsWrapper = document.createElement('section');
         navToolsWrapper.id = 'nav-tools-wrapper';
+        navToolsWrapper.setAttribute('role', 'navigation');
+        navToolsWrapper.setAttribute('aria-label', 'Data Navigation');
         const clearResultsBtn = document.createElement('button');
         clearResultsBtn.className = 'clear';
         clearResultsBtn.innerText = 'x';
@@ -44,6 +54,36 @@ export default class NavigationTools extends HTMLElement {
             app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
+        const propertyDataBtn = document.createElement('button');
+        const homeIcon = document.createElement('img');
+        homeIcon.src = homeImage;
+        homeIcon.setAttribute('alt', 'property data');
+        propertyDataBtn.setAttribute('data-nav-value', 'property');
+        propertyDataBtn.appendChild(homeIcon);
+        if(app[0].getAttribute('data-active-section') == 'property'){
+            propertyDataBtn.className = 'nav active';
+        }else{
+            propertyDataBtn.className = 'nav';
+            propertyDataBtn.addEventListener('click', (ev) => {
+                console.log(ev);
+            });
+        }
+        navToolsWrapper.appendChild(propertyDataBtn);
+        const govDataBtn = document.createElement('button');
+        const govIcon = document.createElement('img');
+        govIcon.src = govImage;
+        govIcon.setAttribute('alt', 'government data');
+        govDataBtn.setAttribute('data-nav-value', 'government');
+        if(app[0].getAttribute('data-active-section') == 'government'){
+            govDataBtn.className = 'nav active';
+        }else{
+            govDataBtn.className = 'nav';
+            govDataBtn.addEventListener('click', (ev) => {
+                console.log(ev);
+            });
+        }
+        govDataBtn.appendChild(govIcon);
+        navToolsWrapper.appendChild(govDataBtn);
         shadow.appendChild(navToolsWrapper);
     }
 
