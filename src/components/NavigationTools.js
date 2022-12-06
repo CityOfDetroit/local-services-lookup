@@ -46,7 +46,6 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.className = 'clear';
         clearResultsBtn.innerText = 'x';
         clearResultsBtn.addEventListener('click', (ev) => {
-            const app = document.getElementsByTagName('my-home-info');
             app[0].setAttribute('data-app-state', 'welcome-screen');
             app[0].setAttribute('data-parcel-id', 'none');
             app[0].setAttribute('data-api-datasets', 'none');
