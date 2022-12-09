@@ -6,7 +6,8 @@ customElements.define('app-data-loader', DataLoader);
 
 export default class MyHomeInfo extends HTMLElement {
     static get observedAttributes() {
-        return ['data-app-state', 'data-parcel-id', 'data-active-sets', 'data-active-section', 'data-api-datasets'];
+        return ['data-app-state', 'data-parcel-id'];
+        // , 'data-active-sets', 'data-active-section', 'data-api-active-datasets'
     }
 
     constructor() {
@@ -44,11 +45,20 @@ export default class MyHomeInfo extends HTMLElement {
                 }
                 break;
 
-            case 'data-api-datasets':
-                if(newValue != 'none'){
-                    this.setAttribute('data-app-state', 'results');
-                }
-                break;
+            // case 'data-api-active-datasets':
+            //     if(newValue != 'none'){
+            //         this.setAttribute('data-app-state', 'results');
+            //     }
+            //     break;
+
+            // case 'data-active-sets':
+            //     break;
+
+            // case 'data-active-section':
+            //     if(newValue != 'none' && (this.getAttribute('data-parcel-id') != 'none')){
+            //         this.setAttribute('data-app-state', 'loading-screen');
+            //     }
+            //     break;
         
             default:
                 break;
@@ -94,6 +104,9 @@ export default class MyHomeInfo extends HTMLElement {
             default:
                 break;
         }
-        shadow.appendChild(appWrapper);
+        console.log(shadow.firstChild);
+        if(shadow.firstChild == null){
+            shadow.appendChild(appWrapper);
+        }
     }
 }

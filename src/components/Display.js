@@ -264,6 +264,10 @@ export default class Display extends HTMLElement {
     }
 
     buildCouncil(value){
+      console.log(value);
+      let dataParsing = {title: "Coucil", content: null};
+      dataParsing.content = `<p><strong>Council District:</strong> ${value.data.attributes.council_district}</p>`;
+      return dataParsing;
         let siteURL = window.location.hostname;
         let tempHTML = `
           <article class="info-section">
@@ -282,7 +286,6 @@ export default class Display extends HTMLElement {
             <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${value.data.enforcement.phone}</p>
           </div>
         </article>`;
-        return tempHTML;
       }
     
       buildNeighborhood(value){
@@ -816,11 +819,10 @@ export default class Display extends HTMLElement {
       }
 
       selectDataBlockType(display, value){
-        console.log(display, value);
           switch (value.id) {
             case 'council':
               try {
-                return display.buildCouncil(values.councilData);
+                return display.buildCouncil(value);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -967,11 +969,9 @@ export default class Display extends HTMLElement {
       }
 
     buildDataBlock(display, dataSet) {
-        console.log(dataSet);
         const dataBlock = document.createElement('article');
         dataBlock.className = 'data-block';
         let datasetValues = display.selectDataBlockType(display, dataSet);
-        console.log(datasetValues);
         if(datasetValues.content == null){
           return '';
         }else{
@@ -996,10 +996,9 @@ export default class Display extends HTMLElement {
         sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
         results.appendChild(sectionTitle);
 
-        const apiDataSets = JSON.parse(app[0].getAttribute('data-api-datasets'));
+        const apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
         for (const dataSet in apiDataSets) {
             if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
-              console.log(apiDataSets[dataSet]);
               results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
             }
         }
@@ -1029,9 +1028,7 @@ export default class Display extends HTMLElement {
                 const btn = document.createElement('button');
                 btn.innerText = 'Start';
                 btn.addEventListener('click', (ev)=>{
-                    console.log(ev);
                     const app = document.getElementsByTagName('my-home-info');
-                    console.log(app[0]);
                     app[0].setAttribute('data-app-state', 'active-screen');
                 })
                 textWrapperWelcome.appendChild(btn)

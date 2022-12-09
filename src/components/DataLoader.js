@@ -60,7 +60,7 @@ export default class DataLoader extends HTMLElement {
         });
 
         let council = new Promise((resolve, reject) => {
-            return resolve({"id": "council", "data": null});
+            return resolve({"id": "council", "data": parcelData});
           });
           let districtManagers = new Promise((resolve, reject) => {
             let url = "/rest/district-managers?_format=json";
@@ -409,13 +409,291 @@ export default class DataLoader extends HTMLElement {
         });
     }
 
+    buildCouncilData(data){
+      let councilData = {
+        district: `District ${data.council.data}`,
+        districtURL: null,
+        council:{
+          name: null,
+          url: null,
+          phone: null
+        },
+        dmanager:{
+          name: null,
+          url: `/departments/department-of-neighborhoods/district-${data.council.data}#block-views-block-contacts-special-block-1`,
+          phone: null
+        },
+        ddmanager: {
+          name: null,
+          url: `/departments/department-of-neighborhoods/district-${data.council.data}#block-views-block-contacts-special-block-1`,
+          phone: null
+        },
+        bliaision:{
+          name: null,
+          email: null
+        },
+        enforcement: {
+          name: null,
+          phone: null
+        }
+      };
+      switch (data.council.data) {
+        case "1":
+          councilData.districtURL = `/taxonomy/term/1276`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1276'){
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1276`;
+              councilData.council.phone = item.field_phone;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 1 Manager')){
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 1 Deputy Manager')){
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 1 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 1')){
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = item.field_telephone;
+            }
+          });
+          break;
+          
+        case "2":
+          councilData.districtURL = `/taxonomy/term/1476`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1476'){
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1476`;
+              councilData.council.phone = item.field_phone;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 2 Manager')){
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 2 Deputy Manager')){
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 2 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 2')){
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = item.field_telephone;
+            }
+          });
+          break;
+          
+        case "3":
+          councilData.districtURL = `/taxonomy/term/1481`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1481'){
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1481`;
+              councilData.council.phone = item.field_phone;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 3 Manager')){
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 3 Deputy Manager')){
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 3 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 3')){
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = item.field_telephone;
+            }
+          });
+          break;
+          
+        case "4":
+          councilData.districtURL = `/taxonomy/term/1486`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1486'){
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1486`;
+              councilData.council.phone = item.field_phone;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 4 Manager')){
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 4 Deputy Manager')){
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 4 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 4')){
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = item.field_telephone;
+            }
+          });
+          break;
+          
+        case "5":
+            councilData.districtURL = `/taxonomy/term/1346`;
+            data.councilMembers.data.forEach((item)=>{
+              if(item.tid == '1346'){
+                councilData.council.name = item.field_organization_head_name;
+                councilData.council.url = `/taxonomy/term/1346`;
+                councilData.council.phone = item.field_phone;
+              }
+            });
+            data.districtManagers.data.forEach((item)=>{
+              if(item.field_contact_position.includes('District 5 Manager')){
+                councilData.dmanager.name = item.title;
+                councilData.dmanager.phone = item.field_telephone;
+              }
+              if(item.field_contact_position.includes('District 5 Deputy Manager')){
+                councilData.ddmanager.name = item.title;
+                councilData.ddmanager.phone = item.field_telephone;
+              }
+              if(item.field_contact_position.includes('District 5 Business Liaison')){
+                councilData.bliaision.name = item.title;
+                councilData.bliaision.email = item.field_email_address;
+              }
+            });
+            data.districtInspectors.data.forEach((item)=>{
+              if(item.field_responsibilities.includes('District 5')){
+                councilData.enforcement.name = item.title;
+                councilData.enforcement.phone = item.field_telephone;
+              }
+          });
+          break;
+          
+        case "6":
+          councilData.districtURL = `/taxonomy/term/1491`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1491'){
+              let cleanPhone = item.field_phone.replace('Office: ','');
+              cleanPhone = cleanPhone.replace(/ /g,'-');
+              cleanPhone = cleanPhone.replace(/[()]/g,'');
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1491`;
+              councilData.council.phone = `<a href="tel:${cleanPhone}">${item.field_phone}</a>`;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 6 Manager')){
+              let cleanPhone = item.field_telephone.replace(/ /g,'-');
+              cleanPhone = cleanPhone.replace(/[()]/g,'');
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            }
+            if(item.field_contact_position.includes('District 6 Deputy Manager')){
+              let cleanPhone = item.field_telephone.replace(/ /g,'-');
+              cleanPhone = cleanPhone.replace(/[()]/g,'');
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            }
+            if(item.field_contact_position.includes('District 6 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 6')){
+              let cleanPhone = item.field_telephone.replace(/ /g,'-');
+              cleanPhone = cleanPhone.replace(/[()]/g,'');
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            }
+          });
+          break;
+  
+        case "7":
+          councilData.districtURL = `/taxonomy/term/1511`;
+          data.councilMembers.data.forEach((item)=>{
+            if(item.tid == '1511'){
+              councilData.council.name = item.field_organization_head_name;
+              councilData.council.url = `/taxonomy/term/1511`;
+              councilData.council.phone = item.field_phone;
+            }
+          });
+          data.districtManagers.data.forEach((item)=>{
+            if(item.field_contact_position.includes('District 7 Manager')){
+              councilData.dmanager.name = item.title;
+              councilData.dmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 7 Deputy Manager')){
+              councilData.ddmanager.name = item.title;
+              councilData.ddmanager.phone = item.field_telephone;
+            }
+            if(item.field_contact_position.includes('District 7 Business Liaison')){
+              councilData.bliaision.name = item.title;
+              councilData.bliaision.email = item.field_email_address;
+            }
+          });
+          data.districtInspectors.data.forEach((item)=>{
+            if(item.field_responsibilities.includes('District 7')){
+              councilData.enforcement.name = item.title;
+              councilData.enforcement.phone = item.field_telephone;
+            }
+          });
+          break;
+      
+        default:
+          console.log('not inside city');
+          break;
+      }
+      return councilData;
+    }
+
     getData(loader) {
         const app = document.getElementsByTagName('my-home-info');
         const activeDataSets = app[0].getAttribute('data-active-sets').split(',');
         const parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
-        loader.getDataSets(loader)
-        
-        Promise.all(loader.callList).then(values => {
+        const storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
+        let dataAlreadyLoaded = false;
+        for (let key in storedData) {
+          if(activeDataSets.includes(key)){
+            dataAlreadyLoaded = true;
+          }
+        }
+        if(dataAlreadyLoaded){
+          console.log('loading stored data');
+          let dataSets = {};
+          activeDataSets.forEach(data => {
+            dataSets[data] = storedData[data];
+          });
+          app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
+          app[0].setAttribute('data-app-state', 'results');
+        }else{
+          console.log('getting data from apis');
+          loader.getDataSets(loader);
+          Promise.all(loader.callList).then(values => {
             let dataSets = {};
             for (let key in values) {
               if(values[key] != null) {
@@ -424,12 +702,11 @@ export default class DataLoader extends HTMLElement {
                 initialLoadChecker = false;
               }
             }
-            dataSets['title'] = location.address;
-            if(activeDataSets.includes('council')){
-              dataSets.council.data = parcelData.attributes.council_district;
-              let councilData = controller.buildCouncilData(dataSets, controller);
-              dataSets.councilData = {id: 'councilData', data: councilData};
-            }
+            // if(activeDataSets.includes('council')){
+            //   dataSets.council.data = parcelData.attributes.council_district;
+            //   let councilData = loader.buildCouncilData(dataSets);
+            //   dataSets.councilData = {id: 'councilData', data: councilData};
+            // }
             if(activeDataSets.includes('DWSDBackupProtection')){
               try {
                 if(!dataSets.DWSDBackupProtection){
@@ -439,15 +716,15 @@ export default class DataLoader extends HTMLElement {
                 // console.log(error);
               }
             }
-            console.log(dataSets);
-            app[0].setAttribute('data-api-datasets', JSON.stringify(dataSets));
+            app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
+            app[0].setAttribute('data-app-state', 'results');
           }).catch(reason => {
             // console.log(reason);
           });
+        }
     }
 
     clearLoader(loader) {
-        console.log('clearing loader');
         const shadow = loader.shadowRoot;
         while (shadow.firstChild) {
             shadow.removeChild(shadow.firstChild);

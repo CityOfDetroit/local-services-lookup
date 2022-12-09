@@ -48,9 +48,10 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.addEventListener('click', (ev) => {
             app[0].setAttribute('data-app-state', 'welcome-screen');
             app[0].setAttribute('data-parcel-id', 'none');
-            app[0].setAttribute('data-api-datasets', 'none');
-            app[0].setAttribute('data-active-section', 'property');
+            app[0].setAttribute('data-api-stored-datasets', '{}');
+            app[0].setAttribute('data-api-active-datasets', 'none');
             app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood');
+            app[0].setAttribute('data-active-section', 'property');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
         const propertyDataBtn = document.createElement('button');
@@ -64,7 +65,20 @@ export default class NavigationTools extends HTMLElement {
         }else{
             propertyDataBtn.className = 'nav';
             propertyDataBtn.addEventListener('click', (ev) => {
-                console.log(ev);
+                if(app[0].getAttribute('data-api-active-datasets') != 'none'){
+                    let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
+                    let activeData = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+                    for (const key in activeData) {
+                        if(!(key in storedData)){
+                            storedData[key] = activeData[key];
+                        }
+                    }
+                    app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
+                }
+                app[0].setAttribute('data-api-active-datasets', 'none');
+                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood');
+                app[0].setAttribute('data-active-section', 'property');
+                app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }
         navToolsWrapper.appendChild(propertyDataBtn);
@@ -78,7 +92,20 @@ export default class NavigationTools extends HTMLElement {
         }else{
             govDataBtn.className = 'nav';
             govDataBtn.addEventListener('click', (ev) => {
-                console.log(ev);
+                if(app[0].getAttribute('data-api-active-datasets') != 'none'){
+                    let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
+                    let activeData = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+                    for (const key in activeData) {
+                        if(!(key in storedData)){
+                            storedData[key] = activeData[key];
+                        }
+                    }
+                    app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
+                }
+                app[0].setAttribute('data-api-active-datasets', 'none');
+                app[0].setAttribute('data-active-sets', 'council');
+                app[0].setAttribute('data-active-section', 'government');
+                app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }
         govDataBtn.appendChild(govIcon);
