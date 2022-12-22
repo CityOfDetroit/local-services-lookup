@@ -655,9 +655,9 @@ export default class Panel {
       
       tempHTML += `
       <article class="info-section">
-      <span>UPCOMING STABILIZATIONS NEAR YOU</span>
+      <span>STABILIZATIONS NEAR YOU</span>
       <div>
-        <p>NO UPCOMING STABILIZATIONS FOUND</p>
+        <p>NO STABILIZATIONS FOUND</p>
         <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your stabilization search</a></p>
       </div>
       </article>`;
