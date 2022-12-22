@@ -171,11 +171,25 @@ export default class DataManager {
       let buffer = turf.buffer(point, 1, {units: 'miles'});
       let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=demolish_by_date+%3E%3D+%27${controller.defaultSettings.startDate}%27+and+demolish_by_date+%3C+%27${controller.defaultSettings.endDate}%27+and+parcel_id+%3C%3E+%27${location.attributes.parcel_id}%27&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
       return fetch(url)
       .then((resp) => resp.json()) // Transform the data into json
       .then(function(data) {
         resolve({"id": "demos-data", "data": data});
+      }).catch( err => {
+        // console.log(err);
+      });
+    });
+    let stabilizationData = new Promise((resolve, reject) => {
+      let point = turf.point([location.location.x, location.location.y]);
+      let buffer = turf.buffer(point, 1, {units: 'miles'});
+      let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
+      let arcsimplePolygon = arcGIS.convert(simplePolygon);
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Contracted_Stabilizations/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=json`;
+      return fetch(url)
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function(data) {
+        resolve({"id": "stabilization-data", "data": data});
       }).catch( err => {
         // console.log(err);
       });
@@ -322,6 +336,10 @@ export default class DataManager {
 
         case 'demosData':
           callList.push(demosData);
+          break;
+
+        case 'stabilizationData':
+          callList.push(stabilizationData);
           break;
 
         case 'npo':

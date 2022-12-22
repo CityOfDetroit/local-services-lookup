@@ -569,8 +569,10 @@ export default class Panel {
     return tempHTML;
   }
 
-  buildDemoStatus(value){
+  buildDemoStatus(value, address){
     let tempHTML = '';
+    let tempAddress = address.replace(' ', '%2520');
+    tempAddress = tempAddress.replace(',', '%252C');
     if(value.data.features.length){
       tempHTML = `<article class="info-section">
     <span>DEMOLITION STATUS</span>`;
@@ -584,20 +586,23 @@ export default class Panel {
       `;
     });
     tempHTML += `
-    <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
+    <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
     </article>`;
     }
 
     return tempHTML;
   }
 
-  buildDemosNear(value){
+  buildDemosNear(value, address){
     let tempHTML = '';
+    let tempAddress = address.replace(' ', '%2520');
+    tempAddress = tempAddress.replace(',', '%252C');
     if(value.data.features.length){
+      tempHTML += `
+        <article class="info-section">
+        <span>DEMOLITIONS NEAR YOU</span>`;
       value.data.features.forEach(function(value){
         tempHTML += `
-        <article class="info-section">
-        <span>DEMOLITIONS NEAR YOU</span>
         <div>
           <p><strong>ADDRESS:</strong> ${value.attributes.address}</p>
           <p><strong>COMMERCIAL:</strong> ${value.attributes.commercial_building}</p>
@@ -606,11 +611,12 @@ export default class Panel {
           <p><strong>CONTRACTOR:</strong> ${value.attributes.contractor_name}</p>
           <p><strong>COUNCIL DISTRICT:</strong> ${value.attributes.council_district}</p>
           <p><strong>NEIGHBORHOOD:</strong> ${value.attributes.neighborhood}</p>
-          <p><strong>EXPECTED DATE:</strong> ${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</p>
-        </div>`;
+          ${(value.attributes.demolish_by_date == null) ? `<p><strong>EXPECTED DATE:</strong> Date to be determined</p>`:`<p><strong>EXPECTED DATE:</strong> ${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</p>`}
+        </div>
+       `;
       });
       tempHTML += `
-      <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
+      <p><a class="noprint" href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Find more demos near you</a></p>
       </article>`;
     }else{
       tempHTML += `
@@ -618,6 +624,41 @@ export default class Panel {
       <span>DEMOLITIONS NEAR YOU</span>
       <div>
         <p>NO DEMOLITIONS FOUND</p>
+        <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
+      </div>
+      </article>`;
+    }
+    return tempHTML;
+  }
+
+  buildStabilizationNear(value, address){
+    let tempHTML = '';
+    let tempAddress = address.replace(' ', '%2520');
+    tempAddress = tempAddress.replace(',', '%252C');
+    if(value.data.features.length){
+      tempHTML += `
+        <article class="info-section">
+        <span>STABILIZATIONS NEAR YOU</span>`;
+      value.data.features.forEach(function(value){
+        tempHTML += `
+        <div>
+          <p><strong>ADDRESS:</strong> ${value.attributes.address}</p>
+          <p><strong>DISTRICT:</strong> ${value.attributes.council_district}</p>
+          <p><strong>NEIGHBORHOOD:</strong> ${value.attributes.neighborhood}</p>
+          <p><strong>STATUS:</strong> ${value.attributes.rehab_status}</p>
+        </div>`;
+      });
+      tempHTML += `
+      <p><a class="noprint" href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Find more stabilizations near you</a></p>
+      </article>`;
+    }else{
+      
+      tempHTML += `
+      <article class="info-section">
+      <span>STABILIZATIONS NEAR YOU</span>
+      <div>
+        <p>NO STABILIZATIONS FOUND</p>
+        <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your stabilization search</a></p>
       </div>
       </article>`;
     }
@@ -735,7 +776,16 @@ export default class Panel {
 
         case 'demos-data':
           try {
-            tempHTML += controller.panel.buildDemosNear(value);
+            tempHTML += controller.panel.buildDemosNear(value, values.title);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
+          break;
+
+        case 'stabilization-data':
+          try {
+            tempHTML += controller.panel.buildStabilizationNear(value, values.title);
           } catch (error) {
             console.log(error);
             tempHTML += '';
@@ -744,7 +794,7 @@ export default class Panel {
 
         case 'demo-status':
           try {
-            tempHTML += controller.panel.buildDemoStatus(value);
+            tempHTML += controller.panel.buildDemoStatus(value, values.title);
           } catch (error) {
             console.log(error);
             tempHTML += '';
