@@ -24,12 +24,13 @@ export default class Display extends HTMLElement {
         // Creating display styles
         this.welcomeStyle = document.createElement('style');
         this.welcomeStyle.textContent = `
-            #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap;}
-            #display-wrapper > img { max-width: 100%; }
-            #display-wrapper p { text-align: center; }
-            #display-wrapper button { padding: 1em 2em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
-            p.display-title { font-weight: bold; font-size: 1.25em; }
-            #data-results{ width: 100%}
+          @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
+          #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap; font-family: 'Montserrat', sans-serif;}
+          #display-wrapper > img { max-width: 100%; }
+          #display-wrapper p { text-align: center; font-family: 'Montserrat', sans-serif;}
+          #display-wrapper button { padding: 1em 3em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
+          p.display-title { font-weight: bold; font-size: 1.25em; }
+          app-geocoder { width: 100%}
         `;
 
         this.loadingStyle = document.createElement('style');
@@ -236,11 +237,11 @@ export default class Display extends HTMLElement {
         this.resultsStyle.textContent = `
           .results-container{ display: flex; }
           #data-results { background-color: #e6e6e6; padding: 1em }
-          .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; }
-          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.6em;}
-          .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; }
+          .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
+          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.94em 0.6em; font-family: 'Montserrat', sans-serif;}
+          .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif;}
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
-          .data-block-content p { margin: 0; }
+          .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
         `;
 
         // Start loading display content
@@ -263,29 +264,69 @@ export default class Display extends HTMLElement {
         }
     }
 
+    formatDate(value) {
+      const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const tempDate = new Date(value);
+      return `${month[tempDate.getMonth()]} ${tempDate.getDate()}, ${tempDate.getFullYear()}`;
+    }
+
     buildCouncil(value){
-      console.log(value);
-      let dataParsing = {title: "Coucil", content: null};
-      dataParsing.content = `<p><strong>Council District:</strong> ${value.data.attributes.council_district}</p>`;
+      let app = document.getElementsByTagName('my-home-info');
+      let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+      let dataParsing = {title: "Council District", content: null};
+      dataParsing.content = `
+        <p><strong>District Number:</strong> ${value.data.attributes.council_district}</p>
+        <p><strong>Council Member:</strong> <a href="http://${siteURL}${apiDataSets['councilMember'].data.url}" target="_blank">${apiDataSets['councilMember'].data.name}</a></p>
+        <p><strong>Council Member Phone:</strong> ${apiDataSets['councilMember'].data.phone}</p>
+      `;
       return dataParsing;
-        let siteURL = window.location.hostname;
-        let tempHTML = `
-          <article class="info-section">
-          <span>GOVERNMENT</span>
-          <div>
-            <p><strong>COUNCIL:</strong> <a href="${value.data.districtURL}" target="_blank">${value.data.district}</a></p>
-            <p><strong>COUNCIL MEMBER:</strong> <a href="http://${siteURL}${value.data.council.url}" target="_blank">${value.data.council.name}</a></p>
-            <p><strong>COUNCIL MEMBER PHONE:</strong> ${value.data.council.phone}</p>
-            <p><strong>DISTRICT MANAGER:</strong> <a href="${value.data.dmanager.url}" target="_blank">${value.data.dmanager.name}</a></p>
-            <p><strong>DISTRICT MANAGER PHONE:</strong> ${value.data.dmanager.phone}</p>
-            <p><strong>DEPUTY MANAGER:</strong> <a href="${value.data.ddmanager.url}" target="_blank">${value.data.ddmanager.name}</a></p>
-            <p><strong>DEPUTY MANAGER PHONE:</strong> ${value.data.ddmanager.phone}</p>
-            <p><strong>BUSINESS LIAISON:</strong> ${value.data.bliaision.name}</p>
-            <p><strong>BUSINESS LIAISON PHONE:</strong> ${value.data.bliaision.email}</p>
-            <p><strong>ENFORCEMENT INSPECTOR:</strong> ${value.data.enforcement.name}</p>
-            <p><strong>ENFORCEMENT INSPECTOR PHONE:</strong> ${value.data.enforcement.phone}</p>
-          </div>
-        </article>`;
+      }
+
+      buildDistrictManagers(value){
+        let dataParsing = {title: "District Managers", content: null};
+        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
+          dataParsing.content = `
+          <p><strong>District Manager:</strong> <a href="${value.data.manager.url}" target="_blank">${value.data.manager.name}</a></p>
+          <p><strong>Manager Phone:</strong> ${value.data.manager.phone}</p>
+          <p><strong>Deputy Manager:</strong> <a href="${value.data.deputy.url}" target="_blank">${value.data.deputy.name}</a></p>
+          <p><strong>Deputy Manager Phone:</strong> ${value.data.deputy.phone}</p>
+          `;
+        }else {
+          dataParsing.content = `
+            <p>No data found</p>
+          `;
+        }
+        return dataParsing;
+      }
+
+      buildBusinessLiaison(value){
+        let dataParsing = {title: "Business Liaison", content: null};
+        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
+          dataParsing.content = `
+          <p><strong>Liaison:</strong> ${value.data.name}</p>
+          <p><strong>Liaison Phone:</strong> ${value.data.email}</p>
+          `;
+        }else {
+          dataParsing.content = `
+            <p>No data found</p>
+          `;
+        }
+        return dataParsing;
+      }
+
+      buildInspector(value){
+        let dataParsing = {title: "Enforcement Inspector", content: null};
+        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
+          dataParsing.content = `
+          <p><strong>Inspector:</strong> ${value.data.name}</p>
+          <p><strong>Inspector Phone:</strong> ${value.data.email}</p>
+          `;
+        }else {
+          dataParsing.content = `
+            <p>No data found</p>
+          `;
+        }
+        return dataParsing;
       }
     
       buildNeighborhood(value){
@@ -472,33 +513,24 @@ export default class Display extends HTMLElement {
       }
     
       buildNPO(value){
-        let tempHTML = '';
-        if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
-          tempHTML = `
-          <article class="info-section">
-            <span>POLICE</span>
-            <div>
-              <h5>PRECINCT</h5>
-              <p><strong>NUMBER:</strong> ${value.data.features[0].attributes.precinct}</p>
-              <p><strong>ADDRESS</strong> ${value.data.features[0].attributes.precinct_location}</p>
-            </div>
-            <div>
-              <h5>NEIGHBORHOOD POLICE OFFICER (NPO)</h5>
-              <p><strong>NAME:</strong> ${value.data.features[0].attributes.police_officer}</p>
-              <p><strong>PHONE:</strong> ${value.data.features[0].attributes.phone_number}</p>
-              <p><strong>EMAIL:</strong> ${value.data.features[0].attributes.email}</p>
-            </div>
-          </article>`;
-        }else{
-          tempHTML = `
-          <article class="info-section">
-            <span>POLICE</span>
-            <div>
-              <p>NO POLICE INFO FOUND</p>
-            </div>
-          </article>`;
+        console.log(value)
+        let dataParsing = {title: "Police", content: null};
+        if(value && value.data.features.length){
+          console.log('building police section');
+          dataParsing.content = `
+          <p><strong>PRECINCT</strong></p>
+          <p><strong>Number:</strong> ${value.data.features[0].attributes.precinct}</p>
+          <p><strong>Address:</strong> ${value.data.features[0].attributes.precinct_location}</p>
+          <br>
+          <p><strong>NEIGHBORHOOD POLICE OFFICER (NPO)</strong></p>
+          <p><strong>Name:</strong> ${value.data.features[0].attributes.police_officer}</p>
+          <p><strong>Phone:</strong> ${value.data.features[0].attributes.phone_number}</p>
+          <p><strong>Email:</strong> ${value.data.features[0].attributes.email}</p>
+          `;
+        }else {
+          dataParsing.content = `<p>No police info found</p>`;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       checkRecyclingStatus(data){
@@ -535,9 +567,9 @@ export default class Display extends HTMLElement {
         }
       }
     
-      buildRecycling(value, panel){
-        let tempHTML = '';
-        if(Object.keys(value.data).length != 0 && value.data.constructor === Object){
+      buildRecycling(value, display){
+        let dataParsing = {title: "Trash & Recycling", content: null};
+        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object){
           let contractorInfo = {
             name: null,
             url: null,
@@ -552,28 +584,17 @@ export default class Display extends HTMLElement {
             contractorInfo.url =  'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
             contractorInfo.phone = ' (844) 233-8764';
           }
-          tempHTML = `
-          <article class="info-section">
-            <span>TRASH & RECYCLING</span>
-            <div>
-              <p><strong>PROVIDER:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
-              <p><strong>NEXT TRASH:</strong> ${moment(value.data.next_pickups.trash.next_pickup).format('MMM DD, YYYY')}</p>
-              <p><strong>NEXT RECYCLING:</strong> ${moment(value.data.next_pickups.recycling.next_pickup).format('MMM DD, YYYY')}</p>
-              <p><strong>NEXT BULK:</strong> ${moment(value.data.next_pickups.bulk.next_pickup).format('MMM DD, YYYY')}</p>
-              ${(panel.checkRecyclingStatus(value.data)) ?  tempHTML += `<p><strong>NEXT YARD:</strong> ${moment(value.data.next_pickups['yard waste'].next_pickup).format('MMM DD, YYYY')}</p>` : ``}
-            </div>
-          <h4 class="noprint"><a href="/webapp/waste-pickup-map" target="_blank">MORE INFO</a></h4>
-          </article>`;
-        }else{
-          tempHTML = `
-          <article class="info-section">
-            <span>TRASH & RECYCLING</span>
-            <div>
-              <p>NO TRASH & RECYCLING INFO FOUND</p>
-            </div>
-          </article>`;
+          dataParsing.content = `
+            <p><strong>Provider:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
+            <p><strong>Next Trash:</strong> ${display.formatDate(value.data.next_pickups.trash.next_pickup)}</p>
+            <p><strong>Next Recycling:</strong> ${display.formatDate(value.data.next_pickups.recycling.next_pickup)}</p>
+            <p><strong>Next Bulk:</strong> ${display.formatDate(value.data.next_pickups.bulk.next_pickup)}</p>
+            ${(display.checkRecyclingStatus(value.data)) ?  tempHTML += `<p><strong>Next Yard:</strong> ${display.formatDate(value.data.next_pickups['yard waste'].next_pickup)}</p>` : ``}
+          `;
+        }else {
+          dataParsing.content = `<p>No data found</p>`;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       buildAssessors(value){
@@ -615,30 +636,22 @@ export default class Display extends HTMLElement {
         return dataParsing;
       }
     
-      buildRental(value, values){
-        let tempHTML = '';
-        if((value && value.data.features.length) || (values['rental-cert-data'] && values['rental-cert-data'].data.features.length)){
-          tempHTML += `
-            <article class="info-section">
-            <span>RENTAL ENFORCEMENT STATUS</span>
-            <div>
-              <p><strong>REGISTER:</strong> ${value.data.features.length ? `${moment(value.data.features[0].attributes.date_status).format('MMM DD, YYYY')}` : `Not registered`}</p>
-              <p><strong>CERTIFIED:</strong> ${values['rental-cert-data'].data.features.length ? `${moment(values['rental-cert-data'].data.features[0].attributes.issued_date).format('MMM DD, YYYY')}` : `Not certified`}</p>
-            </div>
-            `;
-          tempHTML += `<h4><a href="/departments/buildings-safety-engineering-and-environmental-department/property-maintenance-division/rental-property" target="_blank">MORE INFO</a></h4>
-          </article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-            <span>RENTAL ENFORCEMENT STATUS</span>
-          <div>
-            <p><strong>REGISTER:</strong> Not registered</p>
-            <p><strong>CERTIFIED:</strong> Not certified</p>
-          </div>
-          </article>`;
+      buildRental(value, display){
+        let app = document.getElementsByTagName('my-home-info');
+        let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+        let dataParsing = {title: "Rental Enforcement Status", content: null};
+        if((value && value.data.features.length) || (apiDataSets['rental-cert-data'] && apiDataSets['rental-cert-data'].data.features.length)){
+          dataParsing.content = `
+            <p><strong>Registered:</strong> ${value.data.features.length ? `${display.formatDate(value.data.features[0].attributes.date_status)}` : `Not registered`}</p>
+            <p><strong>Certified:</strong> ${apiDataSets['rental-cert-data'].data.features.length ? `${display.formatDate(apiDataSets['rental-cert-data'].data.features[0].attributes.issued_date)}` : `Not certified`}</p>
+          `;
+        }else {
+          dataParsing.content = `
+          <p><strong>Registered:</strong> Not registered</p>
+          <p><strong>Certified:</strong> Not certified</p>
+          `;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       buildFireEscrow(value){
@@ -664,92 +677,62 @@ export default class Display extends HTMLElement {
         return tempHTML;
       }
     
-      buildBlight(value){
-        let tempHTML = '';
+      buildBlight(value, display){
+        let dataParsing = {title: "Blight Tickets", content: null};
         if(value && value.data.features.length){
-          tempHTML += `
-          <article class="info-section">
-          <span>BLIGHT TICKETS</span>`;
-          value.data.features.forEach(function(value){
-            tempHTML += `
-            <div>
-              <p><strong>TICKET ID:</strong> ${value.attributes.ticket_number}</p>
-              <p><strong>FINE AMOUNT:</strong> $${value.attributes.fine_amount}</p>
-              <p><strong>AGENCY NAME:</strong> ${value.attributes.agency_name}</p>
-              <p><strong>DISPOSITION:</strong> ${value.attributes.disposition}</p>
-              <p><strong>DESCRIPTION:</strong> ${value.attributes.violation_description}</p>
-              <p><strong>HEARING DATE:</strong> ${moment(value.attributes.hearing_date).format('MMM DD, YYYY')}</p>
-              <p><strong>HEARING TIME:</strong> ${value.attributes.hearing_time}</p>
-            </div>
-            `;
-          });
-          tempHTML += `<h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/blight-violations" target="_blank">MORE INFO</a></h4></article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-          <span>BLIGHT TICKETS</span>
-          <div>
-            <p>NO BLIGHT TICKETS FOUND</p>
-          </div>
-          </article>`;
-        }
-        return tempHTML;
-      }
-    
-      buildPermit(value){
-        let tempHTML = '';
-        if(value && value.data.features.length){
-          tempHTML += `
-            <article class="info-section">
-            <span>BUILDING PERMITS</span>`;
-          value.data.features.forEach(function(value){
-            // <p><strong>PERMIT EXPIRED:</strong> ${moment(value.attributes.date_expiration).format('MMM DD, YYYY')}</p>
-            tempHTML += `
-            <div>
-              <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
-              <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
-              <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.permit_type}</p>
-              <p><strong>PERMIT STATUS:</strong> ${value.attributes.status}</p>
-              <p><strong>PERMIT ISSUED:</strong> ${moment(value.attributes.issued_date).format('MMM DD, YYYY')}</p>
-              
-              <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.description_of_work}</p>
-            </div>
-            `;
-          });
-          tempHTML += `<h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/building-permits" target="_blank">MORE INFO</a></h4>
-          </article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-            <span>BUILDING PERMITS</span>
-          <div>
-            <p>NO BUILDING PERMITS FOUND</p>
-          </div>
-          </article>`;
-        }
-        return tempHTML;
-      }
-    
-      buildDemoStatus(value){
-        let tempHTML = '';
-        if(value.data.features.length){
-          tempHTML = `<article class="info-section">
-        <span>DEMOLITION STATUS</span>`;
-        value.data.features.forEach(function(value){
-          tempHTML += `
-            <div>
-              <p><STRONG>WARNING!</STRONG></p>
-              <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
-              ${(value.attributes.demolish_by_date == null) ? `Date to be determined`:`<p><strong>${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</stron></p>`}
-            </div>
+          dataParsing.content = `
+            <p><strong>Ticket ID:</strong> ${value.attributes.ticket_number}</p>
+            <p><strong>Fine Amount:</strong> $${value.attributes.fine_amount}</p>
+            <p><strong>Agency name:</strong> ${value.attributes.agency_name}</p>
+            <p><strong>Disposition:</strong> ${value.attributes.disposition}</p>
+            <p><strong>Description:</strong> ${value.attributes.violation_description}</p>
+            <p><strong>Hearing Date:</strong> ${display.formatDate(value.attributes.hearing_date)}</p>
+            <p><strong>Hearing Time:</strong> ${value.attributes.hearing_time}</p>
           `;
-        });
-        tempHTML += `
-        <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
-        </article>`;
+        }else {
+          dataParsing.content = `<p>No blight tickets found</p>`;
         }
+        return dataParsing;
+      }
     
-        return tempHTML;
+      buildPermit(value, display){
+        let dataParsing = {title: "Building Permits", content: null};
+        if(value && value.data.features.length){
+          dataParsing.content = `
+          <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
+          <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
+          <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.permit_type}</p>
+          <p><strong>PERMIT STATUS:</strong> ${value.attributes.status}</p>
+          <p><strong>PERMIT ISSUED:</strong> ${display.formatDate(value.attributes.issued_date)}</p>
+          <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.description_of_work}</p>
+          `;
+        }else {
+          dataParsing.content = `<p>No building permits found</p>`;
+        }
+        return dataParsing;
+      }
+    
+      buildDemoStatus(value, display){
+        let app = document.getElementsByTagName('my-home-info');
+        let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+        let tempAddress = parcelData.address.replace(' ', '%2520');
+        tempAddress = tempAddress.replace(',', '%252C');
+        let dataParsing = {title: "Demolition Status", content: null};
+        console.log(value);
+        if(value && value.data.features.length){
+          dataParsing.content = `
+            <p><strong>WARNIG!</strong></p>
+            <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
+            ${(value.attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>`:`<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
+            `}
+          `;
+        }else {
+          dataParsing.content = `
+          <p>This property is not on the demolition list</p>
+          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>`;
+        }
+        return dataParsing;
       }
     
       buildDemosNear(value){
@@ -867,7 +850,7 @@ export default class Display extends HTMLElement {
     
             case 'permit-data':
               try {
-                return display.buildPermit(value);
+                return display.buildPermit(value, display);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -876,7 +859,7 @@ export default class Display extends HTMLElement {
     
             case 'rental-data':
               try {
-                return display.buildRental(value, values);
+                return display.buildRental(value, display);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -885,7 +868,7 @@ export default class Display extends HTMLElement {
     
             case 'blight-data':
               try {
-                return display.buildBlight(value);
+                return display.buildBlight(value, display);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -971,9 +954,11 @@ export default class Display extends HTMLElement {
     buildDataBlock(display, dataSet) {
         const dataBlock = document.createElement('article');
         dataBlock.className = 'data-block';
+        console.log(dataSet);
         let datasetValues = display.selectDataBlockType(display, dataSet);
-        if(datasetValues.content == null){
-          return '';
+        console.log(datasetValues);
+        if(datasetValues == undefined || datasetValues.content == null ){
+          return null;
         }else{
           const dataBlockTitle = document.createElement('p');
           dataBlockTitle.className = 'data-block-title';
@@ -999,7 +984,9 @@ export default class Display extends HTMLElement {
         const apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
         for (const dataSet in apiDataSets) {
             if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
-              results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
+              if(display.buildDataBlock(display, apiDataSets[dataSet]) != null){
+                results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
+              }
             }
         }
         return results;
@@ -1037,17 +1024,6 @@ export default class Display extends HTMLElement {
 
             case 'active':
                 shadow.appendChild(display.welcomeStyle);
-                displayWrapper.appendChild(this.neighborhoodImage);
-                const textWrapperActive = document.createElement('article');
-                displayWrapper.appendChild(textWrapperActive);
-                const titleActive = document.createElement('p');
-                titleActive.setAttribute('aria-label', 'title');
-                titleActive.innerText = 'It’s all here. All in one place.';
-                titleActive.className = 'display-title';
-                textWrapperActive.appendChild(titleActive)
-                const textActive = document.createElement('p');
-                textActive.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
-                textWrapperActive.appendChild(textActive)
                 displayWrapper.appendChild(geocoder);
                 shadow.appendChild(displayWrapper);
                 break;

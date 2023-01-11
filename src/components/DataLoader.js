@@ -702,11 +702,15 @@ export default class DataLoader extends HTMLElement {
                 initialLoadChecker = false;
               }
             }
-            // if(activeDataSets.includes('council')){
-            //   dataSets.council.data = parcelData.attributes.council_district;
-            //   let councilData = loader.buildCouncilData(dataSets);
-            //   dataSets.councilData = {id: 'councilData', data: councilData};
-            // }
+            if(activeDataSets.includes('council')){
+              dataSets.council.data = parcelData.attributes.council_district;
+              let councilData = loader.buildCouncilData(dataSets);
+              dataSets.councilMember = {id: 'councilMember', data: councilData.council};
+              let dManagers = {manager: councilData.dmanager, deputy: councilData.ddmanager}
+              dataSets.districtManagers = {id: 'districManagers', data: dManagers};
+              dataSets.businessLiaison = {id: 'businessLiaison', data: councilData.bliaision};
+              dataSets.inspector = {id: 'inspector', data: councilData.enforcement};
+            }
             if(activeDataSets.includes('DWSDBackupProtection')){
               try {
                 if(!dataSets.DWSDBackupProtection){

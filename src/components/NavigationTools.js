@@ -14,8 +14,8 @@ export default class NavigationTools extends HTMLElement {
         this.navToolsStyle = document.createElement('style');
         this.navToolsStyle.textContent = `
             #nav-tools-wrapper { display: flex; flex-direction: column;}
-            button.clear { font-size: 1.25em; width: 2em; height: 2em; background-color: #FEB70D; cursor: pointer; border: none; }
-            button.nav { width: 3em; height: 3em; border: none; cursor: pointer;background: #fff; }
+            button.clear { font-size: 1.25em; width: 2.5em; height: 2.5em; background-color: #FEB70D; cursor: pointer; border: none; }
+            button.nav { width: 3.75em; height: 3.75em; border: none; cursor: pointer;background: #fff; }
             button.nav:hover { background-color: #e6e6e6; transition: all 500ms cubic-bezier(.64,.09,.08,1); }
             button.nav.active { background-color: #9fd5b3; }
             button.nav img { width: 100%; }
@@ -50,7 +50,7 @@ export default class NavigationTools extends HTMLElement {
             app[0].setAttribute('data-parcel-id', 'none');
             app[0].setAttribute('data-api-stored-datasets', '{}');
             app[0].setAttribute('data-api-active-datasets', 'none');
-            app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood');
+            app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demoStatus,blight-data,permit-data');
             app[0].setAttribute('data-active-section', 'property');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
@@ -76,7 +76,7 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood');
+                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demoStatus,blight-data,permit-data');
                 app[0].setAttribute('data-active-section', 'property');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -103,7 +103,7 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'council');
+                app[0].setAttribute('data-active-sets', 'npo');
                 app[0].setAttribute('data-active-section', 'government');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });

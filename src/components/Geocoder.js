@@ -13,11 +13,19 @@ export default class Geocoder extends HTMLElement {
         this.form = null;
         this.parcelStatus = 'Invalid';
         this.user = null;
+        this.styles = document.createElement('style');
+        this.styles.textContent = `
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
+            label {display:block; font-family: 'Montserrat', sans-serif; font-weight: bold;}
+            #geocoder {width: 100%}
+            input {width: calc(100% - 2em); padding: 1em; border:.1em solid #e6e6e6;}
+        `;
 
         // Create a shadow root
         const shadow = this.attachShadow({ mode: 'open' });
 
         // Create geocoder section
+        shadow.appendChild(this.styles);
         const geocoderWraper = document.createElement('article');
         geocoderWraper.id = 'geocoder';
         let form = document.createElement('form');
@@ -30,7 +38,7 @@ export default class Geocoder extends HTMLElement {
             this.submit(ev, this);
         });
         icon.className = 'fas fa-map-marker-alt';
-        label.innerText = "My Home Info:";
+        label.innerText = "Property Address:";
         label.setAttribute("for", "geocoder-input");
         input.type = 'text';
         input.setAttribute('list', 'addresses-list');
