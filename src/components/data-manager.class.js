@@ -204,6 +204,9 @@ export default class DataManager {
         // console.log(err);
       });
     });
+    let demoRedirect = new Promise((resolve, reject) => {
+      resolve({"id": "demo-redirect", "data": ''});
+    });
     let pSchools = new Promise((resolve, reject) => {
       let point = turf.point([location.location.x, location.location.y]);
       let buffer = turf.buffer(point, 1, {units: 'miles'});
@@ -368,6 +371,10 @@ export default class DataManager {
           if(location.attributes.parcel_id != null && location.attributes.parcel_id != ''){
             callList.push(demoStatus);
           }
+          break;
+
+        case 'demo-redirect':
+          callList.push(demoRedirect);
           break;
 
         case 'historicDistrict':

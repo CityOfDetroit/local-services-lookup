@@ -593,6 +593,14 @@ export default class Panel {
     return tempHTML;
   }
 
+  buildDemoRedirect(value, address){
+    let tempHTML = `<article class="info-section"><div><p><STRONG>You will be redirected shortly.</STRONG></p></div></article>`;
+    let tempAddress = address.replace(' ', '%2520');
+    tempAddress = tempAddress.replace(',', '%252C');
+    window.location.href = `https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}`;
+    return tempHTML;
+  }
+
   buildDemosNear(value, address){
     let tempHTML = '';
     let tempAddress = address.replace(' ', '%2520');
@@ -795,6 +803,15 @@ export default class Panel {
         case 'demo-status':
           try {
             tempHTML += controller.panel.buildDemoStatus(value, values.title);
+          } catch (error) {
+            console.log(error);
+            tempHTML += '';
+          }
+          break;
+
+        case 'demo-redirect':
+          try {
+            tempHTML += controller.panel.buildDemoRedirect(value, values.title);
           } catch (error) {
             console.log(error);
             tempHTML += '';
