@@ -28,9 +28,10 @@ export default class Display extends HTMLElement {
           #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap; font-family: 'Montserrat', sans-serif;}
           #display-wrapper > img { max-width: 100%; }
           #display-wrapper p { text-align: center; font-family: 'Montserrat', sans-serif;}
-          #display-wrapper button { padding: 1em 3em;  background-color: #004445; color: #fff; border: none; cursor: pointer }
+          #display-wrapper button { padding: 1em 3em;  background-color: #004445; color: #fff; border: none; cursor: pointer; margin: auto; width: 100%;}
           p.display-title { font-weight: bold; font-size: 1.25em; }
           app-geocoder { width: 100%}
+          .btn-group { display:flex; width: 100%; }
         `;
 
         this.loadingStyle = document.createElement('style');
@@ -45,7 +46,11 @@ export default class Display extends HTMLElement {
             top: -0.2em;
         }
         .loader-container{
-            margin: auto;
+          display: flex;
+          margin: auto;
+        }
+        .loader-container article{
+          margin:auto;
         }
         .loader {
             position: relative;
@@ -242,6 +247,7 @@ export default class Display extends HTMLElement {
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif;}
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
+          .dataset-results {flex: 1;}
         `;
 
         // Start loading display content
@@ -396,124 +402,53 @@ export default class Display extends HTMLElement {
         return tempHTML;
       }
     
-      buildHistoricDistrict(value){
-        let tempHTML = '';
+      buildHistoricDistrict(value, display){
+        let dataParsing = {title: "NEZ Homestead Zone", content: null};
         if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
-          tempHTML = `
-          <article class="info-section">
-            <span>LOCAL HISTORIC DISTRICT</span>
-            <div>
-              <p><strong>NAME:</strong> ${value.data.features[0].attributes.Name}</p>
-              <p><strong>DESIGNATED ON:</strong> ${moment(value.data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
-            </div>
-          </article>`;
-        }else{
-          tempHTML = `
-          <article class="info-section">
-            <span>HISTORIC DISTRICT</span>
-            <div>
-              <p>NO HISTORIC DISTRICT FOUND</p>
-            </div>
-          </article>`;
+          dataParsing.content = `
+          <p><strong>NAME:</strong> ${value.data.features[0].attributes.Name}</p>
+          <p><strong>DESIGNATED ON:</strong> ${display.formatDate(value.data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
+          `;
+        }else {
+          dataParsing.content = `
+          <p>This property is not in a historic district.</p>
+          `;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
-      buildNEZ(nez, nezOld){
-        let tempHTML = '';
-    
+      buildNEZ(nez){
+        let dataParsing = {title: "NEZ Homestead Zone", content: null};
         if(Object.keys(nez.data).length != 0 && nez.data.constructor === Object && nez.data.features.length > 0){
-          if(Object.keys(nezOld.data).length != 0 && nezOld.data.constructor === Object && nezOld.data.features.length > 0){
-            tempHTML = `
-            <article class="info-section">
-              <span>CURRENT NEZ HOMESTEAD ZONE</span>
-              <div>
-                <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
-                <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
-                <p><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
-              </div>
-              <span>NEW NEZ HOMESTEAD ZONE</span>
-              <div>
-                <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
-                <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
-              </div>
-            </article>`;
-          }else{
-            tempHTML = `
-            <article class="info-section">
-              <span>Current NEZ HOMESTEAD ZONE</span>
-              <div>
-                <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
-              </div>
-              <span>NEW NEZ HOMESTEAD ZONE</span>
-              <div>
-                <p><strong>NAME:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
-                <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
-              </div>
-            </article>`;
-          }
-        }else{
-          if(Object.keys(nezOld.data).length != 0 && nezOld.data.constructor === Object && nezOld.data.features.length > 0){
-            tempHTML = `
-            <article class="info-section">
-              <span>Current NEZ Homestead Zone</span>
-              <div>
-                <p><strong>NAME:</strong> ${nezOld.data.features[0].attributes.id}</p>
-                <p><strong>ID:</strong> ${nezOld.data.features[0].attributes.nezname}</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
-              </div>
-              <span>New NEZ Homestead Zone</span>
-              <div>
-                <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
-              </div>
-            </article>`;
-          }else{
-            tempHTML = `
-            <article class="info-section">
-              <span>Current NEZ Homestead Zone</span>
-              <div>
-                <p>NO CURRENT NEZ HOMESTEAD ZONE FOUND.</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a>
-              </div>
-              <span>New NEZ Homestead Zone</span>
-              <div>
-                <p>NO NEW NEZ HOMESTEAD ZONE FOUND.</p>
-                <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a>
-              </div>
-            </article>`;
-          }
+          dataParsing.content = `
+          <p><strong>Name:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
+          <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
+          <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a></p>
+          `;
+        }else {
+          dataParsing.content = `
+          <p>This property is not on a NEZ Homestead zone.</p>
+          <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a></p>
+          `;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       buildNRSA(value){
-        let tempHTML = '';
+        let dataParsing = {title: "Neighborhood Revitalization Strategy Areas (NRSA)", content: null};
         if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
-          tempHTML = `
-          <article class="info-section">
-            <span>NEIGHBORHOOD REVITALIZATION STRATEGY AREAS (NRSA)</span>
-            <div>
-              <p><strong>ZONE:</strong> ${value.data.features[0].attributes.Name}</p>
-            </div>
-          </article>`;
-        }else{
-          tempHTML = `
-          <article class="info-section">
-            <span>NEIGHBORHOOD REVITALIZATION STRATEGY AREAS (NRSA)</span>
-            <div>
-              <p>NO NRSA FOUND</p>
-            </div>
-          </article>`;
+          dataParsing.content = `
+          <p><strong>Name:</strong> ${value.data.features[0].attributes.Name}</p>
+          `;
+        }else {
+          dataParsing.content = `
+          <p>This property is not on a NRSA.</p>
+          `;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
       buildNPO(value){
-        console.log(value)
         let dataParsing = {title: "Police", content: null};
         if(value && value.data.features.length){
           console.log('building police section');
@@ -735,70 +670,72 @@ export default class Display extends HTMLElement {
         return dataParsing;
       }
     
-      buildDemosNear(value){
-        let tempHTML = '';
-        if(value.data.features.length){
-          value.data.features.forEach(function(value){
-            tempHTML += `
-            <article class="info-section">
-            <span>DEMOLITIONS NEAR YOU</span>
-            <div>
-              <p><strong>ADDRESS:</strong> ${value.attributes.address}</p>
-              <p><strong>COMMERCIAL:</strong> ${value.attributes.commercial_building}</p>
-              <p><strong>PRICE:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
-              <p><strong>PARCEL:</strong> ${value.attributes.parcel_id}</p>
-              <p><strong>CONTRACTOR:</strong> ${value.attributes.contractor_name}</p>
-              <p><strong>COUNCIL DISTRICT:</strong> ${value.attributes.council_district}</p>
-              <p><strong>NEIGHBORHOOD:</strong> ${value.attributes.neighborhood}</p>
-              <p><strong>EXPECTED DATE:</strong> ${moment(value.attributes.demolish_by_date).format('MMM DD, YYYY')}</p>
-            </div>`;
+      buildDemosNear(value, display){
+        let dataParsing = {title: "Demolitions Nearby", content: null};
+        if(value && value.data.features.length){
+          value.data.features.forEach(function(value, index){
+            if(index == 0){
+              dataParsing.content = `
+              <p><strong>Address:</strong> ${value.attributes.address}</p>
+              <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
+              <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
+              <p><strong>Parcel:</strong> ${value.attributes.parcel_id}</p>
+              <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
+              <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
+              <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
+              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
+              <br>
+              `;
+            }else{
+              dataParsing.content += `
+              <p><strong>Address:</strong> ${value.attributes.address}</p>
+              <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
+              <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
+              <p><strong>Parcel:</strong> ${value.attributes.parcel_id}</p>
+              <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
+              <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
+              <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
+              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
+              <br>
+              `;
+            }
           });
-          tempHTML += `
-          <h4 class="noprint"><a href="https://data.detroitmi.gov/datasets/demolitions-under-contract" target="_blank">MORE INFO</a></h4>
-          </article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-          <span>DEMOLITIONS NEAR YOU</span>
-          <div>
-            <p>NO DEMOLITIONS FOUND</p>
-          </div>
-          </article>`;
+          
+        }else {
+          dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
         }
-        return tempHTML;
+        return dataParsing;
       }
     
-      buildImproveDet(value){
-        let tempHTML = '';
-        if(value.data.features.length){
-          tempHTML += `
-          <article class="info-section">
-          <span>IMPROVE DETROIT ISSUES NEAR YOU</span>`;
-          value.data.features.forEach(function(value){
-            tempHTML += `
-            <div>
+      buildImproveDet(value, display){
+        let dataParsing = {title: "Improve Detroit Issues Nearby", content: null};
+        if(value && value.data.features.length){
+          value.data.features.forEach(function(value, index){
+            if(index == 0){
+              dataParsing.content = `
               <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
-              <p><strong>TYPE:</strong> ${value.attributes.request_type_title}</p>
-              <p><strong>STATUS:</strong> ${value.attributes.status}</p>
-              <p><strong>REPORTED ON:</strong> ${moment(value.attributes.created_at).format('MMM DD, YYYY')}</p>
-            </div>`;
+              <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
+              <p><strong>Status:</strong> ${value.attributes.status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
+              <br>
+              `;
+            }else{
+              dataParsing.content += `
+              <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
+              <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
+              <p><strong>Status:</strong> ${value.attributes.status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
+              <br>
+              `;
+            }
           });
-          tempHTML += `
-          <h4 class="noprint">
-          <a href="https://seeclickfix.com/enhanced_watch_areas/674" target="_blank">MORE INFO</a>
-          <a href="/webapp/improve-detroit-report-issue-online" target="_blank">REPORT ISSUE</a>
-          </h4>
-          </article>`;
-        }else{
-          tempHTML += `
-          <article class="info-section">
-          <span>IMPROVE DETROIT</span>
-          <div>
-            <p>NO IMPROVE DETROIT ISSUES</p>
-          </div>
-          </article>`;
+          
+        }else {
+          dataParsing.content = `<p>No active issues nearby.</p>`;
         }
-        return tempHTML;
+        return dataParsing;
       }
 
       selectDataBlockType(display, value){
@@ -823,7 +760,7 @@ export default class Display extends HTMLElement {
     
             case 'nez':
               try {
-                return display.buildNEZ(value, values.nezOld);
+                return display.buildNEZ(value);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -877,7 +814,7 @@ export default class Display extends HTMLElement {
     
             case 'demos-data':
               try {
-                return display.buildDemosNear(value);
+                return display.buildDemosNear(value, display);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -904,7 +841,7 @@ export default class Display extends HTMLElement {
     
             case 'improve-det':
               try {
-                return display.buildImproveDet(value);
+                return display.buildImproveDet(value, display);
               } catch (error) {
                 console.log(error);
                 return '';
@@ -1011,14 +948,17 @@ export default class Display extends HTMLElement {
                 textWrapperWelcome.appendChild(titleWelcome)
                 const textWelcome = document.createElement('p');
                 textWelcome.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
-                textWrapperWelcome.appendChild(textWelcome)
+                textWrapperWelcome.appendChild(textWelcome);
+                const btnSection = document.createElement('div');
+                btnSection.className = 'btn-group';
                 const btn = document.createElement('button');
                 btn.innerText = 'Start';
                 btn.addEventListener('click', (ev)=>{
                     const app = document.getElementsByTagName('my-home-info');
                     app[0].setAttribute('data-app-state', 'active-screen');
                 })
-                textWrapperWelcome.appendChild(btn)
+                btnSection.appendChild(btn);
+                textWrapperWelcome.appendChild(btnSection)
                 shadow.appendChild(displayWrapper);
                 break;
 

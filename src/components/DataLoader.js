@@ -194,8 +194,8 @@ export default class DataLoader extends HTMLElement {
           });
           let demosData = new Promise((resolve, reject) => {
             let today = new Date();
-            let start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}}`;
-            let end = `${today.getFullYear()}-${today.getMonth() + 6}-${today.getDate()}}`;
+            let start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+            let end = `${today.getFullYear()}-${today.getMonth() + 6}-${today.getDate()}`;
             let point = turf.point([parcelData.location.x, parcelData.location.y]);
             let buffer = turf.buffer(point, 1, {units: 'miles'});
             let simplePolygon = turf.simplify(buffer.geometry, {tolerance: 0.005, highQuality: false});
@@ -349,7 +349,7 @@ export default class DataLoader extends HTMLElement {
             loader.callList.push(nrsa);
             break;
 
-            case 'demosData':
+            case 'demos-data':
             loader.callList.push(demosData);
             break;
 
@@ -375,7 +375,7 @@ export default class DataLoader extends HTMLElement {
             loader.callList.push(rentalCertData);
             break;
 
-            case 'demoStatus':
+            case 'demo-status':
             if(parcelData.attributes.parcel_id != null && parcelData.attributes.parcel_id != ''){
                 loader.callList.push(demoStatus);
             }
