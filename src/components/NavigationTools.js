@@ -3,6 +3,7 @@ import homeImage from '../images/home.png';
 import govImage from '../images/government.png';
 import zoneImage from '../images/zone.png';
 import nearImage from '../images/nearby.png';
+import printImage from '../images/print.png';
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -171,6 +172,24 @@ export default class NavigationTools extends HTMLElement {
         }
         nearDataBtn.appendChild(nearIcon);
         navToolsWrapper.appendChild(nearDataBtn);
+
+        const printBtn = document.createElement('button');
+        const printIcon = document.createElement('img');
+        printIcon.src = printImage;
+        printIcon.setAttribute('alt', 'print');
+        printBtn.setAttribute('data-nav-value', 'print');
+        if(app[0].getAttribute('data-active-section') == 'print'){
+            nearDataBtn.className = 'nav active';
+        }else{
+            printBtn.className = 'nav';
+            printBtn.addEventListener('click', () => {
+                const app = document.getElementsByTagName('my-home-info');
+                console.log(app);
+                app[0].printInfo();
+            });
+        }
+        printBtn.appendChild(printIcon);
+        navToolsWrapper.appendChild(printBtn);
 
         shadow.appendChild(navToolsWrapper);
     }

@@ -73,6 +73,24 @@ export default class MyHomeInfo extends HTMLElement {
         }
     }
 
+    printInfo() {
+        let app = document.getElementsByTagName('my-home-info');
+        let appShadow = app[0].shadowRoot;
+        console.log(appShadow);
+        let display = appShadow.querySelector('app-display');
+        let displayShadow = display[0].shadowRoot;
+        let divContents = displayShadow.querySelector('.dataset-results').innerHTML;
+        console.log(divContents);
+        let a = window.open('', '', 'height=500, width=500');
+        a.document.write('<html>');
+        a.document.write('<head><style>@media print {.noprint { visibility: hidden;}; .local-content {column-count: 3;} }</style></head>');
+        a.document.write('<body >');
+        a.document.write(divContents);
+        a.document.write('</body>');
+        a.document.close();
+        a.print();
+    }
+
     loadApp(app) {
         const shadow = app.shadowRoot;
         const appWrapper = document.createElement('section');
