@@ -32,10 +32,17 @@ export default class Display extends HTMLElement {
           p.display-title { font-weight: bold; font-size: 1.25em; }
           app-geocoder { width: 100%}
           .btn-group { display:flex; width: 100%; }
+          @media all and (min-width: 551px) {
+            #display-wrapper{ display: flex; }
+            #display-wrapper > img { width: 15em; }
+            #display-wrapper article { flex: 1; padding: 1em; }
+          }
         `;
 
         this.loadingStyle = document.createElement('style');
         this.loadingStyle.textContent = `
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
+        p { text-align: center; font-family: 'Montserrat', sans-serif;}
         .loader-box{
             display: flex;
             width: 100%;
@@ -248,6 +255,16 @@ export default class Display extends HTMLElement {
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
           .dataset-results {flex: 1;}
+          .critical-text { color: #CF3234; }
+          @media all and (min-width: 551px) {
+            #data-blocks { column-count: 2; }
+            #data-blocks .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; }
+          }
+
+          @media all and (min-width: 1024px) {
+            #data-blocks { column-count: 3; }
+            #data-blocks .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; }
+          }
         `;
 
         // Start loading display content
@@ -656,9 +673,9 @@ export default class Display extends HTMLElement {
         console.log(value);
         if(value && value.data.features.length){
           dataParsing.content = `
-            <p><strong>WARNIG!</strong></p>
+            <p class="critical-text"><strong>WARNIG!</strong></p>
             <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
-            ${(value.attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>`:`<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+            ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>`:`<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
             <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
             `}
           `;
@@ -683,7 +700,7 @@ export default class Display extends HTMLElement {
               <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
               <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
-              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              ${(value.attributes.demolish_by_date == undefined || value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
               <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
               <br>
               `;
@@ -917,12 +934,15 @@ export default class Display extends HTMLElement {
         sectionTitle.className = 'data-title';
         sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
         results.appendChild(sectionTitle);
+        const dataBlocks = document.createElement('div');
+        dataBlocks.id = 'data-blocks';
+        results.appendChild(dataBlocks);
 
         const apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
         for (const dataSet in apiDataSets) {
             if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
               if(display.buildDataBlock(display, apiDataSets[dataSet]) != null){
-                results.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
+                dataBlocks.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
               }
             }
         }
@@ -969,7 +989,6 @@ export default class Display extends HTMLElement {
                 break;
 
             case 'loading':
-                shadow.appendChild(display.welcomeStyle);
                 shadow.appendChild(display.loadingStyle);
                 const loadingScreen = document.createElement('article');
                 loadingScreen.innerHTML = `
