@@ -183,9 +183,7 @@ export default class NavigationTools extends HTMLElement {
         }else{
             printBtn.className = 'nav';
             printBtn.addEventListener('click', () => {
-                const app = document.getElementsByTagName('my-home-info');
-                console.log(app);
-                app[0].printInfo();
+                app[0].setAttribute('data-app-state', 'print');
             });
         }
         printBtn.appendChild(printIcon);

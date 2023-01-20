@@ -13,9 +13,9 @@ export default class MyHomeInfo extends HTMLElement {
     constructor() {
         // Always call super first in constructor
         super();
-    
+
         // Create a shadow root
-        const shadow = this.attachShadow({mode: 'open'});
+        const shadow = this.attachShadow({ mode: 'open' });
 
         // Create result section
         const appWrapper = document.createElement('section');
@@ -31,16 +31,16 @@ export default class MyHomeInfo extends HTMLElement {
         console.log(`App - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
         switch (name) {
             case 'data-app-state':
-                if(oldValue != null){
+                if (oldValue != null) {
                     this.clearApp(this);
                     this.loadApp(this);
                 }
                 break;
 
             case 'data-parcel-id':
-                if(newValue != 'none'){
+                if (newValue != 'none') {
                     this.setAttribute('data-app-state', 'loading-screen');
-                }else{
+                } else {
                     this.setAttribute('data-app-state', 'welcome-screen');
                 }
                 break;
@@ -59,7 +59,7 @@ export default class MyHomeInfo extends HTMLElement {
             //         this.setAttribute('data-app-state', 'loading-screen');
             //     }
             //     break;
-        
+
             default:
                 break;
         }
@@ -71,24 +71,6 @@ export default class MyHomeInfo extends HTMLElement {
         while (shadow.firstChild) {
             shadow.removeChild(shadow.firstChild);
         }
-    }
-
-    printInfo() {
-        let app = document.getElementsByTagName('my-home-info');
-        let appShadow = app[0].shadowRoot;
-        console.log(appShadow);
-        let display = appShadow.querySelector('app-display');
-        let displayShadow = display[0].shadowRoot;
-        let divContents = displayShadow.querySelector('.dataset-results').innerHTML;
-        console.log(divContents);
-        let a = window.open('', '', 'height=500, width=500');
-        a.document.write('<html>');
-        a.document.write('<head><style>@media print {.noprint { visibility: hidden;}; .local-content {column-count: 3;} }</style></head>');
-        a.document.write('<body >');
-        a.document.write(divContents);
-        a.document.write('</body>');
-        a.document.close();
-        a.print();
     }
 
     loadApp(app) {
@@ -118,12 +100,17 @@ export default class MyHomeInfo extends HTMLElement {
                 display.setAttribute('data-display-type', 'results');
                 appWrapper.appendChild(display);
                 break;
-        
+
+            case 'print':
+                display.setAttribute('data-display-type', 'print');
+                appWrapper.appendChild(display);
+                break;
+
             default:
                 break;
         }
         console.log(shadow.firstChild);
-        if(shadow.firstChild == null){
+        if (shadow.firstChild == null) {
             shadow.appendChild(appWrapper);
         }
     }

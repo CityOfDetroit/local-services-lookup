@@ -5,25 +5,25 @@ import NavigationTools from './NavigationTools';
 customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
-    static get observedAttributes() {
-        return ['data-display-type'];
-    }
+  static get observedAttributes() {
+    return ['data-display-type'];
+  }
 
-    constructor() {
-        // Always call super first in constructor
-        super();
-    
-        // Create a shadow root
-        const shadow = this.attachShadow({mode: 'open'});
+  constructor() {
+    // Always call super first in constructor
+    super();
 
-        // Creating images
-        this.neighborhoodImage = document.createElement('img');
-        this.neighborhoodImage.src = neighborhoodImage;
-        this.neighborhoodImage.setAttribute('alt', '');
+    // Create a shadow root
+    const shadow = this.attachShadow({ mode: 'open' });
 
-        // Creating display styles
-        this.welcomeStyle = document.createElement('style');
-        this.welcomeStyle.textContent = `
+    // Creating images
+    this.neighborhoodImage = document.createElement('img');
+    this.neighborhoodImage.src = neighborhoodImage;
+    this.neighborhoodImage.setAttribute('alt', '');
+
+    // Creating display styles
+    this.welcomeStyle = document.createElement('style');
+    this.welcomeStyle.textContent = `
           @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
           #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap; font-family: 'Montserrat', sans-serif;}
           #display-wrapper > img { max-width: 100%; }
@@ -39,8 +39,8 @@ export default class Display extends HTMLElement {
           }
         `;
 
-        this.loadingStyle = document.createElement('style');
-        this.loadingStyle.textContent = `
+    this.loadingStyle = document.createElement('style');
+    this.loadingStyle.textContent = `
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
         p { text-align: center; font-family: 'Montserrat', sans-serif;}
         .loader-box{
@@ -245,8 +245,8 @@ export default class Display extends HTMLElement {
        }       
         `;
 
-        this.resultsStyle = document.createElement('style');
-        this.resultsStyle.textContent = `
+    this.resultsStyle = document.createElement('style');
+    this.resultsStyle.textContent = `
           .results-container{ display: flex; }
           #data-results { background-color: #e6e6e6; padding: 1em }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
@@ -267,111 +267,111 @@ export default class Display extends HTMLElement {
           }
         `;
 
-        // Start loading display content
-        this.loadDisplay(this);
-    }
+    // Start loading display content
+    this.loadDisplay(this);
+  }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
-        if(newValue == 'results'){
-            this.clearDisplay(this);
-        }
-        this.loadDisplay(this);
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+    if (newValue == 'results') {
+      this.clearDisplay(this);
     }
+    this.loadDisplay(this);
+  }
 
-    clearDisplay(display) {
-        console.log('clearing display');
-        const shadow = display.shadowRoot;
-        while (shadow.firstChild) {
-            shadow.removeChild(shadow.firstChild);
-        }
+  clearDisplay(display) {
+    console.log('clearing display');
+    const shadow = display.shadowRoot;
+    while (shadow.firstChild) {
+      shadow.removeChild(shadow.firstChild);
     }
+  }
 
-    formatDate(value) {
-      const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      const tempDate = new Date(value);
-      return `${month[tempDate.getMonth()]} ${tempDate.getDate()}, ${tempDate.getFullYear()}`;
-    }
+  formatDate(value) {
+    const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const tempDate = new Date(value);
+    return `${month[tempDate.getMonth()]} ${tempDate.getDate()}, ${tempDate.getFullYear()}`;
+  }
 
-    buildCouncil(value){
-      let app = document.getElementsByTagName('my-home-info');
-      let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
-      let dataParsing = {title: "Council District", content: null};
-      dataParsing.content = `
+  buildCouncil(value) {
+    let app = document.getElementsByTagName('my-home-info');
+    let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+    let dataParsing = { title: "Council District", content: null };
+    dataParsing.content = `
         <p><strong>District Number:</strong> ${value.data.attributes.council_district}</p>
         <p><strong>Council Member:</strong> <a href="http://${siteURL}${apiDataSets['councilMember'].data.url}" target="_blank">${apiDataSets['councilMember'].data.name}</a></p>
         <p><strong>Council Member Phone:</strong> ${apiDataSets['councilMember'].data.phone}</p>
       `;
-      return dataParsing;
-      }
+    return dataParsing;
+  }
 
-      buildDistrictManagers(value){
-        let dataParsing = {title: "District Managers", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
-          dataParsing.content = `
+  buildDistrictManagers(value) {
+    let dataParsing = { title: "District Managers", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
+      dataParsing.content = `
           <p><strong>District Manager:</strong> <a href="${value.data.manager.url}" target="_blank">${value.data.manager.name}</a></p>
           <p><strong>Manager Phone:</strong> ${value.data.manager.phone}</p>
           <p><strong>Deputy Manager:</strong> <a href="${value.data.deputy.url}" target="_blank">${value.data.deputy.name}</a></p>
           <p><strong>Deputy Manager Phone:</strong> ${value.data.deputy.phone}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
             <p>No data found</p>
           `;
-        }
-        return dataParsing;
-      }
+    }
+    return dataParsing;
+  }
 
-      buildBusinessLiaison(value){
-        let dataParsing = {title: "Business Liaison", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
-          dataParsing.content = `
+  buildBusinessLiaison(value) {
+    let dataParsing = { title: "Business Liaison", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
+      dataParsing.content = `
           <p><strong>Liaison:</strong> ${value.data.name}</p>
           <p><strong>Liaison Phone:</strong> ${value.data.email}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
             <p>No data found</p>
           `;
-        }
-        return dataParsing;
-      }
+    }
+    return dataParsing;
+  }
 
-      buildInspector(value){
-        let dataParsing = {title: "Enforcement Inspector", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
-          dataParsing.content = `
+  buildInspector(value) {
+    let dataParsing = { title: "Enforcement Inspector", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
+      dataParsing.content = `
           <p><strong>Inspector:</strong> ${value.data.name}</p>
           <p><strong>Inspector Phone:</strong> ${value.data.email}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
             <p>No data found</p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildNeighborhood(value){
-        let dataParsing = {title: "Neighborhood", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
-          dataParsing.content = `
+    }
+    return dataParsing;
+  }
+
+  buildNeighborhood(value) {
+    let dataParsing = { title: "Neighborhood", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
+      dataParsing.content = `
             <p><strong>Neighborhood name:</strong> ${value.data.attributes.neighborhood_name}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
             <p>No neighborhood found</p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildDWSDBackupProtection(values){
-        let tempHTML = '';
-        let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
-        if(values['neighborhood'] && values['neighborhood'].data.features.length){
-          if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.nhood_name)){
-            tempHTML = `
+    }
+    return dataParsing;
+  }
+
+  buildDWSDBackupProtection(values) {
+    let tempHTML = '';
+    let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
+    if (values['neighborhood'] && values['neighborhood'].data.features.length) {
+      if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.nhood_name)) {
+        tempHTML = `
             <article class="info-section">
               <span>DWSD Basement Backup Protection Program</span>
               <div>
@@ -379,18 +379,18 @@ export default class Display extends HTMLElement {
                 <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['neighborhood'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
               </div>
             </article>`;
-          }else{
-            tempHTML = `
+      } else {
+        tempHTML = `
             <article class="info-section">
               <span>DWSD Basement Backup Protection Program</span>
               <div>
                 <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
               </div>
             </article>`;
-          }
-        }else if(values['DWSDBackupProtection'] && values['DWSDBackupProtection'].data.features.length){
-          if (validNeighborhoods.includes(values['DWSDBackupProtection'].data.features[0].attributes.nhood_name)){
-            tempHTML = `
+      }
+    } else if (values['DWSDBackupProtection'] && values['DWSDBackupProtection'].data.features.length) {
+      if (validNeighborhoods.includes(values['DWSDBackupProtection'].data.features[0].attributes.nhood_name)) {
+        tempHTML = `
             <article class="info-section">
               <span>DWSD Basement Backup Protection Program</span>
               <div>
@@ -398,78 +398,78 @@ export default class Display extends HTMLElement {
                 <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['DWSDBackupProtection'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
               </div>
             </article>`;
-          }else{
-            tempHTML = `
+      } else {
+        tempHTML = `
             <article class="info-section">
               <span>DWSD Basement Backup Protection Program</span>
               <div>
                 <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
               </div>
             </article>`;
-          }
-        }else{
-          tempHTML = `
+      }
+    } else {
+      tempHTML = `
           <article class="info-section">
             <span>DWSD Basement Backup Protection Program</span>
             <div>
               <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
             </div>
           </article>`;
-        }
-        return tempHTML;
-      }
-    
-      buildHistoricDistrict(value, display){
-        let dataParsing = {title: "NEZ Homestead Zone", content: null};
-        if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
-          dataParsing.content = `
+    }
+    return tempHTML;
+  }
+
+  buildHistoricDistrict(value, display) {
+    let dataParsing = { title: "NEZ Homestead Zone", content: null };
+    if (Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0) {
+      dataParsing.content = `
           <p><strong>NAME:</strong> ${value.data.features[0].attributes.Name}</p>
           <p><strong>DESIGNATED ON:</strong> ${display.formatDate(value.data.features[0].attributes.Year_Enacted).format('MMM DD, YYYY')}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
           <p>This property is not in a historic district.</p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildNEZ(nez){
-        let dataParsing = {title: "NEZ Homestead Zone", content: null};
-        if(Object.keys(nez.data).length != 0 && nez.data.constructor === Object && nez.data.features.length > 0){
-          dataParsing.content = `
+    }
+    return dataParsing;
+  }
+
+  buildNEZ(nez) {
+    let dataParsing = { title: "NEZ Homestead Zone", content: null };
+    if (Object.keys(nez.data).length != 0 && nez.data.constructor === Object && nez.data.features.length > 0) {
+      dataParsing.content = `
           <p><strong>Name:</strong> ${nez.data.features[0].attributes.RNNAME}</p>
           <p><strong>ID:</strong> ${nez.data.features[0].attributes.RID}</p>
           <p class="noprint"><a href="https://data.detroitmi.gov/datasets/proposed-nez-homestead-2021/explore" target="_blank">View Map</a></p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
           <p>This property is not on a NEZ Homestead zone.</p>
           <p class="noprint"><a href="https://data.detroitmi.gov/datasets/nez-h-districts/explore" target="_blank">View Map</a></p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildNRSA(value){
-        let dataParsing = {title: "Neighborhood Revitalization Strategy Areas (NRSA)", content: null};
-        if(Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0){
-          dataParsing.content = `
+    }
+    return dataParsing;
+  }
+
+  buildNRSA(value) {
+    let dataParsing = { title: "Neighborhood Revitalization Strategy Areas (NRSA)", content: null };
+    if (Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.features.length > 0) {
+      dataParsing.content = `
           <p><strong>Name:</strong> ${value.data.features[0].attributes.Name}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
           <p>This property is not on a NRSA.</p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildNPO(value){
-        let dataParsing = {title: "Police", content: null};
-        if(value && value.data.features.length){
-          console.log('building police section');
-          dataParsing.content = `
+    }
+    return dataParsing;
+  }
+
+  buildNPO(value) {
+    let dataParsing = { title: "Police", content: null };
+    if (value && value.data.features.length) {
+      console.log('building police section');
+      dataParsing.content = `
           <p><strong>PRECINCT</strong></p>
           <p><strong>Number:</strong> ${value.data.features[0].attributes.precinct}</p>
           <p><strong>Address:</strong> ${value.data.features[0].attributes.precinct_location}</p>
@@ -479,137 +479,137 @@ export default class Display extends HTMLElement {
           <p><strong>Phone:</strong> ${value.data.features[0].attributes.phone_number}</p>
           <p><strong>Email:</strong> ${value.data.features[0].attributes.email}</p>
           `;
-        }else {
-          dataParsing.content = `<p>No police info found</p>`;
-        }
-        return dataParsing;
-      }
-    
-      checkRecyclingStatus(data){
-        try {
-          if(data.next_pickups['yard waste']){
-            let yardStart = null;
-            let yardEnd = null;
-            data.details.forEach((item)=>{
-              if(item.type == 'start-date' && item.service == 'yard waste'){
-                if(item.normalDay != null){
-                  yardStart = item.normalDay;
-                }else{
-                  yardStart = item.newDay;
-                }
-              }
-              if(item.type == 'end-date' && item.service == 'yard waste'){
-                if(item.normalDay != null){
-                  yardEnd = item.normalDay;
-                }else{
-                  yardEnd = item.newDay;
-                }
-              }
-            });
-            if(moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)){
-              return true;
-            }else{
-              return false;
+    } else {
+      dataParsing.content = `<p>No police info found</p>`;
+    }
+    return dataParsing;
+  }
+
+  checkRecyclingStatus(data) {
+    try {
+      if (data.next_pickups['yard waste']) {
+        let yardStart = null;
+        let yardEnd = null;
+        data.details.forEach((item) => {
+          if (item.type == 'start-date' && item.service == 'yard waste') {
+            if (item.normalDay != null) {
+              yardStart = item.normalDay;
+            } else {
+              yardStart = item.newDay;
             }
-          }else{
-            return false;
           }
-        } catch (error) {
+          if (item.type == 'end-date' && item.service == 'yard waste') {
+            if (item.normalDay != null) {
+              yardEnd = item.normalDay;
+            } else {
+              yardEnd = item.newDay;
+            }
+          }
+        });
+        if (moment(data.next_pickups['yard waste'].next_pickup).isBetween(yardStart, yardEnd)) {
+          return true;
+        } else {
           return false;
         }
+      } else {
+        return false;
       }
-    
-      buildRecycling(value, display){
-        let dataParsing = {title: "Trash & Recycling", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object){
-          let contractorInfo = {
-            name: null,
-            url: null,
-            phone: null
-          };
-          if(value.data.next_pickups.trash.contractor === 'GFL'){
-            contractorInfo.name = 'GFL';
-            contractorInfo.url =  'http://gflusa.com/residential/detroit/';
-            contractorInfo.phone = '(844) 464-3587';
-          }else{
-            contractorInfo.name = 'WM';
-            contractorInfo.url =  'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
-            contractorInfo.phone = ' (844) 233-8764';
-          }
-          dataParsing.content = `
+    } catch (error) {
+      return false;
+    }
+  }
+
+  buildRecycling(value, display) {
+    let dataParsing = { title: "Trash & Recycling", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object) {
+      let contractorInfo = {
+        name: null,
+        url: null,
+        phone: null
+      };
+      if (value.data.next_pickups.trash.contractor === 'GFL') {
+        contractorInfo.name = 'GFL';
+        contractorInfo.url = 'http://gflusa.com/residential/detroit/';
+        contractorInfo.phone = '(844) 464-3587';
+      } else {
+        contractorInfo.name = 'WM';
+        contractorInfo.url = 'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
+        contractorInfo.phone = ' (844) 233-8764';
+      }
+      dataParsing.content = `
             <p><strong>Provider:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
             <p><strong>Next Trash:</strong> ${display.formatDate(value.data.next_pickups.trash.next_pickup)}</p>
             <p><strong>Next Recycling:</strong> ${display.formatDate(value.data.next_pickups.recycling.next_pickup)}</p>
             <p><strong>Next Bulk:</strong> ${display.formatDate(value.data.next_pickups.bulk.next_pickup)}</p>
-            ${(display.checkRecyclingStatus(value.data)) ?  tempHTML += `<p><strong>Next Yard:</strong> ${display.formatDate(value.data.next_pickups['yard waste'].next_pickup)}</p>` : ``}
+            ${(display.checkRecyclingStatus(value.data)) ? tempHTML += `<p><strong>Next Yard:</strong> ${display.formatDate(value.data.next_pickups['yard waste'].next_pickup)}</p>` : ``}
           `;
-        }else {
-          dataParsing.content = `<p>No data found</p>`;
-        }
-        return dataParsing;
+    } else {
+      dataParsing.content = `<p>No data found</p>`;
+    }
+    return dataParsing;
+  }
+
+  buildAssessors(value) {
+    let dataParsing = { title: "Assessor's Data", content: null };
+    if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
+      let property = {
+        year: null,
+        value: null,
+        floor: null,
+        buildingClass: null
       }
-    
-      buildAssessors(value){
-        let dataParsing = {title: "Assessor's Data", content: null};
-        if(value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found."){
-          let property = {
-            year: null,
-            value: null,
-            floor: null,
-            buildingClass: null
-          }
-          dataParsing.content = `
+      dataParsing.content = `
             <p><strong>Owner's address:</strong> ${value.data.ownerstreetaddr}</p>
             <p><strong>Owner's city:</strong> ${value.data.ownercity}</p>
             <p><strong>Owner's state:</strong> ${value.data.ownerstate}</p>
             <p><strong>Owner's zip:</strong> ${value.data.ownerzip}</p>
           `;
-          if(value.data.resb_bldgclass === 0){
-            property.year = value.data.cib_yearbuilt;
-            property.value = value.data.cib_value;
-            property.floor = value.data.cib_yearbuilt;
-            property.buildingClass = value.data.cib_yearbuilt;
-          }else{
-            property.year = value.data.resb_yearbuilt;
-            property.value = value.data.resb_value;
-            property.floor = value.data.resb_floorarea;
-            property.buildingClass = value.data.resb_bldgclass;
-          }
-          dataParsing.content += `
+      if (value.data.resb_bldgclass === 0) {
+        property.year = value.data.cib_yearbuilt;
+        property.value = value.data.cib_value;
+        property.floor = value.data.cib_yearbuilt;
+        property.buildingClass = value.data.cib_yearbuilt;
+      } else {
+        property.year = value.data.resb_yearbuilt;
+        property.value = value.data.resb_value;
+        property.floor = value.data.resb_floorarea;
+        property.buildingClass = value.data.resb_bldgclass;
+      }
+      dataParsing.content += `
             <p><strong>Parcel number:</strong> ${value.data.pnum}</p>
             <p><strong>Year build:</strong> ${property.year}</p>
             <p><strong>Calculated value:</strong> $${property.value.toLocaleString()}</p>
             <p><strong>Floor area:</strong> ${property.floor.toLocaleString()} SQFT</p>
             <p><strong>Building class:</strong> ${property.buildingClass}</p>
           `;
-        }else {
-          dataParsing.content = `<p>No data found</p>`;
-        }
-        return dataParsing;
-      }
-    
-      buildRental(value, display){
-        let app = document.getElementsByTagName('my-home-info');
-        let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
-        let dataParsing = {title: "Rental Enforcement Status", content: null};
-        if((value && value.data.features.length) || (apiDataSets['rental-cert-data'] && apiDataSets['rental-cert-data'].data.features.length)){
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `<p>No data found</p>`;
+    }
+    return dataParsing;
+  }
+
+  buildRental(value, display) {
+    let app = document.getElementsByTagName('my-home-info');
+    let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+    let dataParsing = { title: "Rental Enforcement Status", content: null };
+    if ((value && value.data.features.length) || (apiDataSets['rental-cert-data'] && apiDataSets['rental-cert-data'].data.features.length)) {
+      dataParsing.content = `
             <p><strong>Registered:</strong> ${value.data.features.length ? `${display.formatDate(value.data.features[0].attributes.date_status)}` : `Not registered`}</p>
             <p><strong>Certified:</strong> ${apiDataSets['rental-cert-data'].data.features.length ? `${display.formatDate(apiDataSets['rental-cert-data'].data.features[0].attributes.issued_date)}` : `Not certified`}</p>
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
           <p><strong>Registered:</strong> Not registered</p>
           <p><strong>Certified:</strong> Not certified</p>
           `;
-        }
-        return dataParsing;
-      }
-    
-      buildFireEscrow(value){
-        let tempHTML = '';
-        if(value && value.data.features.length){
-          tempHTML += `
+    }
+    return dataParsing;
+  }
+
+  buildFireEscrow(value) {
+    let tempHTML = '';
+    if (value && value.data.features.length) {
+      tempHTML += `
             <article class="info-section">
             <span>FIRE ESCROW</span>
             <div>
@@ -617,22 +617,22 @@ export default class Display extends HTMLElement {
               <p><a href="https://detroitmi.gov/taxonomy/term/8501"><button>Start Process</button></a></p>
             </div>
             </article>`;
-        }else{
-          tempHTML += `
+    } else {
+      tempHTML += `
           <article class="info-section">
             <span>FIRE ESCROW</span>
             <div>
               <p><strong>STATUS:</strong> Fire Escrow not found</p>
             </div>
             </article>`;
-        }
-        return tempHTML;
-      }
-    
-      buildBlight(value, display){
-        let dataParsing = {title: "Blight Tickets", content: null};
-        if(value && value.data.features.length){
-          dataParsing.content = `
+    }
+    return tempHTML;
+  }
+
+  buildBlight(value, display) {
+    let dataParsing = { title: "Blight Tickets", content: null };
+    if (value && value.data.features.length) {
+      dataParsing.content = `
             <p><strong>Ticket ID:</strong> ${value.attributes.ticket_number}</p>
             <p><strong>Fine Amount:</strong> $${value.attributes.fine_amount}</p>
             <p><strong>Agency name:</strong> ${value.attributes.agency_name}</p>
@@ -641,16 +641,16 @@ export default class Display extends HTMLElement {
             <p><strong>Hearing Date:</strong> ${display.formatDate(value.attributes.hearing_date)}</p>
             <p><strong>Hearing Time:</strong> ${value.attributes.hearing_time}</p>
           `;
-        }else {
-          dataParsing.content = `<p>No blight tickets found</p>`;
-        }
-        return dataParsing;
-      }
-    
-      buildPermit(value, display){
-        let dataParsing = {title: "Building Permits", content: null};
-        if(value && value.data.features.length){
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `<p>No blight tickets found</p>`;
+    }
+    return dataParsing;
+  }
+
+  buildPermit(value, display) {
+    let dataParsing = { title: "Building Permits", content: null };
+    if (value && value.data.features.length) {
+      dataParsing.content = `
           <p><strong>PERMIT NUMBER:</strong> ${value.attributes.record_id}</p>
           <p><strong>PERMIT TYPE:</strong> ${value.attributes.permit_type}</p>
           <p><strong>PERMIT BUILDING TYPE:</strong> ${value.attributes.permit_type}</p>
@@ -658,41 +658,41 @@ export default class Display extends HTMLElement {
           <p><strong>PERMIT ISSUED:</strong> ${display.formatDate(value.attributes.issued_date)}</p>
           <p><strong>PERMIT DESCRIPTION:</strong> ${value.attributes.description_of_work}</p>
           `;
-        }else {
-          dataParsing.content = `<p>No building permits found</p>`;
-        }
-        return dataParsing;
-      }
-    
-      buildDemoStatus(value, display){
-        let app = document.getElementsByTagName('my-home-info');
-        let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
-        let tempAddress = parcelData.address.replace(' ', '%2520');
-        tempAddress = tempAddress.replace(',', '%252C');
-        let dataParsing = {title: "Demolition Status", content: null};
-        console.log(value);
-        if(value && value.data.features.length){
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `<p>No building permits found</p>`;
+    }
+    return dataParsing;
+  }
+
+  buildDemoStatus(value, display) {
+    let app = document.getElementsByTagName('my-home-info');
+    let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+    let tempAddress = parcelData.address.replace(' ', '%2520');
+    tempAddress = tempAddress.replace(',', '%252C');
+    let dataParsing = { title: "Demolition Status", content: null };
+    console.log(value);
+    if (value && value.data.features.length) {
+      dataParsing.content = `
             <p class="critical-text"><strong>WARNIG!</strong></p>
             <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
-            ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>`:`<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+            ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>` : `<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
             <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
             `}
           `;
-        }else {
-          dataParsing.content = `
+    } else {
+      dataParsing.content = `
           <p>This property is not on the demolition list</p>
           <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>`;
-        }
-        return dataParsing;
-      }
-    
-      buildDemosNear(value, display){
-        let dataParsing = {title: "Demolitions Nearby", content: null};
-        if(value && value.data.features.length){
-          value.data.features.forEach(function(value, index){
-            if(index == 0){
-              dataParsing.content = `
+    }
+    return dataParsing;
+  }
+
+  buildDemosNear(value, display) {
+    let dataParsing = { title: "Demolitions Nearby", content: null };
+    if (value && value.data.features.length) {
+      value.data.features.forEach(function (value, index) {
+        if (index == 0) {
+          dataParsing.content = `
               <p><strong>Address:</strong> ${value.attributes.address}</p>
               <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
               <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
@@ -700,12 +700,12 @@ export default class Display extends HTMLElement {
               <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
               <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
-              ${(value.attributes.demolish_by_date == undefined || value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              ${(value.attributes.demolish_by_date == undefined || value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
               <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
               <br>
               `;
-            }else{
-              dataParsing.content += `
+        } else {
+          dataParsing.content += `
               <p><strong>Address:</strong> ${value.attributes.address}</p>
               <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
               <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
@@ -713,285 +713,298 @@ export default class Display extends HTMLElement {
               <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
               <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
-              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>`:`<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
               <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
               <br>
               `;
-            }
-          });
-          
-        }else {
-          dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
         }
-        return dataParsing;
-      }
-    
-      buildImproveDet(value, display){
-        let dataParsing = {title: "Improve Detroit Issues Nearby", content: null};
-        if(value && value.data.features.length){
-          value.data.features.forEach(function(value, index){
-            if(index == 0){
-              dataParsing.content = `
+      });
+
+    } else {
+      dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
+    }
+    return dataParsing;
+  }
+
+  buildImproveDet(value, display) {
+    let dataParsing = { title: "Improve Detroit Issues Nearby", content: null };
+    if (value && value.data.features.length) {
+      value.data.features.forEach(function (value, index) {
+        if (index == 0) {
+          dataParsing.content = `
               <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
               <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
               <p><strong>Status:</strong> ${value.attributes.status}</p>
               <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
               <br>
               `;
-            }else{
-              dataParsing.content += `
+        } else {
+          dataParsing.content += `
               <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
               <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
               <p><strong>Status:</strong> ${value.attributes.status}</p>
               <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
               <br>
               `;
-            }
-          });
-          
-        }else {
-          dataParsing.content = `<p>No active issues nearby.</p>`;
         }
-        return dataParsing;
-      }
+      });
 
-      selectDataBlockType(display, value){
-          switch (value.id) {
-            case 'council':
-              try {
-                return display.buildCouncil(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'neighborhood':
-              try {
-                return display.buildNeighborhood(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'nez':
-              try {
-                return display.buildNEZ(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'nrsa':
-              try {
-                return display.buildNRSA(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'assessors-data':
-              try {
-                return display.buildAssessors(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'permit-data':
-              try {
-                return display.buildPermit(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'rental-data':
-              try {
-                return display.buildRental(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'blight-data':
-              try {
-                return display.buildBlight(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'demos-data':
-              try {
-                return display.buildDemosNear(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'demo-status':
-              try {
-                return display.buildDemoStatus(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'npo':
-              try {
-                return display.buildNPO(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'improve-det':
-              try {
-                return display.buildImproveDet(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'recycling':
-              try {
-                return display.buildRecycling(value, display);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'historicDistrict':
-              try {
-                return display.buildHistoricDistrict(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'fireEscrow':
-              try {
-                return display.buildFireEscrow(value);
-              } catch (error) {
-                console.log(error);
-                return '';
-              }
-              break;
-    
-            case 'DWSDBackupProtection':
-              try {
-                return display.buildDWSDBackupProtection(values);
-              } catch (error) {
-                return '';
-              }
-              break;
-          
-            default:
-              break;
-          }
-      }
-
-    buildDataBlock(display, dataSet) {
-        const dataBlock = document.createElement('article');
-        dataBlock.className = 'data-block';
-        console.log(dataSet);
-        let datasetValues = display.selectDataBlockType(display, dataSet);
-        console.log(datasetValues);
-        if(datasetValues == undefined || datasetValues.content == null ){
-          return null;
-        }else{
-          const dataBlockTitle = document.createElement('p');
-          dataBlockTitle.className = 'data-block-title';
-          dataBlockTitle.innerText = datasetValues.title;
-          dataBlock.appendChild(dataBlockTitle);
-          const dataBlockContent = document.createElement('article');
-          dataBlockContent.className = 'data-block-content';
-          dataBlockContent.innerHTML = datasetValues.content;
-          dataBlock.appendChild(dataBlockContent);
-          return dataBlock;
-        }
+    } else {
+      dataParsing.content = `<p>No active issues nearby.</p>`;
     }
+    return dataParsing;
+  }
 
-    buildDataSection(display) {
-        const app = document.getElementsByTagName('my-home-info');
-        const results = document.createElement('section');
-        results.id = 'data-results';
-        const sectionTitle = document.createElement('p');
-        sectionTitle.className = 'data-title';
-        sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
-        results.appendChild(sectionTitle);
-        const dataBlocks = document.createElement('div');
-        dataBlocks.id = 'data-blocks';
-        results.appendChild(dataBlocks);
-
-        const apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
-        for (const dataSet in apiDataSets) {
-            if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
-              if(display.buildDataBlock(display, apiDataSets[dataSet]) != null){
-                dataBlocks.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
-              }
-            }
+  selectDataBlockType(display, value) {
+    switch (value.id) {
+      case 'council':
+        try {
+          return display.buildCouncil(value);
+        } catch (error) {
+          console.log(error);
+          return '';
         }
-        return results;
+        break;
+
+      case 'neighborhood':
+        try {
+          return display.buildNeighborhood(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'nez':
+        try {
+          return display.buildNEZ(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'nrsa':
+        try {
+          return display.buildNRSA(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'assessors-data':
+        try {
+          return display.buildAssessors(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'permit-data':
+        try {
+          return display.buildPermit(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'rental-data':
+        try {
+          return display.buildRental(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'blight-data':
+        try {
+          return display.buildBlight(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'demos-data':
+        try {
+          return display.buildDemosNear(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'demo-status':
+        try {
+          return display.buildDemoStatus(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'npo':
+        try {
+          return display.buildNPO(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'improve-det':
+        try {
+          return display.buildImproveDet(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'recycling':
+        try {
+          return display.buildRecycling(value, display);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'historicDistrict':
+        try {
+          return display.buildHistoricDistrict(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'fireEscrow':
+        try {
+          return display.buildFireEscrow(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'DWSDBackupProtection':
+        try {
+          return display.buildDWSDBackupProtection(values);
+        } catch (error) {
+          return '';
+        }
+        break;
+
+      default:
+        break;
     }
+  }
 
-    loadDisplay(display) {
-        const shadow = display.shadowRoot;
-        const displayWrapper = document.createElement('section');
-        const geocoder = document.createElement('app-geocoder');
-        const navTools = document.createElement('app-nav-tools');
-        displayWrapper.id = 'display-wrapper';
-        switch (this.getAttribute('data-display-type')) {
-            case 'welcome':
-                shadow.appendChild(display.welcomeStyle);
-                displayWrapper.appendChild(this.neighborhoodImage);
-                const textWrapperWelcome = document.createElement('article');
-                displayWrapper.appendChild(textWrapperWelcome);
-                const titleWelcome = document.createElement('p');
-                titleWelcome.setAttribute('aria-label', 'title');
-                titleWelcome.innerText = 'It’s all here. All in one place.';
-                titleWelcome.className = 'display-title';
-                textWrapperWelcome.appendChild(titleWelcome)
-                const textWelcome = document.createElement('p');
-                textWelcome.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
-                textWrapperWelcome.appendChild(textWelcome);
-                const btnSection = document.createElement('div');
-                btnSection.className = 'btn-group';
-                const btn = document.createElement('button');
-                btn.innerText = 'Start';
-                btn.addEventListener('click', (ev)=>{
-                    const app = document.getElementsByTagName('my-home-info');
-                    app[0].setAttribute('data-app-state', 'active-screen');
-                })
-                btnSection.appendChild(btn);
-                textWrapperWelcome.appendChild(btnSection)
-                shadow.appendChild(displayWrapper);
-                break;
+  printInfo(display) {
+    let divContents = display.buildDataSection(display);
+    let a = window.open('', '', 'height=500, width=500');
+    a.document.write('<html>');
+    a.document.write('<head><style>@media print {.noprint { visibility: hidden;} p.data-block-title{border-bottom: 1px solid;} }</style></head>'); 
+    a.document.write('<body >');
+    a.document.write(divContents.children[1].innerHTML);
+    a.document.write('</body>');
+    a.document.close();
+    a.print();
+  }
 
-            case 'active':
-                shadow.appendChild(display.welcomeStyle);
-                displayWrapper.appendChild(geocoder);
-                shadow.appendChild(displayWrapper);
-                break;
+  buildDataBlock(display, dataSet) {
+    const dataBlock = document.createElement('article');
+    dataBlock.className = 'data-block';
+    console.log(dataSet);
+    let datasetValues = display.selectDataBlockType(display, dataSet);
+    console.log(datasetValues);
+    if (datasetValues == undefined || datasetValues.content == null) {
+      return null;
+    } else {
+      const dataBlockTitle = document.createElement('p');
+      dataBlockTitle.className = 'data-block-title';
+      dataBlockTitle.innerText = datasetValues.title;
+      dataBlock.appendChild(dataBlockTitle);
+      const dataBlockContent = document.createElement('article');
+      dataBlockContent.className = 'data-block-content';
+      dataBlockContent.innerHTML = datasetValues.content;
+      dataBlock.appendChild(dataBlockContent);
+      return dataBlock;
+    }
+  }
 
-            case 'loading':
-                shadow.appendChild(display.loadingStyle);
-                const loadingScreen = document.createElement('article');
-                loadingScreen.innerHTML = `
+  buildDataSection(display) {
+    const app = document.getElementsByTagName('my-home-info');
+    const results = document.createElement('section');
+    results.id = 'data-results';
+    const sectionTitle = document.createElement('p');
+    sectionTitle.className = 'data-title';
+    sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
+    results.appendChild(sectionTitle);
+    const dataBlocks = document.createElement('div');
+    dataBlocks.id = 'data-blocks';
+    results.appendChild(dataBlocks);
+
+    const apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+    for (const dataSet in apiDataSets) {
+      if (Object.hasOwnProperty.call(apiDataSets, dataSet)) {
+        if (display.buildDataBlock(display, apiDataSets[dataSet]) != null) {
+          dataBlocks.appendChild(display.buildDataBlock(display, apiDataSets[dataSet]));
+        }
+      }
+    }
+    return results;
+  }
+
+  loadDisplay(display) {
+    const shadow = display.shadowRoot;
+    const displayWrapper = document.createElement('section');
+    const geocoder = document.createElement('app-geocoder');
+    const navTools = document.createElement('app-nav-tools');
+    navTools.printInfo = display.printInfo;
+    displayWrapper.id = 'display-wrapper';
+    switch (this.getAttribute('data-display-type')) {
+      case 'welcome':
+        shadow.appendChild(display.welcomeStyle);
+        displayWrapper.appendChild(this.neighborhoodImage);
+        const textWrapperWelcome = document.createElement('article');
+        displayWrapper.appendChild(textWrapperWelcome);
+        const titleWelcome = document.createElement('p');
+        titleWelcome.setAttribute('aria-label', 'title');
+        titleWelcome.innerText = 'It’s all here. All in one place.';
+        titleWelcome.className = 'display-title';
+        textWrapperWelcome.appendChild(titleWelcome)
+        const textWelcome = document.createElement('p');
+        textWelcome.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
+        textWrapperWelcome.appendChild(textWelcome);
+        const btnSection = document.createElement('div');
+        btnSection.className = 'btn-group';
+        const btn = document.createElement('button');
+        btn.innerText = 'Start';
+        btn.addEventListener('click', (ev) => {
+          const app = document.getElementsByTagName('my-home-info');
+          app[0].setAttribute('data-app-state', 'active-screen');
+        })
+        btnSection.appendChild(btn);
+        textWrapperWelcome.appendChild(btnSection)
+        shadow.appendChild(displayWrapper);
+        break;
+
+      case 'active':
+        shadow.appendChild(display.welcomeStyle);
+        displayWrapper.appendChild(geocoder);
+        shadow.appendChild(displayWrapper);
+        break;
+
+      case 'loading':
+        shadow.appendChild(display.loadingStyle);
+        const loadingScreen = document.createElement('article');
+        loadingScreen.innerHTML = `
                 <article class="loader-container">
                     <article>
                     <div class="loader">
@@ -1005,33 +1018,54 @@ export default class Display extends HTMLElement {
                     <p>LOADING</p>
                     </article>
                 </article>`;
-                displayWrapper.appendChild(loadingScreen);
-                shadow.appendChild(displayWrapper);
-                break;
+        displayWrapper.appendChild(loadingScreen);
+        shadow.appendChild(displayWrapper);
+        break;
 
-            case 'results':
-              const app = document.getElementsByTagName('my-home-info');
-              let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
-              shadow.appendChild(display.resultsStyle);
-              const resultsContainer = document.createElement('section');
-              resultsContainer.className = 'results-container';
-              resultsContainer.appendChild(navTools);
-              const dataSetResults = document.createElement('article');
-              dataSetResults.className = 'dataset-results';
-              const addressBox = document.createElement('article');
-              addressBox.className = 'result-address';
-              addressBox.innerText = parcelData.address;
-              dataSetResults.appendChild(addressBox);
-              const results = display.buildDataSection(display);
-              dataSetResults.appendChild(results);
-              resultsContainer.appendChild(dataSetResults);
-              displayWrapper.appendChild(resultsContainer);
-              shadow.appendChild(displayWrapper);
-              break;
-        
-            default:
-                break;
-        }
+      case 'results':
+        let app = document.getElementsByTagName('my-home-info');
+        let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+        shadow.appendChild(display.resultsStyle);
+        let resultsContainer = document.createElement('section');
+        resultsContainer.className = 'results-container';
+        resultsContainer.appendChild(navTools);
+        let dataSetResults = document.createElement('article');
+        dataSetResults.className = 'dataset-results';
+        let addressBox = document.createElement('article');
+        addressBox.className = 'result-address';
+        addressBox.innerText = parcelData.address;
+        dataSetResults.appendChild(addressBox);
+        let results = display.buildDataSection(display);
+        dataSetResults.appendChild(results);
+        resultsContainer.appendChild(dataSetResults);
+        displayWrapper.appendChild(resultsContainer);
+        shadow.appendChild(displayWrapper);
+        break;
+
+      case 'print':
+        app = document.getElementsByTagName('my-home-info');
+        parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+        shadow.appendChild(display.resultsStyle);
+        resultsContainer = document.createElement('section');
+        resultsContainer.className = 'results-container';
+        resultsContainer.appendChild(navTools);
+        dataSetResults = document.createElement('article');
+        dataSetResults.className = 'dataset-results';
+        addressBox = document.createElement('article');
+        addressBox.className = 'result-address';
+        addressBox.innerText = parcelData.address;
+        dataSetResults.appendChild(addressBox);
+        results = display.buildDataSection(display);
+        dataSetResults.appendChild(results);
+        resultsContainer.appendChild(dataSetResults);
+        displayWrapper.appendChild(resultsContainer);
+        shadow.appendChild(displayWrapper);
+        display.printInfo(display);
+        break;
+
+      default:
+        break;
     }
+  }
 
 }
