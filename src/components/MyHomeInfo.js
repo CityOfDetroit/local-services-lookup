@@ -18,16 +18,25 @@ export default class MyHomeInfo extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
 
         // Create result section
+        const app = document.getElementsByTagName('my-home-info');
+        let tempState = app[0].getAttribute('data-app-state');
+
         const appWrapper = document.createElement('section');
         appWrapper.id = 'app-wrapper';
         const display = document.createElement('app-display');
-        display.setAttribute('data-display-type', 'welcome');
+        if(tempState == 'active-screen'){
+            display.setAttribute('data-display-type', 'active');
+        }else{
+            display.setAttribute('data-display-type', 'welcome');
+        }
         appWrapper.appendChild(display);
         shadow.appendChild(appWrapper);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         const shadow = this.shadowRoot;
+        const app = document.getElementsByTagName('my-home-info');
+        const appMode = app[0].getAttribute('data-app-mode');
         console.log(`App - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
         switch (name) {
             case 'data-app-state':
@@ -41,24 +50,11 @@ export default class MyHomeInfo extends HTMLElement {
                 if (newValue != 'none') {
                     this.setAttribute('data-app-state', 'loading-screen');
                 } else {
-                    this.setAttribute('data-app-state', 'welcome-screen');
+                    if(appMode == 'my-home-info'){
+                        this.setAttribute('data-app-state', 'welcome-screen');
+                    }
                 }
                 break;
-
-            // case 'data-api-active-datasets':
-            //     if(newValue != 'none'){
-            //         this.setAttribute('data-app-state', 'results');
-            //     }
-            //     break;
-
-            // case 'data-active-sets':
-            //     break;
-
-            // case 'data-active-section':
-            //     if(newValue != 'none' && (this.getAttribute('data-parcel-id') != 'none')){
-            //         this.setAttribute('data-app-state', 'loading-screen');
-            //     }
-            //     break;
 
             default:
                 break;

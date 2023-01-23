@@ -1,5 +1,5 @@
 'use strict';
-import neighborhoodImage from '../images/neighborhood.png';
+// import neighborhoodImage from '../images/neighborhood.png';
 import Geocoder from './Geocoder';
 import NavigationTools from './NavigationTools';
 customElements.define('app-geocoder', Geocoder);
@@ -18,7 +18,7 @@ export default class Display extends HTMLElement {
 
     // Creating images
     this.neighborhoodImage = document.createElement('img');
-    this.neighborhoodImage.src = neighborhoodImage;
+    this.neighborhoodImage.src = '/sites/default/files/2023-01/neighborhood.png'; //neighborhoodImage;
     this.neighborhoodImage.setAttribute('alt', '');
 
     // Creating display styles
@@ -250,7 +250,7 @@ export default class Display extends HTMLElement {
           .results-container{ display: flex; }
           #data-results { background-color: #e6e6e6; padding: 1em }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
-          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.94em 0.6em; font-family: 'Montserrat', sans-serif;}
+          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.78em 0.6em; font-family: 'Montserrat', sans-serif;}
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif;}
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
@@ -294,18 +294,18 @@ export default class Display extends HTMLElement {
   }
 
   buildCouncil(value) {
-    let app = document.getElementsByTagName('my-home-info');
-    let apiDataSets = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
+    let siteURL = window.location.hostname;
     let dataParsing = { title: "Council District", content: null };
     dataParsing.content = `
-        <p><strong>District Number:</strong> ${value.data.attributes.council_district}</p>
-        <p><strong>Council Member:</strong> <a href="http://${siteURL}${apiDataSets['councilMember'].data.url}" target="_blank">${apiDataSets['councilMember'].data.name}</a></p>
-        <p><strong>Council Member Phone:</strong> ${apiDataSets['councilMember'].data.phone}</p>
+        <p><strong>District Number:</strong> ${value.data.district}</p>
+        <p><strong>Council Member:</strong> <a href="http://${siteURL}${value.data.url}" target="_blank">${value.data.name}</a></p>
+        <p><strong>Council Member Phone:</strong> ${value.data.phone}</p>
       `;
     return dataParsing;
   }
 
   buildDistrictManagers(value) {
+    console.log('building district manager');
     let dataParsing = { title: "District Managers", content: null };
     if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
       dataParsing.content = `
@@ -319,6 +319,7 @@ export default class Display extends HTMLElement {
             <p>No data found</p>
           `;
     }
+    console.log(dataParsing);
     return dataParsing;
   }
 
@@ -338,17 +339,19 @@ export default class Display extends HTMLElement {
   }
 
   buildInspector(value) {
+    console.log('building inspector');
     let dataParsing = { title: "Enforcement Inspector", content: null };
     if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
       dataParsing.content = `
           <p><strong>Inspector:</strong> ${value.data.name}</p>
-          <p><strong>Inspector Phone:</strong> ${value.data.email}</p>
+          <p><strong>Inspector Phone:</strong> ${value.data.phone}</p>
           `;
     } else {
       dataParsing.content = `
             <p>No data found</p>
           `;
     }
+    console.log(dataParsing);
     return dataParsing;
   }
 
@@ -367,56 +370,21 @@ export default class Display extends HTMLElement {
   }
 
   buildDWSDBackupProtection(values) {
-    let tempHTML = '';
     let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
+    let dataParsing = { title: "DWSD Basement Backup Protection Program", content: null };
     if (values['neighborhood'] && values['neighborhood'].data.features.length) {
-      if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.nhood_name)) {
-        tempHTML = `
-            <article class="info-section">
-              <span>DWSD Basement Backup Protection Program</span>
-              <div>
-                <p>You qualify for the DWSD Basement Backup Protection Program.</p>
-                <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['neighborhood'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
-              </div>
-            </article>`;
-      } else {
-        tempHTML = `
-            <article class="info-section">
-              <span>DWSD Basement Backup Protection Program</span>
-              <div>
-                <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
-              </div>
-            </article>`;
-      }
-    } else if (values['DWSDBackupProtection'] && values['DWSDBackupProtection'].data.features.length) {
-      if (validNeighborhoods.includes(values['DWSDBackupProtection'].data.features[0].attributes.nhood_name)) {
-        tempHTML = `
-            <article class="info-section">
-              <span>DWSD Basement Backup Protection Program</span>
-              <div>
-                <p>You qualify for the DWSD Basement Backup Protection Program.</p>
-                <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.title}&Property%20City=Detroit&Property%20Zip%20Code=${values['assessors-data'].data.zipcode}&Neighborhood=${values['DWSDBackupProtection'].data.features[0].attributes.nhood_name}" target="_blank"><button>Apply Now</button></a>
-              </div>
-            </article>`;
-      } else {
-        tempHTML = `
-            <article class="info-section">
-              <span>DWSD Basement Backup Protection Program</span>
-              <div>
-                <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
-              </div>
-            </article>`;
+      if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.neighborhood_name)) {
+      dataParsing.content = `
+        <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${value.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${value.data.attributes.Postal}&Neighborhood=${value.data.attributes.neighborhood_name}" target="_blank"><button>Apply Now</button></a>
+        `;
       }
     } else {
-      tempHTML = `
-          <article class="info-section">
-            <span>DWSD Basement Backup Protection Program</span>
-            <div>
-              <p>You don't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
-            </div>
-          </article>`;
+      dataParsing.content = `
+        <p>This property doesn't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
+        `;
     }
-    return tempHTML;
+    return dataParsing;
   }
 
   buildHistoricDistrict(value, display) {
@@ -757,9 +725,36 @@ export default class Display extends HTMLElement {
 
   selectDataBlockType(display, value) {
     switch (value.id) {
-      case 'council':
+      case 'council-members':
         try {
           return display.buildCouncil(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'district-managers':
+        try {
+          return display.buildDistrictManagers(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'business-liaison':
+        try {
+          return display.buildBusinessLiaison(value);
+        } catch (error) {
+          console.log(error);
+          return '';
+        }
+        break;
+
+      case 'district-inspectors':
+        try {
+          return display.buildInspector(value);
         } catch (error) {
           console.log(error);
           return '';
@@ -894,13 +889,14 @@ export default class Display extends HTMLElement {
 
       case 'DWSDBackupProtection':
         try {
-          return display.buildDWSDBackupProtection(values);
+          return display.buildDWSDBackupProtection(value);
         } catch (error) {
           return '';
         }
         break;
 
       default:
+        return '';
         break;
     }
   }
@@ -940,12 +936,15 @@ export default class Display extends HTMLElement {
 
   buildDataSection(display) {
     const app = document.getElementsByTagName('my-home-info');
+    const appMode = app[0].getAttribute('data-app-mode');
     const results = document.createElement('section');
     results.id = 'data-results';
-    const sectionTitle = document.createElement('p');
-    sectionTitle.className = 'data-title';
-    sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
-    results.appendChild(sectionTitle);
+    if (appMode == 'my-home-info'){
+      const sectionTitle = document.createElement('p');
+      sectionTitle.className = 'data-title';
+      sectionTitle.innerText = app[0].getAttribute('data-active-section').toUpperCase();
+      results.appendChild(sectionTitle);
+    }
     const dataBlocks = document.createElement('div');
     dataBlocks.id = 'data-blocks';
     results.appendChild(dataBlocks);
@@ -966,6 +965,7 @@ export default class Display extends HTMLElement {
     const displayWrapper = document.createElement('section');
     const geocoder = document.createElement('app-geocoder');
     const navTools = document.createElement('app-nav-tools');
+    const app = document.getElementsByTagName('my-home-info');
     navTools.printInfo = display.printInfo;
     displayWrapper.id = 'display-wrapper';
     switch (this.getAttribute('data-display-type')) {
@@ -1023,7 +1023,6 @@ export default class Display extends HTMLElement {
         break;
 
       case 'results':
-        let app = document.getElementsByTagName('my-home-info');
         let parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
         shadow.appendChild(display.resultsStyle);
         let resultsContainer = document.createElement('section');
@@ -1043,7 +1042,6 @@ export default class Display extends HTMLElement {
         break;
 
       case 'print':
-        app = document.getElementsByTagName('my-home-info');
         parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
         shadow.appendChild(display.resultsStyle);
         resultsContainer = document.createElement('section');

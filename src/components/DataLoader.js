@@ -67,7 +67,7 @@ export default class DataLoader extends HTMLElement {
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-          resolve({ "id": "districtManagers", "data": data });
+          resolve({ "id": "district-managers", "data": data });
         }).catch(err => {
           // console.log(err);
         });
@@ -77,7 +77,7 @@ export default class DataLoader extends HTMLElement {
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-          resolve({ "id": "districtInspectors", "data": data });
+          resolve({ "id": "district-inspectors", "data": data });
         }).catch(err => {
           // console.log(err);
         });
@@ -87,20 +87,13 @@ export default class DataLoader extends HTMLElement {
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-          resolve({ "id": "councilMembers", "data": data });
+          resolve({ "id": "council-members", "data": data });
         }).catch(err => {
           // console.log(err);
         });
     });
     let DWSDBackupProtection = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Current_City_of_Detroit_Neighborhoods/FeatureServer/0/query?where=&objectIds=&time=&geometry=${parcelData.location.x}%2C${parcelData.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
-      return fetch(url)
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-          resolve({ "id": "DWSDBackupProtection", "data": data });
-        }).catch(err => {
-          // console.log(err);
-        });
+      resolve({ "id": "DWSDBackupProtection", "data": parcelData });
     });
     let nrsa = new Promise((resolve, reject) => {
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/NRSA_2020/FeatureServer/0/query?where=&objectIds=&time=&geometry=${parcelData.location.x}%2C${parcelData.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
@@ -384,22 +377,20 @@ export default class DataLoader extends HTMLElement {
           dataList.push(historicDistrict);
           break;
 
-        case 'districtManagers':
+        case 'district-managers':
           dataList.push(districtManagers);
           break;
 
-        case 'districtInspectors':
+        case 'district-inspectors':
           dataList.push(districtInspectors);
           break;
 
-        case 'councilMembers':
+        case 'council-members':
           dataList.push(councilMembers);
           break;
 
         case 'DWSDBackupProtection':
-          if (!filters.includes('neighborhood')) {
-            dataList.push(DWSDBackupProtection);
-          }
+          dataList.push(DWSDBackupProtection);
           break;
 
         default:
@@ -412,21 +403,21 @@ export default class DataLoader extends HTMLElement {
 
   buildCouncilData(data) {
     let councilData = {
-      district: `District ${data.council.data}`,
-      districtURL: null,
       council: {
+        district: `District ${data.council.data.attributes.council_district}`,
+        districtURL: null,
         name: null,
         url: null,
         phone: null
       },
       dmanager: {
         name: null,
-        url: `/departments/department-of-neighborhoods/district-${data.council.data}#block-views-block-contacts-special-block-1`,
+        url: `/departments/department-of-neighborhoods/district-${data.council.data.attributes.council_district}#block-views-block-contacts-special-block-1`,
         phone: null
       },
       ddmanager: {
         name: null,
-        url: `/departments/department-of-neighborhoods/district-${data.council.data}#block-views-block-contacts-special-block-1`,
+        url: `/departments/department-of-neighborhoods/district-${data.council.data.attributes.council_district}#block-views-block-contacts-special-block-1`,
         phone: null
       },
       bliaision: {
@@ -438,17 +429,17 @@ export default class DataLoader extends HTMLElement {
         phone: null
       }
     };
-    switch (data.council.data) {
+    switch (data.council.data.attributes.council_district) {
       case "1":
-        councilData.districtURL = `/taxonomy/term/1276`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1276`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1276') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1276`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 1 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -462,7 +453,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 1')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -471,15 +462,15 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "2":
-        councilData.districtURL = `/taxonomy/term/1476`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1476`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1476') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1476`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 2 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -493,7 +484,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 2')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -502,15 +493,15 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "3":
-        councilData.districtURL = `/taxonomy/term/1481`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1481`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1481') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1481`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 3 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -524,7 +515,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 3')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -533,15 +524,15 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "4":
-        councilData.districtURL = `/taxonomy/term/1486`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1486`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1486') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1486`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 4 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -555,7 +546,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 4')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -564,15 +555,15 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "5":
-        councilData.districtURL = `/taxonomy/term/1346`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1346`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1346') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1346`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 5 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -586,7 +577,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 5')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -595,8 +586,10 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "6":
-        councilData.districtURL = `/taxonomy/term/1491`;
-        data.councilMembers.data.forEach((item) => {
+        console.log('building district 6');
+        councilData.council.districtURL = `/taxonomy/term/1491`;
+        console.log(data['council-members'].data);
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1491') {
             let cleanPhone = item.field_phone.replace('Office: ', '');
             cleanPhone = cleanPhone.replace(/ /g, '-');
@@ -606,7 +599,7 @@ export default class DataLoader extends HTMLElement {
             councilData.council.phone = `<a href="tel:${cleanPhone}">${item.field_phone}</a>`;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 6 Manager')) {
             let cleanPhone = item.field_telephone.replace(/ /g, '-');
             cleanPhone = cleanPhone.replace(/[()]/g, '');
@@ -624,8 +617,9 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 6')) {
+            console.log('found inspector');
             let cleanPhone = item.field_telephone.replace(/ /g, '-');
             cleanPhone = cleanPhone.replace(/[()]/g, '');
             councilData.enforcement.name = item.title;
@@ -635,15 +629,15 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "7":
-        councilData.districtURL = `/taxonomy/term/1511`;
-        data.councilMembers.data.forEach((item) => {
+        councilData.council.districtURL = `/taxonomy/term/1511`;
+        data['council-members'].data.forEach((item) => {
           if (item.tid == '1511') {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1511`;
             councilData.council.phone = item.field_phone;
           }
         });
-        data.districtManagers.data.forEach((item) => {
+        data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 7 Manager')) {
             councilData.dmanager.name = item.title;
             councilData.dmanager.phone = item.field_telephone;
@@ -657,7 +651,7 @@ export default class DataLoader extends HTMLElement {
             councilData.bliaision.email = item.field_email_address;
           }
         });
-        data.districtInspectors.data.forEach((item) => {
+        data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 7')) {
             councilData.enforcement.name = item.title;
             councilData.enforcement.phone = item.field_telephone;
@@ -704,14 +698,16 @@ export default class DataLoader extends HTMLElement {
             initialLoadChecker = false;
           }
         }
+        console.log(dataSets);
+        console.log(activeDataSets);
         if (activeDataSets.includes('council')) {
-          dataSets.council.data = parcelData.attributes.council_district;
           let councilData = loader.buildCouncilData(dataSets);
-          dataSets.councilMember = { id: 'councilMember', data: councilData.council };
+          console.log(councilData);
+          dataSets['council-members'] = { id: 'council-members', data: councilData.council };
           let dManagers = { manager: councilData.dmanager, deputy: councilData.ddmanager }
-          dataSets.districtManagers = { id: 'districManagers', data: dManagers };
-          dataSets.businessLiaison = { id: 'businessLiaison', data: councilData.bliaision };
-          dataSets.inspector = { id: 'inspector', data: councilData.enforcement };
+          dataSets['district-managers'] = { id: 'district-managers', data: dManagers };
+          dataSets['business-liaison'] = { id: 'business-liaison', data: councilData.bliaision };
+          dataSets['district-inspectors'] = { id: 'district-inspectors', data: councilData.enforcement };
         }
         if (activeDataSets.includes('DWSDBackupProtection')) {
           try {
@@ -722,6 +718,7 @@ export default class DataLoader extends HTMLElement {
             // console.log(error);
           }
         }
+        console.log(dataSets);
         app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
         app[0].setAttribute('data-app-state', 'results');
       }).catch(reason => {

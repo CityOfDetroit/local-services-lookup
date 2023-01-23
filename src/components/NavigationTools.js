@@ -1,9 +1,9 @@
 'use strict';
-import homeImage from '../images/home.png';
-import govImage from '../images/government.png';
-import zoneImage from '../images/zone.png';
-import nearImage from '../images/nearby.png';
-import printImage from '../images/print.png';
+// import homeImage from '../images/home.png';
+// import govImage from '../images/government.png';
+// import zoneImage from '../images/zone.png';
+// import nearImage from '../images/nearby.png';
+// import printImage from '../images/print.png';
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -38,6 +38,7 @@ export default class NavigationTools extends HTMLElement {
 
     loadNavTools(navTools) {
         const app = document.getElementsByTagName('my-home-info');
+        const appMode = app[0].getAttribute('data-app-mode');
         console.log('loading navigation');
         const shadow = navTools.shadowRoot;
         shadow.appendChild(navTools.navToolsStyle);
@@ -49,7 +50,11 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.className = 'clear';
         clearResultsBtn.innerText = 'x';
         clearResultsBtn.addEventListener('click', (ev) => {
-            app[0].setAttribute('data-app-state', 'welcome-screen');
+            if(app[0].getAttribute('data-app-mode') == 'my-home-info'){
+                app[0].setAttribute('data-app-state', 'welcome-screen');
+            }else{
+                app[0].setAttribute('data-app-state', 'active-screen');
+            }
             app[0].setAttribute('data-parcel-id', 'none');
             app[0].setAttribute('data-api-stored-datasets', '{}');
             app[0].setAttribute('data-api-active-datasets', 'none');
@@ -57,9 +62,10 @@ export default class NavigationTools extends HTMLElement {
             app[0].setAttribute('data-active-section', 'property');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
+        if (appMode == 'my-home-info'){
         const propertyDataBtn = document.createElement('button');
         const homeIcon = document.createElement('img');
-        homeIcon.src = homeImage;
+        homeIcon.src = '/sites/default/files/2023-01/home.png'; //homeImage;
         homeIcon.setAttribute('alt', 'about this property');
         propertyDataBtn.setAttribute('data-nav-value', 'about this property');
         propertyDataBtn.appendChild(homeIcon);
@@ -88,7 +94,7 @@ export default class NavigationTools extends HTMLElement {
 
         const govDataBtn = document.createElement('button');
         const govIcon = document.createElement('img');
-        govIcon.src = govImage;
+        govIcon.src = '/sites/default/files/2023-01/government.png'; //govImage;
         govIcon.setAttribute('alt', 'government officials');
         govDataBtn.setAttribute('data-nav-value', 'government officials');
         if(app[0].getAttribute('data-active-section') == 'government officials'){
@@ -107,7 +113,7 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'npo');
+                app[0].setAttribute('data-active-sets', 'council,council-members,district-managers,business-liaison,district-inspectors,npo');
                 app[0].setAttribute('data-active-section', 'government officials');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -117,7 +123,7 @@ export default class NavigationTools extends HTMLElement {
 
         const zoneDataBtn = document.createElement('button');
         const zoneIcon = document.createElement('img');
-        zoneIcon.src = zoneImage;
+        zoneIcon.src = '/sites/default/files/2023-01/zone.png'; //zoneImage;
         zoneIcon.setAttribute('alt', 'special areas and zones');
         zoneDataBtn.setAttribute('data-nav-value', 'special areas and zones');
         if(app[0].getAttribute('data-active-section') == 'special areas and zones'){
@@ -143,10 +149,10 @@ export default class NavigationTools extends HTMLElement {
         }
         zoneDataBtn.appendChild(zoneIcon);
         navToolsWrapper.appendChild(zoneDataBtn);
-
+        
         const nearDataBtn = document.createElement('button');
         const nearIcon = document.createElement('img');
-        nearIcon.src = nearImage;
+        nearIcon.src = '/sites/default/files/2023-01/nearby.png'; //nearImage;
         nearIcon.setAttribute('alt', 'things nearby');
         nearDataBtn.setAttribute('data-nav-value', 'things nearby');
         if(app[0].getAttribute('data-active-section') == 'things nearby'){
@@ -175,7 +181,7 @@ export default class NavigationTools extends HTMLElement {
 
         const printBtn = document.createElement('button');
         const printIcon = document.createElement('img');
-        printIcon.src = printImage;
+        printIcon.src = '/sites/default/files/2023-01/print.png'; //printImage;
         printIcon.setAttribute('alt', 'print');
         printBtn.setAttribute('data-nav-value', 'print');
         if(app[0].getAttribute('data-active-section') == 'print'){
@@ -188,6 +194,7 @@ export default class NavigationTools extends HTMLElement {
         }
         printBtn.appendChild(printIcon);
         navToolsWrapper.appendChild(printBtn);
+        }
 
         shadow.appendChild(navToolsWrapper);
     }

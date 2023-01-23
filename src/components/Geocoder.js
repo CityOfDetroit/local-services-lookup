@@ -38,7 +38,18 @@ export default class Geocoder extends HTMLElement {
             this.submit(ev, this);
         });
         icon.className = 'fas fa-map-marker-alt';
+        // Get label text
+        const app = document.getElementsByTagName('my-home-info');
         label.innerText = "Property Address:";
+        try {
+            if (app[0].getAttribute('data-geocoder-label')){
+                if(app[0].getAttribute('data-geocoder-label') != ''){
+                    label.innerText = app[0].getAttribute('data-geocoder-label');
+                }
+            }
+        } catch (error) {
+            
+        }
         label.setAttribute("for", "geocoder-input");
         input.type = 'text';
         input.setAttribute('list', 'addresses-list');
