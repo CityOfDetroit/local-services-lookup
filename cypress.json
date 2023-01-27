@@ -4,5 +4,6 @@
     "projectId": "local-services-lookup",
     "pageLoadTimeout": 100000,
     "video": false,
-    "videoUploadOnPasses": false
+    "videoUploadOnPasses": false,
+    "includeShadowDom": true
   }

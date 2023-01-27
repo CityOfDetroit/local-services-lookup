@@ -73,6 +73,7 @@ export default class Geocoder extends HTMLElement {
     }
 
     supplementGeocoder(address, geocoder, type) {
+        const app = document.getElementsByTagName('my-home-info');
         let tempAddr = address.split(",");
         tempAddr = tempAddr[0];
         tempAddr = tempAddr.split(" ");
@@ -113,7 +114,6 @@ export default class Geocoder extends HTMLElement {
                                     .then((resp) => resp.json()) // Transform the data into json
                                     .then(function (city) {
                                         if (city.features.length) {
-                                            const app = document.getElementsByTagName('my-home-info');
                                             let parcel = null;
                                             let location;
                                             data.candidates.forEach((item) => {
@@ -144,25 +144,29 @@ export default class Geocoder extends HTMLElement {
                                         } else {
                                             geocoder.parcelStatus = 'Invalid';
                                             geocoder.needGeocode(address, geocoder, location);
-                                            geocoder.controller.panel.createErrorPanel(address, true);
+                                            geocoder.clearSuggestions(geocoder);
+                                            app[0].setAttribute('data-app-state', 'error');
                                         }
                                     });
                             } catch (error) {
                                 geocoder.parcelStatus = 'Invalid';
                                 geocoder.needGeocode(address, geocoder, location);
-                                geocoder.controller.panel.createErrorPanel(address, true);
+                                geocoder.clearSuggestions(geocoder);
+                                app[0].setAttribute('data-app-state', 'error');
                             }
                         } else {
                             geocoder.parcelStatus = 'Invalid';
                             geocoder.needGeocode(address, geocoder, location);
-                            geocoder.controller.panel.createErrorPanel(address, true);
+                            geocoder.clearSuggestions(geocoder);
+                            app[0].setAttribute('data-app-state', 'error');
                         }
                     }
                 });
         } catch (error) {
             geocoder.parcelStatus = 'Invalid';
             geocoder.needGeocode(address, geocoder, location);
-            geocoder.controller.panel.createErrorPanel(address, true);
+            geocoder.clearSuggestions(geocoder);
+            app[0].setAttribute('data-app-state', 'error');
         }
     }
 

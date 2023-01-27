@@ -97,6 +97,11 @@ export default class MyHomeInfo extends HTMLElement {
                 appWrapper.appendChild(display);
                 break;
 
+            case 'error':
+                display.setAttribute('data-display-type', 'error');
+                appWrapper.appendChild(display);
+                break;
+
             case 'print':
                 display.setAttribute('data-display-type', 'print');
                 appWrapper.appendChild(display);

@@ -38,6 +38,7 @@ export default class NavigationTools extends HTMLElement {
 
     loadNavTools(navTools) {
         const app = document.getElementsByTagName('my-home-info');
+        const appStatus = app[0].getAttribute('data-app-state');
         const appMode = app[0].getAttribute('data-app-mode');
         console.log('loading navigation');
         const shadow = navTools.shadowRoot;
@@ -62,7 +63,7 @@ export default class NavigationTools extends HTMLElement {
             app[0].setAttribute('data-active-section', 'property');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
-        if (appMode == 'my-home-info'){
+        if (appMode == 'my-home-info' && appStatus != 'error'){
         const propertyDataBtn = document.createElement('button');
         const homeIcon = document.createElement('img');
         homeIcon.src = '/sites/default/files/2023-01/home.png'; //homeImage;
