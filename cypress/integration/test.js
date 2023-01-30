@@ -15,6 +15,11 @@ describe('Basic test for address result', () => {
       cy.wait(3000)
       cy.get('my-home-info')
       .contains('1104 Military St, Detroit, MI, 48209')
+      cy.get('my-home-info')
+      .get('button[data-nav-value="special areas and zones"]').click()
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('SPECIAL AREAS AND ZONES')
     })
 
     it('Test invalid address', () => {
