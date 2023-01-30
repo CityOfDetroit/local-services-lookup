@@ -18,7 +18,7 @@ export default class Display extends HTMLElement {
 
     // Creating images
     this.neighborhoodImage = document.createElement('img');
-    this.neighborhoodImage.src = '/sites/default/files/2023-01/neighborhood.png'; //neighborhoodImage;
+    this.neighborhoodImage.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/neighborhood.png'; //neighborhoodImage;
     this.neighborhoodImage.setAttribute('alt', '');
 
     // Creating display styles
@@ -273,7 +273,7 @@ export default class Display extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+    // console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
     if (newValue == 'results') {
       this.clearDisplay(this);
     }
@@ -281,7 +281,6 @@ export default class Display extends HTMLElement {
   }
 
   clearDisplay(display) {
-    console.log('clearing display');
     const shadow = display.shadowRoot;
     while (shadow.firstChild) {
       shadow.removeChild(shadow.firstChild);
@@ -306,7 +305,6 @@ export default class Display extends HTMLElement {
   }
 
   buildDistrictManagers(value) {
-    console.log('building district manager');
     let dataParsing = { title: "District Managers", content: null };
     if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
       dataParsing.content = `
@@ -320,7 +318,6 @@ export default class Display extends HTMLElement {
             <p>No data found</p>
           `;
     }
-    console.log(dataParsing);
     return dataParsing;
   }
 
@@ -340,7 +337,6 @@ export default class Display extends HTMLElement {
   }
 
   buildInspector(value) {
-    console.log('building inspector');
     let dataParsing = { title: "Enforcement Inspector", content: null };
     if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
       dataParsing.content = `
@@ -352,7 +348,6 @@ export default class Display extends HTMLElement {
             <p>No data found</p>
           `;
     }
-    console.log(dataParsing);
     return dataParsing;
   }
 
@@ -437,7 +432,6 @@ export default class Display extends HTMLElement {
   buildNPO(value) {
     let dataParsing = { title: "Police", content: null };
     if (value && value.data.features.length) {
-      console.log('building police section');
       dataParsing.content = `
           <p><strong>PRECINCT</strong></p>
           <p><strong>Number:</strong> ${value.data.features[0].attributes.precinct}</p>
@@ -616,6 +610,34 @@ export default class Display extends HTMLElement {
     return dataParsing;
   }
 
+  buildSchools(value, display) {
+    let dataParsing = { title: "Schools", content: null };
+    if (value && value.data.features.length) {
+      value.data.features.forEach(function (value, index) {
+        if (index == 0) {
+          dataParsing.content = `
+              <p><strong>Name:</strong> ${value.attributes.EntityOfficialName}</p>
+              <p><strong>EntityActualGrades:</strong> ${value.attributes.EntityActualGrades}</p>
+              <p><strong>Type:</strong> ${value.attributes.EntityTypeName}</p>
+              <p><strong>Address:</strong> ${value.attributes.EntityPhysicalStreet}</p>
+              <br>
+              `;
+        } else {
+          dataParsing.content += `
+              <p><strong>Name:</strong> ${value.attributes.EntityOfficialName}</p>
+              <p><strong>EntityActualGrades:</strong> ${value.attributes.EntityActualGrades}</p>
+              <p><strong>Type:</strong> ${value.attributes.EntityTypeName}</p>
+              <p><strong>Address:</strong> ${value.attributes.EntityPhysicalStreet}</p>
+              <br>
+              `;
+        }
+      });
+    } else {
+      dataParsing.content = `<p>No schools nearby.</p>`;
+    }
+    return dataParsing;
+  }
+
   buildPermit(value, display) {
     let dataParsing = { title: "Building Permits", content: null };
     if (value && value.data.features.length) {
@@ -639,7 +661,6 @@ export default class Display extends HTMLElement {
     let tempAddress = parcelData.address.replace(' ', '%2520');
     tempAddress = tempAddress.replace(',', '%252C');
     let dataParsing = { title: "Demolition Status", content: null };
-    console.log(value);
     if (value && value.data.features.length) {
       dataParsing.content = `
             <p class="critical-text"><strong>WARNIG!</strong></p>
@@ -730,7 +751,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildCouncil(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -739,7 +760,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildDistrictManagers(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -748,7 +769,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildBusinessLiaison(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -757,7 +778,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildInspector(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -766,7 +787,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildNeighborhood(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -775,7 +796,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildNEZ(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -784,7 +805,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildNRSA(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -793,7 +814,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildAssessors(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -802,7 +823,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildPermit(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -811,7 +832,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildRental(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -820,7 +841,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildBlight(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -829,7 +850,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildDemosNear(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -838,7 +859,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildDemoStatus(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -847,7 +868,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildNPO(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -856,7 +877,16 @@ export default class Display extends HTMLElement {
         try {
           return display.buildImproveDet(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
+          return '';
+        }
+        break;
+
+      case 'schools':
+        try {
+          return display.buildSchools(value, display);
+        } catch (error) {
+          // console.log(error);
           return '';
         }
         break;
@@ -865,7 +895,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildRecycling(value, display);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -874,7 +904,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildHistoricDistrict(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -883,7 +913,7 @@ export default class Display extends HTMLElement {
         try {
           return display.buildFireEscrow(value);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return '';
         }
         break;
@@ -917,9 +947,7 @@ export default class Display extends HTMLElement {
   buildDataBlock(display, dataSet) {
     const dataBlock = document.createElement('article');
     dataBlock.className = 'data-block';
-    console.log(dataSet);
     let datasetValues = display.selectDataBlockType(display, dataSet);
-    console.log(datasetValues);
     if (datasetValues == undefined || datasetValues.content == null) {
       return null;
     } else {

@@ -22,7 +22,7 @@ export default class DataLoader extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     const shadow = this.shadowRoot;
-    console.log(`Loader - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+    // console.log(`Loader - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
     switch (name) {
       case 'data-loader-state':
         this.clearLoader(this);
@@ -212,12 +212,12 @@ export default class DataLoader extends HTMLElement {
           // console.log(err);
         });
     });
-    let pSchools = new Promise((resolve, reject) => {
+    let schools = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
       let buffer = turf.buffer(point, 1, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
-      let url = "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Schools2017/FeatureServer/0/query?where=1%3D1&text=&objectIds=&time=&geometry=" + encodeURI(JSON.stringify(arcsimplePolygon)) + "&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json";
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/2018_2019_Schools_(EEM)/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=json`;
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
@@ -288,8 +288,6 @@ export default class DataLoader extends HTMLElement {
           // console.log(err);
         });
     });
-    console.log('------------- list of query data --------------');
-    console.log(dataSets);
     dataSets.forEach(f => {
       switch (f) {
         case 'council':
@@ -373,6 +371,10 @@ export default class DataLoader extends HTMLElement {
           }
           break;
 
+        case 'schools':
+          dataList.push(schools);
+          break;
+
         case 'historicDistrict':
           dataList.push(historicDistrict);
           break;
@@ -397,7 +399,6 @@ export default class DataLoader extends HTMLElement {
           break;
       }
     });
-    console.log(dataList);
     return dataList;
   }
 
@@ -586,9 +587,7 @@ export default class DataLoader extends HTMLElement {
         break;
 
       case "6":
-        console.log('building district 6');
         councilData.council.districtURL = `/taxonomy/term/1491`;
-        console.log(data['council-members'].data);
         data['council-members'].data.forEach((item) => {
           if (item.tid == '1491') {
             let cleanPhone = item.field_phone.replace('Office: ', '');
@@ -619,7 +618,6 @@ export default class DataLoader extends HTMLElement {
         });
         data['district-inspectors'].data.forEach((item) => {
           if (item.field_responsibilities.includes('District 6')) {
-            console.log('found inspector');
             let cleanPhone = item.field_telephone.replace(/ /g, '-');
             cleanPhone = cleanPhone.replace(/[()]/g, '');
             councilData.enforcement.name = item.title;
@@ -660,7 +658,7 @@ export default class DataLoader extends HTMLElement {
         break;
 
       default:
-        console.log('not inside city');
+        // console.log('not inside city');
         break;
     }
     return councilData;
@@ -678,7 +676,6 @@ export default class DataLoader extends HTMLElement {
       }
     }
     if (dataAlreadyLoaded) {
-      console.log('loading stored data');
       let dataSets = {};
       activeDataSets.forEach(data => {
         dataSets[data] = storedData[data];
@@ -686,10 +683,8 @@ export default class DataLoader extends HTMLElement {
       app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
       app[0].setAttribute('data-app-state', 'results');
     } else {
-      console.log('getting data from apis');
       let dataList = loader.getDataSets();
       Promise.all(dataList).then(values => {
-        console.log(values);
         let dataSets = {};
         for (let key in values) {
           if (values[key] != null) {
@@ -698,11 +693,8 @@ export default class DataLoader extends HTMLElement {
             initialLoadChecker = false;
           }
         }
-        console.log(dataSets);
-        console.log(activeDataSets);
         if (activeDataSets.includes('council')) {
           let councilData = loader.buildCouncilData(dataSets);
-          console.log(councilData);
           dataSets['council-members'] = { id: 'council-members', data: councilData.council };
           let dManagers = { manager: councilData.dmanager, deputy: councilData.ddmanager }
           dataSets['district-managers'] = { id: 'district-managers', data: dManagers };
@@ -718,7 +710,6 @@ export default class DataLoader extends HTMLElement {
             // console.log(error);
           }
         }
-        console.log(dataSets);
         app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
         app[0].setAttribute('data-app-state', 'results');
       }).catch(reason => {

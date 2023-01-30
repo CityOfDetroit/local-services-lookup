@@ -29,7 +29,6 @@ export default class NavigationTools extends HTMLElement {
     }
 
     clearDisplay(display) {
-        console.log('clearing nav tools');
         const shadow = display.shadowRoot;
         while (shadow.firstChild) {
             shadow.removeChild(shadow.firstChild);
@@ -40,7 +39,6 @@ export default class NavigationTools extends HTMLElement {
         const app = document.getElementsByTagName('my-home-info');
         const appStatus = app[0].getAttribute('data-app-state');
         const appMode = app[0].getAttribute('data-app-mode');
-        console.log('loading navigation');
         const shadow = navTools.shadowRoot;
         shadow.appendChild(navTools.navToolsStyle);
         const navToolsWrapper = document.createElement('section');
@@ -66,7 +64,7 @@ export default class NavigationTools extends HTMLElement {
         if (appMode == 'my-home-info' && appStatus != 'error'){
         const propertyDataBtn = document.createElement('button');
         const homeIcon = document.createElement('img');
-        homeIcon.src = '/sites/default/files/2023-01/home.png'; //homeImage;
+        homeIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/home.png'; //homeImage;
         homeIcon.setAttribute('alt', 'about this property');
         propertyDataBtn.setAttribute('data-nav-value', 'about this property');
         propertyDataBtn.appendChild(homeIcon);
@@ -95,7 +93,7 @@ export default class NavigationTools extends HTMLElement {
 
         const govDataBtn = document.createElement('button');
         const govIcon = document.createElement('img');
-        govIcon.src = '/sites/default/files/2023-01/government.png'; //govImage;
+        govIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/government.png'; //govImage;
         govIcon.setAttribute('alt', 'government officials');
         govDataBtn.setAttribute('data-nav-value', 'government officials');
         if(app[0].getAttribute('data-active-section') == 'government officials'){
@@ -124,7 +122,7 @@ export default class NavigationTools extends HTMLElement {
 
         const zoneDataBtn = document.createElement('button');
         const zoneIcon = document.createElement('img');
-        zoneIcon.src = '/sites/default/files/2023-01/zone.png'; //zoneImage;
+        zoneIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/zone.png'; //zoneImage;
         zoneIcon.setAttribute('alt', 'special areas and zones');
         zoneDataBtn.setAttribute('data-nav-value', 'special areas and zones');
         if(app[0].getAttribute('data-active-section') == 'special areas and zones'){
@@ -153,7 +151,7 @@ export default class NavigationTools extends HTMLElement {
         
         const nearDataBtn = document.createElement('button');
         const nearIcon = document.createElement('img');
-        nearIcon.src = '/sites/default/files/2023-01/nearby.png'; //nearImage;
+        nearIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/nearby.png'; //nearImage;
         nearIcon.setAttribute('alt', 'things nearby');
         nearDataBtn.setAttribute('data-nav-value', 'things nearby');
         if(app[0].getAttribute('data-active-section') == 'things nearby'){
@@ -172,7 +170,7 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'demos-data,improve-det');
+                app[0].setAttribute('data-active-sets', 'schools,demos-data,improve-det');
                 app[0].setAttribute('data-active-section', 'things nearby');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -182,7 +180,7 @@ export default class NavigationTools extends HTMLElement {
 
         const printBtn = document.createElement('button');
         const printIcon = document.createElement('img');
-        printIcon.src = '/sites/default/files/2023-01/print.png'; //printImage;
+        printIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/print.png'; //printImage;
         printIcon.setAttribute('alt', 'print');
         printBtn.setAttribute('data-nav-value', 'print');
         if(app[0].getAttribute('data-active-section') == 'print'){

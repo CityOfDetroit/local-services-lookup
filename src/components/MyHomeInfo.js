@@ -37,7 +37,7 @@ export default class MyHomeInfo extends HTMLElement {
         const shadow = this.shadowRoot;
         const app = document.getElementsByTagName('my-home-info');
         const appMode = app[0].getAttribute('data-app-mode');
-        console.log(`App - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+        // console.log(`App - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
         switch (name) {
             case 'data-app-state':
                 if (oldValue != null) {
@@ -62,7 +62,6 @@ export default class MyHomeInfo extends HTMLElement {
     }
 
     clearApp(app) {
-        console.log('clearing app');
         const shadow = app.shadowRoot;
         while (shadow.firstChild) {
             shadow.removeChild(shadow.firstChild);
@@ -110,7 +109,6 @@ export default class MyHomeInfo extends HTMLElement {
             default:
                 break;
         }
-        console.log(shadow.firstChild);
         if (shadow.firstChild == null) {
             shadow.appendChild(appWrapper);
         }
