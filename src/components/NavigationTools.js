@@ -39,6 +39,7 @@ export default class NavigationTools extends HTMLElement {
         const app = document.getElementsByTagName('my-home-info');
         const appStatus = app[0].getAttribute('data-app-state');
         const appMode = app[0].getAttribute('data-app-mode');
+        const initialSets = app[0].getAttribute('data-inital-sets');
         const shadow = navTools.shadowRoot;
         shadow.appendChild(navTools.navToolsStyle);
         const navToolsWrapper = document.createElement('section');
@@ -51,13 +52,14 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.addEventListener('click', (ev) => {
             if(app[0].getAttribute('data-app-mode') == 'my-home-info'){
                 app[0].setAttribute('data-app-state', 'welcome-screen');
+                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data');
             }else{
                 app[0].setAttribute('data-app-state', 'active-screen');
+                app[0].setAttribute('data-active-sets', initialSets);
             }
             app[0].setAttribute('data-parcel-id', 'none');
             app[0].setAttribute('data-api-stored-datasets', '{}');
             app[0].setAttribute('data-api-active-datasets', 'none');
-            app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data');
             app[0].setAttribute('data-active-section', 'property');
         });
         navToolsWrapper.appendChild(clearResultsBtn);
