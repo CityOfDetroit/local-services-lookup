@@ -963,7 +963,7 @@ export default class Display extends HTMLElement {
         const text = document.createElement('span');
         text.innerText = datasetValues.title;
         const mapButton = document.createElement('button');
-        mapButton.id = 'map-btn';
+        mapButton.className = 'map-btn';
         mapButton.innerText = 'View Map ';
         mapButton.setAttribute('data-map-active-data', dataSet.id);
         const mapIcon = document.createElement('img');
