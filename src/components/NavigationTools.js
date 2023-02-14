@@ -1,9 +1,4 @@
 'use strict';
-// import homeImage from '../images/home.png';
-// import govImage from '../images/government.png';
-// import zoneImage from '../images/zone.png';
-// import nearImage from '../images/nearby.png';
-// import printImage from '../images/print.png';
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -86,7 +81,8 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data');
+                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data,DWSDBackupProtection');
+                app[0].setAttribute('data-map-available', 'false');
                 app[0].setAttribute('data-active-section', 'about this property');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -115,6 +111,7 @@ export default class NavigationTools extends HTMLElement {
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
                 app[0].setAttribute('data-active-sets', 'council,council-members,district-managers,business-liaison,district-inspectors,npo');
+                app[0].setAttribute('data-map-available', 'false');
                 app[0].setAttribute('data-active-section', 'government officials');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -144,6 +141,7 @@ export default class NavigationTools extends HTMLElement {
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
                 app[0].setAttribute('data-active-sets', 'nez,nrsa,historicDistrict');
+                app[0].setAttribute('data-map-available', 'false');
                 app[0].setAttribute('data-active-section', 'special areas and zones');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
@@ -174,6 +172,7 @@ export default class NavigationTools extends HTMLElement {
                 app[0].setAttribute('data-api-active-datasets', 'none');
                 app[0].setAttribute('data-active-sets', 'schools,demos-data,improve-det');
                 app[0].setAttribute('data-active-section', 'things nearby');
+                app[0].setAttribute('data-map-available', 'true');
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }

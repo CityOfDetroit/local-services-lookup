@@ -251,12 +251,15 @@ export default class Display extends HTMLElement {
           #data-results { background-color: #e6e6e6; padding: 1em }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
           .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.78em 0.6em; font-family: 'Montserrat', sans-serif;}
-          .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif;}
+          .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif; display: flex;}
+          .data-block-title span { flex: 1 }
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
           .dataset-results {flex: 1;}
           .critical-text { color: #CF3234; }
           .error-result { padding: 1em; }
+          .data-block-title button { background-color: #fff; border: none; padding: 0.25em 0.5em; box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 75%);}
+          .data-block-title button img { height: 1em; }
           @media all and (min-width: 551px) {
             #data-blocks { column-count: 2; }
             #data-blocks .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; }
@@ -616,18 +619,18 @@ export default class Display extends HTMLElement {
       value.data.features.forEach(function (value, index) {
         if (index == 0) {
           dataParsing.content = `
-              <p><strong>Name:</strong> ${value.attributes.EntityOfficialName}</p>
-              <p><strong>EntityActualGrades:</strong> ${value.attributes.EntityActualGrades}</p>
-              <p><strong>Type:</strong> ${value.attributes.EntityTypeName}</p>
-              <p><strong>Address:</strong> ${value.attributes.EntityPhysicalStreet}</p>
+              <p><strong>Name:</strong> ${value.properties.EntityOfficialName}</p>
+              <p><strong>EntityActualGrades:</strong> ${value.properties.EntityActualGrades}</p>
+              <p><strong>Type:</strong> ${value.properties.EntityTypeName}</p>
+              <p><strong>Address:</strong> ${value.properties.EntityPhysicalStreet}</p>
               <br>
               `;
         } else {
           dataParsing.content += `
-              <p><strong>Name:</strong> ${value.attributes.EntityOfficialName}</p>
-              <p><strong>EntityActualGrades:</strong> ${value.attributes.EntityActualGrades}</p>
-              <p><strong>Type:</strong> ${value.attributes.EntityTypeName}</p>
-              <p><strong>Address:</strong> ${value.attributes.EntityPhysicalStreet}</p>
+              <p><strong>Name:</strong> ${value.properties.EntityOfficialName}</p>
+              <p><strong>EntityActualGrades:</strong> ${value.properties.EntityActualGrades}</p>
+              <p><strong>Type:</strong> ${value.properties.EntityTypeName}</p>
+              <p><strong>Address:</strong> ${value.properties.EntityPhysicalStreet}</p>
               <br>
               `;
         }
@@ -681,30 +684,31 @@ export default class Display extends HTMLElement {
     let dataParsing = { title: "Demolitions Nearby", content: null };
     if (value && value.data.features.length) {
       value.data.features.forEach(function (value, index) {
+
         if (index == 0) {
           dataParsing.content = `
-              <p><strong>Address:</strong> ${value.attributes.address}</p>
-              <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
-              <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
-              <p><strong>Parcel:</strong> ${value.attributes.parcel_id}</p>
-              <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
-              <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
-              <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
-              ${(value.attributes.demolish_by_date == undefined || value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
-              <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
+              <p><strong>Address:</strong> ${value.properties.address}</p>
+              <p><strong>Commercial:</strong> ${value.properties.commercial_building}</p>
+              <p><strong>Price:</strong> $${parseInt(value.properties.price).toLocaleString()}</p>
+              <p><strong>Parcel:</strong> ${value.properties.parcel_id}</p>
+              <p><strong>Contractor:</strong> ${value.properties.contractor_name}</p>
+              <p><strong>Council District:</strong> ${value.properties.council_district}</p>
+              <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
+              ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              <p><strong>Expected Date:</strong> ${display.formatDate(value.properties.demolish_by_date)}</p>`}
               <br>
               `;
         } else {
           dataParsing.content += `
-              <p><strong>Address:</strong> ${value.attributes.address}</p>
-              <p><strong>Commercial:</strong> ${value.attributes.commercial_building}</p>
-              <p><strong>Price:</strong> $${parseInt(value.attributes.price).toLocaleString()}</p>
-              <p><strong>Parcel:</strong> ${value.attributes.parcel_id}</p>
-              <p><strong>Contractor:</strong> ${value.attributes.contractor_name}</p>
-              <p><strong>Council District:</strong> ${value.attributes.council_district}</p>
-              <p><strong>Neighborhood:</strong> ${value.attributes.neighborhood}</p>
-              ${(value.attributes.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
-              <p><strong>Expected Date:</strong> ${display.formatDate(value.attributes.demolish_by_date)}</p>`}
+              <p><strong>Address:</strong> ${value.properties.address}</p>
+              <p><strong>Commercial:</strong> ${value.properties.commercial_building}</p>
+              <p><strong>Price:</strong> $${parseInt(value.properties.price).toLocaleString()}</p>
+              <p><strong>Parcel:</strong> ${value.properties.parcel_id}</p>
+              <p><strong>Contractor:</strong> ${value.properties.contractor_name}</p>
+              <p><strong>Council District:</strong> ${value.properties.council_district}</p>
+              <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
+              ${(value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
+              <p><strong>Expected Date:</strong> ${display.formatDate(value.properties.demolish_by_date)}</p>`}
               <br>
               `;
         }
@@ -722,18 +726,18 @@ export default class Display extends HTMLElement {
       value.data.features.forEach(function (value, index) {
         if (index == 0) {
           dataParsing.content = `
-              <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
-              <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
-              <p><strong>Status:</strong> ${value.attributes.status}</p>
-              <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
+              <p><strong>ID:</strong> <a href="${value.properties.web_url}" target="_blank">${value.properties.id}</a></p>
+              <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
+              <p><strong>Status:</strong> ${value.properties.status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
               <br>
               `;
         } else {
           dataParsing.content += `
-              <p><strong>ID:</strong> <a href="${value.attributes.web_url}" target="_blank">${value.attributes.id}</a></p>
-              <p><strong>Type:</strong> ${value.attributes.request_type_title}</p>
-              <p><strong>Status:</strong> ${value.attributes.status}</p>
-              <p><strong>Reported on:</strong> ${display.formatDate(value.attributes.created_at)}</p>
+              <p><strong>ID:</strong> <a href="${value.properties.web_url}" target="_blank">${value.properties.id}</a></p>
+              <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
+              <p><strong>Status:</strong> ${value.properties.status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
               <br>
               `;
         }
@@ -936,7 +940,7 @@ export default class Display extends HTMLElement {
     let divContents = display.buildDataSection(display);
     let a = window.open('', '', 'height=500, width=500');
     a.document.write('<html>');
-    a.document.write('<head><style>@media print {.noprint { visibility: hidden;} p.data-block-title{border-bottom: 1px solid;} }</style></head>');
+    a.document.write('<head><style>@media print {.noprint { visibility: hidden;} p.data-block-title{border-bottom: 1px solid;} .data-block-title button { display: none; } body { column-count: 2;} .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; } }</style></head>');
     a.document.write('<body >');
     a.document.write(divContents.children[1].innerHTML);
     a.document.write('</body>');
@@ -945,6 +949,8 @@ export default class Display extends HTMLElement {
   }
 
   buildDataBlock(display, dataSet) {
+    const app = document.getElementsByTagName('my-home-info');
+    const mapAvailable = app[0].getAttribute('data-map-available');
     const dataBlock = document.createElement('article');
     dataBlock.className = 'data-block';
     let datasetValues = display.selectDataBlockType(display, dataSet);
@@ -953,7 +959,26 @@ export default class Display extends HTMLElement {
     } else {
       const dataBlockTitle = document.createElement('p');
       dataBlockTitle.className = 'data-block-title';
-      dataBlockTitle.innerText = datasetValues.title;
+      if(mapAvailable == 'true') {
+        const text = document.createElement('span');
+        text.innerText = datasetValues.title;
+        const mapButton = document.createElement('button');
+        mapButton.id = 'map-btn';
+        mapButton.innerText = 'View Map ';
+        mapButton.setAttribute('data-map-active-data', dataSet.id);
+        const mapIcon = document.createElement('img');
+        mapIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png'; 
+        mapIcon.setAttribute('alt', 'view map');
+        mapButton.appendChild(mapIcon)
+        mapButton.addEventListener('click', (ev)=>{
+          app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
+          app[0].setAttribute('data-app-state', 'map');
+        });
+        dataBlockTitle.appendChild(text);
+        dataBlockTitle.appendChild(mapButton);
+      }else{
+        dataBlockTitle.innerText = datasetValues.title;
+      }
       dataBlock.appendChild(dataBlockTitle);
       const dataBlockContent = document.createElement('article');
       dataBlockContent.className = 'data-block-content';
@@ -1011,16 +1036,7 @@ export default class Display extends HTMLElement {
         const textWelcome = document.createElement('p');
         textWelcome.innerText = 'Enter your home address to find out your city councilmember and neighborhood district manager, along with local information about trash/recycling, your neighborhood police officer, city issues reported in your neighborhood, and more.';
         textWrapperWelcome.appendChild(textWelcome);
-        const btnSection = document.createElement('div');
-        btnSection.className = 'btn-group';
-        const btn = document.createElement('button');
-        btn.innerText = 'Start';
-        btn.addEventListener('click', (ev) => {
-          const app = document.getElementsByTagName('my-home-info');
-          app[0].setAttribute('data-app-state', 'active-screen');
-        })
-        btnSection.appendChild(btn);
-        textWrapperWelcome.appendChild(btnSection)
+        textWrapperWelcome.appendChild(geocoder);
         shadow.appendChild(displayWrapper);
         break;
 

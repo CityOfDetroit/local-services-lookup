@@ -1,13 +1,14 @@
 'use strict';
 import Display from './Display';
 import DataLoader from './DataLoader';
+import Map from './Map';
 customElements.define('app-display', Display);
 customElements.define('app-data-loader', DataLoader);
+customElements.define('app-map', Map);
 
 export default class MyHomeInfo extends HTMLElement {
     static get observedAttributes() {
-        return ['data-app-state', 'data-parcel-id'];
-        // , 'data-active-sets', 'data-active-section', 'data-api-active-datasets'
+        return ['data-app-state', 'data-parcel-id', 'data-map-state'];
     }
 
     constructor() {
@@ -55,8 +56,12 @@ export default class MyHomeInfo extends HTMLElement {
                     }
                 }
                 break;
+            
+            case 'data-map-state':
+                break;
 
             default:
+                console.log('not catched');
                 break;
         }
     }
@@ -70,7 +75,7 @@ export default class MyHomeInfo extends HTMLElement {
 
     loadApp(app) {
         const shadow = app.shadowRoot;
-        const appWrapper = document.createElement('section');
+        const appWrapper = document.createElement('div');
         appWrapper.id = 'app-wrapper';
         const display = document.createElement('app-display');
         const dataLoader = document.createElement('app-data-loader');
@@ -94,6 +99,13 @@ export default class MyHomeInfo extends HTMLElement {
             case 'results':
                 display.setAttribute('data-display-type', 'results');
                 appWrapper.appendChild(display);
+                break;
+
+            case 'map':
+                const map = document.createElement('app-map');
+                map.id='app-map';
+                map.setAttribute('data-map-state', 'init');
+                appWrapper.appendChild(map);
                 break;
 
             case 'error':
