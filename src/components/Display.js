@@ -249,7 +249,7 @@ export default class Display extends HTMLElement {
     this.resultsStyle = document.createElement('style');
     this.resultsStyle.textContent = `
           .results-container{ display: flex; }
-          #data-results { background-color: #e6e6e6; padding: 1em }
+          #data-results { background-color: #e6e6e6; padding: 1em; height: 40em; overflow-y: auto; }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
           .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.78em 0.6em; font-family: 'Montserrat', sans-serif;}
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif; display: flex;}
@@ -262,11 +262,13 @@ export default class Display extends HTMLElement {
           .data-block-title button { background-color: #fff; border: none; padding: 0.25em 0.5em; box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 75%);}
           .data-block-title button img { height: 1em; }
           @media all and (min-width: 551px) {
+            #data-results { height: auto; }
             #data-blocks { column-count: 2; }
             #data-blocks .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; }
           }
 
           @media all and (min-width: 1024px) {
+            #data-results { height: auto; }
             #data-blocks { column-count: 3; }
             #data-blocks .data-block {     -webkit-column-break-inside: avoid; page-break-inside: avoid; break-inside: avoid; }
           }
