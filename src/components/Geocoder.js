@@ -16,7 +16,6 @@ export default class Geocoder extends HTMLElement {
         this.styles = document.createElement('style');
         this.styles.textContent = `
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
-            label {display:block; font-family: 'Montserrat', sans-serif; font-weight: bold;}
             #geocoder {width: 100%}
             input {width: calc(100% - 2em); padding: 1em; border:.1em solid #e6e6e6;}
         `;
@@ -30,6 +29,8 @@ export default class Geocoder extends HTMLElement {
         geocoderWraper.id = 'geocoder';
         let form = document.createElement('form');
         let label = document.createElement('label');
+        label.style.fontFamily = 'Montserrat, sans-serif';
+        label.style.fontWeight = 'bold';
         let input = document.createElement('input');
         let suggestions = document.createElement('ul');
         let list = document.createElement('datalist');

@@ -26,7 +26,8 @@ export default class Display extends HTMLElement {
     this.welcomeStyle.textContent = `
           @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
           #display-wrapper { display: flex; padding: 1em; flex-wrap: wrap; font-family: 'Montserrat', sans-serif;}
-          #display-wrapper > img { max-width: 100%; }
+          #display-wrapper #welcome-img-wrapper { display: flex; }
+          #display-wrapper #welcome-img-wrapper img { height: 10em; margin: auto }
           #display-wrapper p { text-align: center; font-family: 'Montserrat', sans-serif;}
           #display-wrapper button { padding: 1em 3em;  background-color: #004445; color: #fff; border: none; cursor: pointer; margin: auto; width: 100%;}
           p.display-title { font-weight: bold; font-size: 1.25em; }
@@ -34,7 +35,7 @@ export default class Display extends HTMLElement {
           .btn-group { display:flex; width: 100%; }
           @media all and (min-width: 551px) {
             #display-wrapper{ display: flex; }
-            #display-wrapper > img { width: 15em; }
+            #display-wrapper #welcome-img-wrapper img { width: 15em; height: auto; }
             #display-wrapper article { flex: 1; padding: 1em; }
           }
         `;
@@ -1025,7 +1026,10 @@ export default class Display extends HTMLElement {
     switch (this.getAttribute('data-display-type')) {
       case 'welcome':
         shadow.appendChild(display.welcomeStyle);
-        displayWrapper.appendChild(this.neighborhoodImage);
+        const imageWrapper = document.createElement('div');
+        imageWrapper.id = 'welcome-img-wrapper';
+        imageWrapper.appendChild(this.neighborhoodImage);
+        displayWrapper.appendChild(imageWrapper);
         const textWrapperWelcome = document.createElement('article');
         displayWrapper.appendChild(textWrapperWelcome);
         const titleWelcome = document.createElement('p');
