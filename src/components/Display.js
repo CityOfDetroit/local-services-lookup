@@ -374,11 +374,11 @@ export default class Display extends HTMLElement {
   buildDWSDBackupProtection(values) {
     let validNeighborhoods = ['Aviation Sub', 'Barton-McFarland', 'Chadsey Condon', 'Cornerstone Village', 'East English Village', 'Morningside', 'Jefferson Chalmers', 'Warrendale', 'Victoria Park', 'Moross-Morang', 'Garden View'];
     let dataParsing = { title: "DWSD Basement Backup Protection Program", content: null };
-    if (values['neighborhood'] && values['neighborhood'].data.features.length) {
-      if (validNeighborhoods.includes(values['neighborhood'].data.features[0].attributes.neighborhood_name)) {
+    if (values && values.data.attributes.neighborhood_name) {
+      if (validNeighborhoods.includes(values.data.attributes.neighborhood_name)) {
         dataParsing.content = `
         <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
-        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${value.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${value.data.attributes.Postal}&Neighborhood=${value.data.attributes.neighborhood_name}" target="_blank"><button>Apply Now</button></a>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><button>Apply Now</button></a>
         `;
       }
     } else {
