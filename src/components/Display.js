@@ -723,6 +723,38 @@ export default class Display extends HTMLElement {
     return dataParsing;
   }
 
+  buildStabilizationsNear(value, display) {
+    let dataParsing = { title: "Stabilizations Nearby", content: null };
+    if (value && value.data.features.length) {
+      value.data.features.forEach(function (value, index) {
+
+        if (index == 0) {
+          dataParsing.content = `
+              <p><strong>Address:</strong> ${value.properties.address}</p>
+              <p><strong>Parcel:</strong> ${value.properties.parcel_id}</p>
+              <p><strong>Council District:</strong> ${value.properties.council_district}</p>
+              <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
+              <p><strong>Status:</strong> ${value.properties.rehab_status}</p>
+              <br>
+              `;
+        } else {
+          dataParsing.content += `
+          <p><strong>Address:</strong> ${value.properties.address}</p>
+          <p><strong>Parcel:</strong> ${value.properties.parcel_id}</p>
+          <p><strong>Council District:</strong> ${value.properties.council_district}</p>
+          <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
+          <p><strong>Status:</strong> ${value.properties.rehab_status}</p>
+              <br>
+              `;
+        }
+      });
+
+    } else {
+      dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
+    }
+    return dataParsing;
+  }
+
   buildImproveDet(value, display) {
     let dataParsing = { title: "Improve Detroit Issues Nearby", content: null };
     if (value && value.data.features.length) {
@@ -862,6 +894,15 @@ export default class Display extends HTMLElement {
         }
         break;
 
+      case 'stabilization-data':
+        try {
+          return display.buildStabilizationsNear(value, display);
+        } catch (error) {
+          // console.log(error);
+          return '';
+        }
+        break;
+
       case 'demo-status':
         try {
           return display.buildDemoStatus(value);
@@ -962,7 +1003,7 @@ export default class Display extends HTMLElement {
     } else {
       const dataBlockTitle = document.createElement('p');
       dataBlockTitle.className = 'data-block-title';
-      if(mapAvailable == 'true') {
+      if (mapAvailable == 'true') {
         const text = document.createElement('span');
         text.innerText = datasetValues.title;
         const mapButton = document.createElement('button');
@@ -970,16 +1011,16 @@ export default class Display extends HTMLElement {
         mapButton.innerText = 'View Map ';
         mapButton.setAttribute('data-map-active-data', dataSet.id);
         const mapIcon = document.createElement('img');
-        mapIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png'; 
+        mapIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png';
         mapIcon.setAttribute('alt', 'view map');
         mapButton.appendChild(mapIcon)
-        mapButton.addEventListener('click', (ev)=>{
+        mapButton.addEventListener('click', (ev) => {
           app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
           app[0].setAttribute('data-app-state', 'map');
         });
         dataBlockTitle.appendChild(text);
         dataBlockTitle.appendChild(mapButton);
-      }else{
+      } else {
         dataBlockTitle.innerText = datasetValues.title;
       }
       dataBlock.appendChild(dataBlockTitle);

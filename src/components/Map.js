@@ -952,6 +952,13 @@ export default class Map extends HTMLElement {
                     .addTo(map.map);
                 break;
 
+            case 'stabilization-data':
+                new maplibregl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(`<strong>Stabilization Address:</strong> ${e.features[0].properties.address}`)
+                    .addTo(map.map);
+                break;
+
             case 'improve-det':
                 new maplibregl.Popup()
                     .setLngLat(e.lngLat)

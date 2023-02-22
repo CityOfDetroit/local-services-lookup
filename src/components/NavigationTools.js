@@ -170,7 +170,7 @@ export default class NavigationTools extends HTMLElement {
                     app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                 }
                 app[0].setAttribute('data-api-active-datasets', 'none');
-                app[0].setAttribute('data-active-sets', 'schools,demos-data,improve-det');
+                app[0].setAttribute('data-active-sets', 'schools,demos-data,stabilization-data,improve-det');
                 app[0].setAttribute('data-active-section', 'things nearby');
                 app[0].setAttribute('data-map-available', 'true');
                 app[0].setAttribute('data-app-state', 'loading-screen');

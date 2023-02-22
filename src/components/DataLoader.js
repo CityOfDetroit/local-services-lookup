@@ -115,16 +115,6 @@ export default class DataLoader extends HTMLElement {
           // console.log(err);
         });
     });
-    let nezHomesteadOld = new Promise((resolve, reject) => {
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/NEZ_H_Districts/FeatureServer/0/query?where=&objectIds=&time=&geometry=${parcelData.location.x}%2C${parcelData.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
-      return fetch(url)
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-          resolve({ "id": "nezOld", "data": data });
-        }).catch(err => {
-          // console.log(err);
-        });
-    });
     let permitData = new Promise((resolve, reject) => {
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/BuildingPermits/FeatureServer/0/query?where=parcel_id+%3D+%27${parcelData.attributes.parcel_id}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=3&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json`;
       return fetch(url)
@@ -186,9 +176,6 @@ export default class DataLoader extends HTMLElement {
         });
     });
     let demosData = new Promise((resolve, reject) => {
-      let today = new Date();
-      let start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-      let end = `${today.getFullYear()}-${today.getMonth() + 6}-${today.getDate()}`;
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
       let buffer = turf.buffer(point, 1, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
@@ -198,6 +185,20 @@ export default class DataLoader extends HTMLElement {
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
           resolve({ "id": "demos-data", "data": data });
+        }).catch(err => {
+          // console.log(err);
+        });
+    });
+    let stabilizationData = new Promise((resolve, reject) => {
+      let point = turf.point([parcelData.location.x, parcelData.location.y]);
+      let buffer = turf.buffer(point, 1, { units: 'miles' });
+      let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
+      let arcsimplePolygon = arcGIS.convert(simplePolygon);
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Contracted_Stabilizations/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=geojson`;
+      return fetch(url)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) {
+          resolve({ "id": "stabilization-data", "data": data });
         }).catch(err => {
           // console.log(err);
         });
@@ -339,10 +340,6 @@ export default class DataLoader extends HTMLElement {
           dataList.push(nrsa);
           break;
 
-        case 'demos-data':
-          dataList.push(demosData);
-          break;
-
         case 'npo':
           dataList.push(npo);
           break;
@@ -369,6 +366,14 @@ export default class DataLoader extends HTMLElement {
           if (parcelData.attributes.parcel_id != null && parcelData.attributes.parcel_id != '') {
             dataList.push(demoStatus);
           }
+          break;
+
+        case 'demos-data':
+          dataList.push(demosData);
+          break;
+
+        case 'stabilization-data':
+          dataList.push(stabilizationData);
           break;
 
         case 'schools':
