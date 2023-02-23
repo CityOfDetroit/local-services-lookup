@@ -380,6 +380,10 @@ export default class Display extends HTMLElement {
         <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
         <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><button>Apply Now</button></a>
         `;
+      }else{
+        dataParsing.content = `
+        <p>This property doesn't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
+        `;
       }
     } else {
       dataParsing.content = `

@@ -47,7 +47,7 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.addEventListener('click', (ev) => {
             if(app[0].getAttribute('data-app-mode') == 'my-home-info'){
                 app[0].setAttribute('data-app-state', 'welcome-screen');
-                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data');
+                app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data,DWSDBackupProtection');
             }else{
                 app[0].setAttribute('data-app-state', 'active-screen');
                 app[0].setAttribute('data-active-sets', initialSets);
