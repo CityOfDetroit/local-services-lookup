@@ -1,4 +1,6 @@
 'use strict';
+import Button from './atoms/Button';
+customElements.define('cod-button', Button);
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -41,10 +43,8 @@ export default class NavigationTools extends HTMLElement {
         navToolsWrapper.id = 'nav-tools-wrapper';
         navToolsWrapper.setAttribute('role', 'navigation');
         navToolsWrapper.setAttribute('aria-label', 'Data Navigation');
-        const clearResultsBtn = document.createElement('button');
-        clearResultsBtn.className = 'clear';
-        clearResultsBtn.innerText = 'x';
-        clearResultsBtn.addEventListener('click', (ev) => {
+        const clearResultsBtn = document.createElement('cod-button');
+        clearResultsBtn.addEventListener('click', (ev)=>{
             if(app[0].getAttribute('data-app-mode') == 'my-home-info'){
                 app[0].setAttribute('data-app-state', 'welcome-screen');
                 app[0].setAttribute('data-active-sets', 'assessors-data,neighborhood,recycling,rental-data,rental-cert,demo-status,blight-data,permit-data,DWSDBackupProtection');
@@ -57,19 +57,31 @@ export default class NavigationTools extends HTMLElement {
             app[0].setAttribute('data-api-active-datasets', 'none');
             app[0].setAttribute('data-active-section', 'property');
         });
+        clearResultsBtn.setAttribute('data-primary', true);
+        clearResultsBtn.setAttribute('data-label', 'x');
+        clearResultsBtn.setAttribute('data-size', 'large');
+        clearResultsBtn.setAttribute('data-hover', false);
+        clearResultsBtn.setAttribute('data-background-color', 'color-3');
+        clearResultsBtn.setAttribute('data-img', '');
+        clearResultsBtn.setAttribute('data-img-alt', '');
+        clearResultsBtn.setAttribute('data-shape', 'square');
         navToolsWrapper.appendChild(clearResultsBtn);
+
         if (appMode == 'my-home-info' && appStatus != 'error'){
-        const propertyDataBtn = document.createElement('button');
-        const homeIcon = document.createElement('img');
-        homeIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/home.png'; //homeImage;
-        homeIcon.setAttribute('alt', 'about this property');
+        const propertyDataBtn = document.createElement('cod-button');
+        propertyDataBtn.setAttribute('data-label', '');
+        propertyDataBtn.setAttribute('data-size', 'large');
+        propertyDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/home.png');
+        propertyDataBtn.setAttribute('data-img-alt', 'about this property');
+        propertyDataBtn.setAttribute('data-shape', 'square');
         propertyDataBtn.setAttribute('data-nav-value', 'about this property');
-        propertyDataBtn.appendChild(homeIcon);
         if(app[0].getAttribute('data-active-section') == 'about this property'){
-            propertyDataBtn.className = 'nav active';
+            propertyDataBtn.setAttribute('data-background-color', 'color-2');
+            propertyDataBtn.setAttribute('data-primary', true);
         }else{
-            propertyDataBtn.className = 'nav';
-            propertyDataBtn.addEventListener('click', (ev) => {
+            propertyDataBtn.setAttribute('data-background-color', 'color-5');
+            propertyDataBtn.setAttribute('data-primary', false);
+            propertyDataBtn.addEventListener('click', (ev)=>{
                 if(app[0].getAttribute('data-api-active-datasets') != 'none'){
                     let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
                     let activeData = JSON.parse(app[0].getAttribute('data-api-active-datasets'));
@@ -85,19 +97,23 @@ export default class NavigationTools extends HTMLElement {
                 app[0].setAttribute('data-map-available', 'false');
                 app[0].setAttribute('data-active-section', 'about this property');
                 app[0].setAttribute('data-app-state', 'loading-screen');
-            });
+            })
         }
         navToolsWrapper.appendChild(propertyDataBtn);
 
-        const govDataBtn = document.createElement('button');
-        const govIcon = document.createElement('img');
-        govIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/government.png'; //govImage;
-        govIcon.setAttribute('alt', 'government officials');
+        const govDataBtn = document.createElement('cod-button');
+        govDataBtn.setAttribute('data-label', '');
+        govDataBtn.setAttribute('data-size', 'large');
+        govDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/government.png');
+        govDataBtn.setAttribute('data-img-alt', 'government officials');
+        govDataBtn.setAttribute('data-shape', 'square');
         govDataBtn.setAttribute('data-nav-value', 'government officials');
         if(app[0].getAttribute('data-active-section') == 'government officials'){
-            govDataBtn.className = 'nav active';
+            govDataBtn.setAttribute('data-background-color', 'color-2');
+            govDataBtn.setAttribute('data-primary', true);
         }else{
-            govDataBtn.className = 'nav';
+            govDataBtn.setAttribute('data-background-color', 'color-5');
+            govDataBtn.setAttribute('data-primary', false);
             govDataBtn.addEventListener('click', (ev) => {
                 if(app[0].getAttribute('data-api-active-datasets') != 'none'){
                     let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
@@ -116,18 +132,21 @@ export default class NavigationTools extends HTMLElement {
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }
-        govDataBtn.appendChild(govIcon);
         navToolsWrapper.appendChild(govDataBtn);
 
-        const zoneDataBtn = document.createElement('button');
-        const zoneIcon = document.createElement('img');
-        zoneIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/zone.png'; //zoneImage;
-        zoneIcon.setAttribute('alt', 'special areas and zones');
+        const zoneDataBtn = document.createElement('cod-button');
+        zoneDataBtn.setAttribute('data-label', '');
+        zoneDataBtn.setAttribute('data-size', 'large');
+        zoneDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/zone.png');
+        zoneDataBtn.setAttribute('data-img-alt', 'special areas and zones');
+        zoneDataBtn.setAttribute('data-shape', 'square');
         zoneDataBtn.setAttribute('data-nav-value', 'special areas and zones');
         if(app[0].getAttribute('data-active-section') == 'special areas and zones'){
-            zoneDataBtn.className = 'nav active';
+            zoneDataBtn.setAttribute('data-background-color', 'color-2');
+            zoneDataBtn.setAttribute('data-primary', true);
         }else{
-            zoneDataBtn.className = 'nav';
+            zoneDataBtn.setAttribute('data-background-color', 'color-5');
+            zoneDataBtn.setAttribute('data-primary', false);
             zoneDataBtn.addEventListener('click', (ev) => {
                 if(app[0].getAttribute('data-api-active-datasets') != 'none'){
                     let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
@@ -146,18 +165,21 @@ export default class NavigationTools extends HTMLElement {
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }
-        zoneDataBtn.appendChild(zoneIcon);
         navToolsWrapper.appendChild(zoneDataBtn);
         
-        const nearDataBtn = document.createElement('button');
-        const nearIcon = document.createElement('img');
-        nearIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/nearby.png'; //nearImage;
-        nearIcon.setAttribute('alt', 'things nearby');
+        const nearDataBtn = document.createElement('cod-button');
+        nearDataBtn.setAttribute('data-label', '');
+        nearDataBtn.setAttribute('data-size', 'large');
+        nearDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/nearby.png');
+        nearDataBtn.setAttribute('data-img-alt', 'things nearby');
+        nearDataBtn.setAttribute('data-shape', 'square');
         nearDataBtn.setAttribute('data-nav-value', 'things nearby');
         if(app[0].getAttribute('data-active-section') == 'things nearby'){
-            nearDataBtn.className = 'nav active';
+            nearDataBtn.setAttribute('data-background-color', 'color-2');
+            nearDataBtn.setAttribute('data-primary', true);
         }else{
-            nearDataBtn.className = 'nav';
+            nearDataBtn.setAttribute('data-background-color', 'color-5');
+            nearDataBtn.setAttribute('data-primary', false);
             nearDataBtn.addEventListener('click', (ev) => {
                 if(app[0].getAttribute('data-api-active-datasets') != 'none'){
                     let storedData = JSON.parse(app[0].getAttribute('data-api-stored-datasets'));
@@ -176,23 +198,25 @@ export default class NavigationTools extends HTMLElement {
                 app[0].setAttribute('data-app-state', 'loading-screen');
             });
         }
-        nearDataBtn.appendChild(nearIcon);
         navToolsWrapper.appendChild(nearDataBtn);
 
-        const printBtn = document.createElement('button');
-        const printIcon = document.createElement('img');
-        printIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/print.png'; //printImage;
-        printIcon.setAttribute('alt', 'print');
+        const printBtn = document.createElement('cod-button');
+        printBtn.setAttribute('data-label', '');
+        printBtn.setAttribute('data-size', 'large');
+        printBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/print.png');
+        printBtn.setAttribute('data-img-alt', 'print');
+        printBtn.setAttribute('data-shape', 'square');
         printBtn.setAttribute('data-nav-value', 'print');
         if(app[0].getAttribute('data-active-section') == 'print'){
-            nearDataBtn.className = 'nav active';
+            printBtn.setAttribute('data-background-color', 'color-2');
+            printBtn.setAttribute('data-primary', true);
         }else{
-            printBtn.className = 'nav';
-            printBtn.addEventListener('click', () => {
+            printBtn.setAttribute('data-background-color', 'color-5');
+            printBtn.setAttribute('data-primary', false);
+            printBtn.addEventListener('click', (ev) => {
                 app[0].setAttribute('data-app-state', 'print');
             });
         }
-        printBtn.appendChild(printIcon);
         navToolsWrapper.appendChild(printBtn);
         }
 

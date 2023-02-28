@@ -1,7 +1,8 @@
 'use strict';
-// import neighborhoodImage from '../images/neighborhood.png';
 import Geocoder from './Geocoder';
 import NavigationTools from './NavigationTools';
+import Loader from './atoms/Loader';
+customElements.define('cod-loader', Loader);
 customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
@@ -251,7 +252,7 @@ export default class Display extends HTMLElement {
           .results-container{ display: flex; }
           #data-results { background-color: #e6e6e6; padding: 1em; height: 40em; overflow-y: auto; }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
-          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.78em 0.6em; font-family: 'Montserrat', sans-serif;}
+          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 1.04em 0.6em; font-family: 'Montserrat', sans-serif;}
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif; display: flex;}
           .data-block-title span { flex: 1 }
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
@@ -1010,14 +1011,16 @@ export default class Display extends HTMLElement {
       if (mapAvailable == 'true') {
         const text = document.createElement('span');
         text.innerText = datasetValues.title;
-        const mapButton = document.createElement('button');
-        mapButton.className = 'map-btn';
-        mapButton.innerText = 'View Map ';
+        const mapButton = document.createElement('cod-button');
         mapButton.setAttribute('data-map-active-data', dataSet.id);
-        const mapIcon = document.createElement('img');
-        mapIcon.src = 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png';
-        mapIcon.setAttribute('alt', 'view map');
-        mapButton.appendChild(mapIcon)
+        mapButton.setAttribute('data-label', 'View Map');
+        mapButton.setAttribute('data-size', 'xsmall');
+        mapButton.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png');
+        mapButton.setAttribute('data-img-alt', 'map');
+        mapButton.setAttribute('data-shape', '');
+        mapButton.setAttribute('data-hover', false);
+        mapButton.setAttribute('data-background-color', 'color-light');
+        mapButton.setAttribute('data-primary', true);
         mapButton.addEventListener('click', (ev) => {
           app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
           app[0].setAttribute('data-app-state', 'map');
@@ -1098,23 +1101,9 @@ export default class Display extends HTMLElement {
         break;
 
       case 'loading':
-        shadow.appendChild(display.loadingStyle);
-        const loadingScreen = document.createElement('article');
-        loadingScreen.innerHTML = `
-                <article class="loader-container">
-                    <article>
-                    <div class="loader">
-                        <div class="loader__bar"></div>
-                        <div class="loader__bar"></div>
-                        <div class="loader__bar"></div>
-                        <div class="loader__bar"></div>
-                        <div class="loader__bar"></div>
-                        <div class="loader__ball"></div>
-                    </div>
-                    <p>LOADING</p>
-                    </article>
-                </article>`;
-        displayWrapper.appendChild(loadingScreen);
+        const loader = document.createElement('cod-loader');
+        loader.setAttribute('data-color', 'color-3');
+        displayWrapper.appendChild(loader);
         shadow.appendChild(displayWrapper);
         break;
 
