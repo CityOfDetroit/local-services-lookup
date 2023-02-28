@@ -19,9 +19,9 @@ export default class Map extends HTMLElement {
         this.styles.textContent = `
             #map-wrapper { position: relative; }
             #map { width:100%; min-height: 50em;}
-            button.clear { font-size: 1.25em; width: 2.5em; height: 2.5em; background-color: #FEB70D; cursor: pointer; border: none; position: absolute; bottom: 0; right: 0;}
+            cod-button { position: absolute; bottom: 0; right: 0;}
             @media all and (min-width: 1024px) {
-                button.clear { position: absolute; top: 0; left: 0;}
+                cod-button { top: 0; left: 0; bottom: auto; right: auto;}
             }
         `;
         // Adding external styles to the shadow DOM by splitting https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css
@@ -839,12 +839,18 @@ export default class Map extends HTMLElement {
         const mapContainer = document.createElement('article');
         mapContainer.id = 'map';
         mapWrapper.appendChild(mapContainer);
-        const closeMapBtn = document.createElement('button');
-        closeMapBtn.className = 'clear';
-        closeMapBtn.innerText = 'x';
-        closeMapBtn.addEventListener('click', (ev) => {
+        const closeMapBtn = document.createElement('cod-button');
+        closeMapBtn.addEventListener('click', (ev)=>{
             app[0].setAttribute('data-app-state', 'results');
         });
+        closeMapBtn.setAttribute('data-primary', true);
+        closeMapBtn.setAttribute('data-label', 'x');
+        closeMapBtn.setAttribute('data-size', 'large');
+        closeMapBtn.setAttribute('data-hover', false);
+        closeMapBtn.setAttribute('data-background-color', 'color-3');
+        closeMapBtn.setAttribute('data-img', '');
+        closeMapBtn.setAttribute('data-img-alt', '');
+        closeMapBtn.setAttribute('data-shape', 'square');
         shadow.appendChild(mapWrapper);
         mapWrapper.appendChild(closeMapBtn);
         this.map = new maplibregl.Map({

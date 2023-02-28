@@ -18,6 +18,21 @@ console.log(e);
   return btn;
 }
 
+export const PrimaryColor1NoHover = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', true);
+  btn.setAttribute('data-label', 'Primary');
+  btn.setAttribute('data-size', 'medium');
+  btn.setAttribute('data-hover', false);
+  btn.setAttribute('data-background-color', 'color-1');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
 export const PrimaryColor2 = () => {
   const btn = document.createElement('cod-button');
   btn.addEventListener('click', (e)=>{
@@ -69,6 +84,34 @@ console.log(e);
   btn.setAttribute('data-label', 'Primary');
   btn.setAttribute('data-size', 'medium');
   btn.setAttribute('data-background-color', 'color-5');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
+export const PrimaryColorLight = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', true);
+  btn.setAttribute('data-label', 'Primary');
+  btn.setAttribute('data-size', 'medium');
+  btn.setAttribute('data-background-color', 'color-light');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
+export const PrimaryColorDark = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', true);
+  btn.setAttribute('data-label', 'Primary');
+  btn.setAttribute('data-size', 'medium');
+  btn.setAttribute('data-background-color', 'color-dark');
   btn.setAttribute('data-img', '');
   btn.setAttribute('data-img-alt', '');
   return btn;
@@ -139,6 +182,48 @@ console.log(e);
   btn.setAttribute('data-label', 'Secondary');
   btn.setAttribute('data-size', 'medium');
   btn.setAttribute('data-background-color', 'color-5');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
+export const SecondaryColorLight = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', false);
+  btn.setAttribute('data-label', 'Secondary');
+  btn.setAttribute('data-size', 'medium');
+  btn.setAttribute('data-background-color', 'color-light');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
+export const SecondaryColorDark = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', false);
+  btn.setAttribute('data-label', 'Secondary');
+  btn.setAttribute('data-size', 'medium');
+  btn.setAttribute('data-background-color', 'color-dark');
+  btn.setAttribute('data-img', '');
+  btn.setAttribute('data-img-alt', '');
+  return btn;
+}
+
+export const ExtraSmall = () => {
+  const btn = document.createElement('cod-button');
+  btn.addEventListener('click', (e)=>{
+console.log(e);
+  })
+  btn.setAttribute('data-primary', false);
+  btn.setAttribute('data-label', 'Secondary');
+  btn.setAttribute('data-size', 'xsmall');
+  btn.setAttribute('data-background-color', 'color-1');
   btn.setAttribute('data-img', '');
   btn.setAttribute('data-img-alt', '');
   return btn;
