@@ -1,7 +1,7 @@
 import './codbutton';
 
 export default {
-  title: 'COD/Button',
+  title: 'COD/Atoms/Button',
 };
 
 export const PrimaryColor1 = () => {
@@ -102,6 +102,9 @@ console.log(e);
   btn.setAttribute('data-img-alt', '');
   return btn;
 }
+PrimaryColorLight.parameters = {
+  backgrounds: { default: 'dark' },
+};
 
 export const PrimaryColorDark = () => {
   const btn = document.createElement('cod-button');
@@ -200,6 +203,9 @@ console.log(e);
   btn.setAttribute('data-img-alt', '');
   return btn;
 }
+SecondaryColorLight.parameters = {
+  backgrounds: { default: 'dark' },
+};
 
 export const SecondaryColorDark = () => {
   const btn = document.createElement('cod-button');

@@ -252,7 +252,7 @@ export default class Display extends HTMLElement {
           .results-container{ display: flex; }
           #data-results { background-color: #e6e6e6; padding: 1em; height: 40em; overflow-y: auto; }
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
-          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 0.78em 0.6em; font-family: 'Montserrat', sans-serif;}
+          .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 1.04em 0.6em; font-family: 'Montserrat', sans-serif;}
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif; display: flex;}
           .data-block-title span { flex: 1 }
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }

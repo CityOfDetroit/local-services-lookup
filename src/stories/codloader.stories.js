@@ -1,7 +1,7 @@
 import './codloader';
 
 export default {
-  title: 'COD/Loader',
+  title: 'COD/Atoms/Loader',
 };
 
 export const LoaderColor1 = () => {
