@@ -692,7 +692,6 @@ export default class Display extends HTMLElement {
     let dataParsing = { title: "Demolitions Nearby", content: null };
     if (value && value.data.features.length) {
       value.data.features.forEach(function (value, index) {
-
         if (index == 0) {
           dataParsing.content = `
               <p><strong>Address:</strong> ${value.properties.address}</p>
@@ -702,8 +701,7 @@ export default class Display extends HTMLElement {
               <p><strong>Contractor:</strong> ${value.properties.contractor_name}</p>
               <p><strong>Council District:</strong> ${value.properties.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
-              ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
-              <p><strong>Expected Date:</strong> ${display.formatDate(value.properties.demolish_by_date)}</p>`}
+              ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.properties.demolish_by_date)}</strong></p>`}
               <br>
               `;
         } else {
@@ -715,12 +713,12 @@ export default class Display extends HTMLElement {
               <p><strong>Contractor:</strong> ${value.properties.contractor_name}</p>
               <p><strong>Council District:</strong> ${value.properties.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
-              ${(value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
-              <p><strong>Expected Date:</strong> ${display.formatDate(value.properties.demolish_by_date)}</p>`}
+              ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.properties.demolish_by_date)}</strong></p>`}
               <br>
               `;
         }
       });
+      console.log(dataParsing.content);
 
     } else {
       dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
