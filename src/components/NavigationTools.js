@@ -1,5 +1,5 @@
 'use strict';
-import Button from './atoms/Button';
+import Button from '@cityofdetroit/cod-design-system/src/components/atoms/Button';
 customElements.define('cod-button', Button);
 export default class NavigationTools extends HTMLElement {
 

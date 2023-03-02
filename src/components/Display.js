@@ -1,7 +1,7 @@
 'use strict';
 import Geocoder from './Geocoder';
 import NavigationTools from './NavigationTools';
-import Loader from './atoms/Loader';
+import Loader from '@cityofdetroit/cod-design-system/src/components/atoms/Loader';
 customElements.define('cod-loader', Loader);
 customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
