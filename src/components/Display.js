@@ -41,212 +41,6 @@ export default class Display extends HTMLElement {
           }
         `;
 
-    this.loadingStyle = document.createElement('style');
-    this.loadingStyle.textContent = `
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
-        p { text-align: center; font-family: 'Montserrat', sans-serif;}
-        .loader-box{
-            display: flex;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, .75);
-            position: absolute;
-            left: -0.2em;
-            top: -0.2em;
-        }
-        .loader-container{
-          display: flex;
-          margin: auto;
-        }
-        .loader-container article{
-          margin:auto;
-        }
-        .loader {
-            position: relative;
-            width: 75px;
-            height: 100px;
-       }
-        .loader__bar {
-            position: absolute;
-            bottom: 0;
-            width: 10px;
-            height: 50%;
-            background: #ea4961;
-            transform-origin: center bottom;
-            box-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
-       }
-        .loader__bar:nth-child(1) {
-            left: 0px;
-            transform: scale(1, 0.2);
-            animation: barUp1 4s infinite;
-       }
-        .loader__bar:nth-child(2) {
-            left: 20px;
-            transform: scale(1, 0.4);
-            animation: barUp2 4s infinite;
-       }
-        .loader__bar:nth-child(3) {
-            left: 40px;
-            transform: scale(1, 0.6);
-            animation: barUp3 4s infinite;
-       }
-        .loader__bar:nth-child(4) {
-            left: 60px;
-            transform: scale(1, 0.8);
-            animation: barUp4 4s infinite;
-       }
-        .loader__bar:nth-child(5) {
-            left: 80px;
-            transform: scale(1, 1);
-            animation: barUp5 4s infinite;
-       }
-        .loader__ball {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            width: 10px;
-            height: 10px;
-            background: #ea4961;
-            border-radius: 50%;
-            animation: ball 4s infinite;
-       }
-        @keyframes ball {
-            0% {
-                transform: translate(0, 0);
-           }
-            5% {
-                transform: translate(10px, -14px);
-           }
-            10% {
-                transform: translate(20px, -10px);
-           }
-            17% {
-                transform: translate(30px, -24px);
-           }
-            20% {
-                transform: translate(40px, -20px);
-           }
-            27% {
-                transform: translate(50px, -34px);
-           }
-            30% {
-                transform: translate(60px, -30px);
-           }
-            37% {
-                transform: translate(70px, -44px);
-           }
-            40% {
-                transform: translate(80px, -40px);
-           }
-            50% {
-                transform: translate(80px, 0);
-           }
-            57% {
-                transform: translate(70px, -14px);
-           }
-            60% {
-                transform: translate(60px, -10px);
-           }
-            67% {
-                transform: translate(50px, -24px);
-           }
-            70% {
-                transform: translate(40px, -20px);
-           }
-            77% {
-                transform: translate(30px, -34px);
-           }
-            80% {
-                transform: translate(20px, -30px);
-           }
-            87% {
-                transform: translate(10px, -44px);
-           }
-            90% {
-                transform: translate(0, -40px);
-           }
-            100% {
-                transform: translate(0, 0);
-           }
-       }
-        @keyframes barUp1 {
-            0% {
-                transform: scale(1, 0.2);
-           }
-            40% {
-                transform: scale(1, 0.2);
-           }
-            50% {
-                transform: scale(1, 1);
-           }
-            90% {
-                transform: scale(1, 1);
-           }
-            100% {
-                transform: scale(1, 0.2);
-           }
-       }
-        @keyframes barUp2 {
-            0% {
-                transform: scale(1, 0.4);
-           }
-            40% {
-                transform: scale(1, 0.4);
-           }
-            50% {
-                transform: scale(1, 0.8);
-           }
-            90% {
-                transform: scale(1, 0.8);
-           }
-            100% {
-                transform: scale(1, 0.4);
-           }
-       }
-        @keyframes barUp3 {
-            0% {
-                transform: scale(1, 0.6);
-           }
-            100% {
-                transform: scale(1, 0.6);
-           }
-       }
-        @keyframes barUp4 {
-            0% {
-                transform: scale(1, 0.8);
-           }
-            40% {
-                transform: scale(1, 0.8);
-           }
-            50% {
-                transform: scale(1, 0.4);
-           }
-            90% {
-                transform: scale(1, 0.4);
-           }
-            100% {
-                transform: scale(1, 0.8);
-           }
-       }
-        @keyframes barUp5 {
-            0% {
-                transform: scale(1, 1);
-           }
-            40% {
-                transform: scale(1, 1);
-           }
-            50% {
-                transform: scale(1, 0.2);
-           }
-            90% {
-                transform: scale(1, 0.2);
-           }
-            100% {
-                transform: scale(1, 1);
-           }
-       }       
-        `;
-
     this.resultsStyle = document.createElement('style');
     this.resultsStyle.textContent = `
           .results-container{ display: flex; }
@@ -257,6 +51,7 @@ export default class Display extends HTMLElement {
           .data-block-title span { flex: 1 }
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
+          .data-block-content hr { border-top: 1px dotted;}
           .dataset-results {flex: 1;}
           .critical-text { color: #CF3234; }
           .error-result { padding: 1em; }
@@ -379,7 +174,8 @@ export default class Display extends HTMLElement {
       if (validNeighborhoods.includes(values.data.attributes.neighborhood_name)) {
         dataParsing.content = `
         <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
-        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><button>Apply Now</button></a>
+        <br>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a>
         `;
       }else{
         dataParsing.content = `
@@ -631,7 +427,7 @@ export default class Display extends HTMLElement {
               <p><strong>EntityActualGrades:</strong> ${value.properties.EntityActualGrades}</p>
               <p><strong>Type:</strong> ${value.properties.EntityTypeName}</p>
               <p><strong>Address:</strong> ${value.properties.EntityPhysicalStreet}</p>
-              <br>
+              <hr>
               `;
         } else {
           dataParsing.content += `
@@ -639,7 +435,7 @@ export default class Display extends HTMLElement {
               <p><strong>EntityActualGrades:</strong> ${value.properties.EntityActualGrades}</p>
               <p><strong>Type:</strong> ${value.properties.EntityTypeName}</p>
               <p><strong>Address:</strong> ${value.properties.EntityPhysicalStreet}</p>
-              <br>
+              <hr>
               `;
         }
       });
@@ -676,14 +472,15 @@ export default class Display extends HTMLElement {
       dataParsing.content = `
             <p class="critical-text"><strong>WARNIG!</strong></p>
             <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
-            ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>` : `<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>
-            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>
-            `}
+            ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>` : `<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>`}
+            <br>
+            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>
           `;
     } else {
       dataParsing.content = `
           <p>This property is not on the demolition list</p>
-          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank">Expand your demo search</a></p>`;
+          <br>
+          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
     }
     return dataParsing;
   }
@@ -702,7 +499,7 @@ export default class Display extends HTMLElement {
               <p><strong>Council District:</strong> ${value.properties.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
               ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.properties.demolish_by_date)}</strong></p>`}
-              <br>
+              <hr>
               `;
         } else {
           dataParsing.content += `
@@ -714,7 +511,7 @@ export default class Display extends HTMLElement {
               <p><strong>Council District:</strong> ${value.properties.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
               ${(value.properties.demolish_by_date == undefined || value.properties.demolish_by_date == null) ? `<p><p><strong>Expected Date:</strong> Date to be determined</p>` : `<p><strong>Expected Date:</strong>${display.formatDate(value.properties.demolish_by_date)}</strong></p>`}
-              <br>
+              <hr>
               `;
         }
       });
@@ -738,7 +535,7 @@ export default class Display extends HTMLElement {
               <p><strong>Council District:</strong> ${value.properties.council_district}</p>
               <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
               <p><strong>Status:</strong> ${value.properties.rehab_status}</p>
-              <br>
+              <hr>
               `;
         } else {
           dataParsing.content += `
@@ -747,7 +544,7 @@ export default class Display extends HTMLElement {
           <p><strong>Council District:</strong> ${value.properties.council_district}</p>
           <p><strong>Neighborhood:</strong> ${value.properties.neighborhood}</p>
           <p><strong>Status:</strong> ${value.properties.rehab_status}</p>
-              <br>
+              <hr>
               `;
         }
       });
@@ -768,7 +565,7 @@ export default class Display extends HTMLElement {
               <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
               <p><strong>Status:</strong> ${value.properties.status}</p>
               <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
-              <br>
+              <hr>
               `;
         } else {
           dataParsing.content += `
@@ -776,7 +573,7 @@ export default class Display extends HTMLElement {
               <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
               <p><strong>Status:</strong> ${value.properties.status}</p>
               <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
-              <br>
+              <hr>
               `;
         }
       });
