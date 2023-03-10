@@ -17,7 +17,7 @@ export default class Geocoder extends HTMLElement {
         this.styles.textContent = `
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;700&display=swap')
             #geocoder {width: 100%}
-            input {width: calc(100% - 2em); padding: 1em; border:.1em solid #e6e6e6;}
+            input {width: calc(100% - 2em); padding: 1em; border:.1em solid #e6e6e6; font-size: 1em;}
         `;
 
         // Create a shadow root
