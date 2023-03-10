@@ -515,7 +515,6 @@ export default class Display extends HTMLElement {
               `;
         }
       });
-      console.log(dataParsing.content);
 
     } else {
       dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
