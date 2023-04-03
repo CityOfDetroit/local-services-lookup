@@ -1,6 +1,3 @@
-'use strict';
-import Button from '@cityofdetroit/cod-design-system/src/components/atoms/Button';
-customElements.define('cod-button', Button);
 export default class NavigationTools extends HTMLElement {
 
     constructor() {
@@ -71,6 +68,7 @@ export default class NavigationTools extends HTMLElement {
         clearResultsBtn.setAttribute('data-img', '');
         clearResultsBtn.setAttribute('data-img-alt', '');
         clearResultsBtn.setAttribute('data-shape', 'square');
+        clearResultsBtn.setAttribute('data-icon', '');
         navToolsWrapper.appendChild(clearResultsBtn);
 
         if (appMode == 'my-home-info' && appStatus != 'error') {
@@ -81,6 +79,7 @@ export default class NavigationTools extends HTMLElement {
             propertyDataBtn.setAttribute('data-img-alt', 'about this property');
             propertyDataBtn.setAttribute('data-shape', 'square');
             propertyDataBtn.setAttribute('data-nav-value', 'about this property');
+            propertyDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'about this property') {
                 propertyDataBtn.setAttribute('data-background-color', 'color-2');
                 propertyDataBtn.setAttribute('data-primary', true);
@@ -114,6 +113,7 @@ export default class NavigationTools extends HTMLElement {
             govDataBtn.setAttribute('data-img-alt', 'government officials');
             govDataBtn.setAttribute('data-shape', 'square');
             govDataBtn.setAttribute('data-nav-value', 'government officials');
+            govDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'government officials') {
                 govDataBtn.setAttribute('data-background-color', 'color-2');
                 govDataBtn.setAttribute('data-primary', true);
@@ -147,6 +147,7 @@ export default class NavigationTools extends HTMLElement {
             zoneDataBtn.setAttribute('data-img-alt', 'special areas and zones');
             zoneDataBtn.setAttribute('data-shape', 'square');
             zoneDataBtn.setAttribute('data-nav-value', 'special areas and zones');
+            zoneDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'special areas and zones') {
                 zoneDataBtn.setAttribute('data-background-color', 'color-2');
                 zoneDataBtn.setAttribute('data-primary', true);
@@ -180,6 +181,7 @@ export default class NavigationTools extends HTMLElement {
             nearDataBtn.setAttribute('data-img-alt', 'things nearby');
             nearDataBtn.setAttribute('data-shape', 'square');
             nearDataBtn.setAttribute('data-nav-value', 'things nearby');
+            nearDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'things nearby') {
                 nearDataBtn.setAttribute('data-background-color', 'color-2');
                 nearDataBtn.setAttribute('data-primary', true);
@@ -213,6 +215,7 @@ export default class NavigationTools extends HTMLElement {
             printBtn.setAttribute('data-img-alt', 'print');
             printBtn.setAttribute('data-shape', 'square');
             printBtn.setAttribute('data-nav-value', 'print');
+            printBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'print') {
                 printBtn.setAttribute('data-background-color', 'color-2');
                 printBtn.setAttribute('data-primary', true);
@@ -220,7 +223,9 @@ export default class NavigationTools extends HTMLElement {
                 printBtn.setAttribute('data-background-color', 'color-5');
                 printBtn.setAttribute('data-primary', false);
                 printBtn.addEventListener('click', (ev) => {
-                    app[0].setAttribute('data-app-state', 'print');
+                    if(ev.target.getAttribute('data-nav-value')){
+                        app[0].setAttribute('data-app-state', 'print');
+                    }
                 });
             }
             navToolsWrapper.appendChild(printBtn);

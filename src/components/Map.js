@@ -50,6 +50,7 @@ export default class Map extends HTMLElement {
         closeMapBtn.setAttribute('data-img', '');
         closeMapBtn.setAttribute('data-img-alt', '');
         closeMapBtn.setAttribute('data-shape', 'square');
+        closeMapBtn.setAttribute('data-icon', '');
         shadow.appendChild(mapWrapper);
         mapWrapper.appendChild(closeMapBtn);
         this.map = new maplibregl.Map({

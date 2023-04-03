@@ -1,8 +1,6 @@
 'use strict';
 import Geocoder from './Geocoder';
 import NavigationTools from './NavigationTools';
-import Loader from '@cityofdetroit/cod-design-system/src/components/atoms/Loader';
-customElements.define('cod-loader', Loader);
 customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
@@ -175,7 +173,7 @@ export default class Display extends HTMLElement {
         dataParsing.content = `
         <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
         <br>
-        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="color-1" data-size="xsmall" data-icon="" data-primary="true" data-img-alt=""></cod-button></a>
         `;
       }else{
         dataParsing.content = `
@@ -474,13 +472,13 @@ export default class Display extends HTMLElement {
             <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
             ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>` : `<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>`}
             <br>
-            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>
+            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>
           `;
     } else {
       dataParsing.content = `
           <p>This property is not on the demolition list</p>
           <br>
-          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
+          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
     }
     return dataParsing;
   }
@@ -809,6 +807,7 @@ export default class Display extends HTMLElement {
         mapButton.setAttribute('data-map-active-data', dataSet.id);
         mapButton.setAttribute('data-label', 'View Map');
         mapButton.setAttribute('data-size', 'xsmall');
+        mapButton.setAttribute('data-icon', '');
         mapButton.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-02/map.png');
         mapButton.setAttribute('data-img-alt', 'map');
         mapButton.setAttribute('data-shape', '');
@@ -816,8 +815,10 @@ export default class Display extends HTMLElement {
         mapButton.setAttribute('data-background-color', 'color-light');
         mapButton.setAttribute('data-primary', true);
         mapButton.addEventListener('click', (ev) => {
-          app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
-          app[0].setAttribute('data-app-state', 'map');
+          if(ev.target.getAttribute('data-map-active-data')){
+            app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
+            app[0].setAttribute('data-app-state', 'map');
+          }
         });
         dataBlockTitle.appendChild(text);
         dataBlockTitle.appendChild(mapButton);

@@ -1,13 +1,5 @@
-'use strict';
-// Old stuff
-// import Controller from './components/controller.class';
-// import './scss/styles.scss';
-// (function(){
-//   let controller = new Controller();
-//   document.getElementById('close-services-btn').addEventListener('click', function(){
-//     document.getElementById('local-services-results').className = '';
-//   });
-// })(window);
 
+import 'cod-design-system/src/components/atoms/Loader/cod-loader';
+import 'cod-design-system/src/components/atoms/Button/cod-button';
 import MyHomeInfo from './components/MyHomeInfo';
 customElements.define('my-home-info', MyHomeInfo);

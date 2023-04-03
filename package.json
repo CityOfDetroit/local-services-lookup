@@ -27,9 +27,9 @@
   "author": "Edgar Montes",
   "license": "MIT",
   "dependencies": {
-    "@cityofdetroit/cod-design-system": "^0.0.1",
     "@turf/simplify": "^5.1.5",
     "@turf/turf": "^5.1.6",
+    "cod-design-system": "^0.1.1",
     "maplibre-gl": "^2.4.0",
     "terraformer-arcgis-parser": "^1.1.0"
   },
