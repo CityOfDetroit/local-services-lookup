@@ -435,7 +435,7 @@ export default class DataLoader extends HTMLElement {
         phone: null
       }
     };
-    switch (data.council.data.attributes.council_district) {
+    switch (data.council.data.attributes.council_district.toString()) {
       case "1":
         councilData.council.districtURL = `/taxonomy/term/1276`;
         data['council-members'].data.forEach((item) => {
