@@ -44,9 +44,10 @@ export default class Map extends HTMLElement {
         });
         closeMapBtn.setAttribute('data-primary', true);
         closeMapBtn.setAttribute('data-label', 'x');
-        closeMapBtn.setAttribute('data-size', 'large');
+        closeMapBtn.setAttribute('data-size', 'lg');
         closeMapBtn.setAttribute('data-hover', false);
-        closeMapBtn.setAttribute('data-background-color', 'color-3');
+        closeMapBtn.setAttribute('data-extra-classes', 'fw-bold');
+        closeMapBtn.setAttribute('data-background-color', 'warning');
         closeMapBtn.setAttribute('data-img', '');
         closeMapBtn.setAttribute('data-img-alt', '');
         closeMapBtn.setAttribute('data-shape', 'square');

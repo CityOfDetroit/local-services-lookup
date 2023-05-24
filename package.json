@@ -29,7 +29,6 @@
   "dependencies": {
     "@turf/simplify": "^5.1.5",
     "@turf/turf": "^5.1.6",
-    "cod-design-system": "^0.1.1",
     "maplibre-gl": "^2.4.0",
     "terraformer-arcgis-parser": "^1.1.0"
   },
@@ -44,6 +43,7 @@
     "@svgr/webpack": "^6.5.1",
     "babel-loader": "^8.2.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "cod-design-system": "^1.0.1",
     "concurrently": "^7.0.0",
     "css-loader": "^6.5.0",
     "css-minimizer-webpack-plugin": "^3.4.1",

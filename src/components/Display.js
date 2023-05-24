@@ -812,7 +812,8 @@ export default class Display extends HTMLElement {
         mapButton.setAttribute('data-img-alt', 'map');
         mapButton.setAttribute('data-shape', '');
         mapButton.setAttribute('data-hover', false);
-        mapButton.setAttribute('data-background-color', 'color-light');
+        mapButton.setAttribute('data-extra-classes', 'fw-bold');
+        mapButton.setAttribute('data-background-color', 'light');
         mapButton.setAttribute('data-primary', true);
         mapButton.addEventListener('click', (ev) => {
           if(ev.target.getAttribute('data-map-active-data')){

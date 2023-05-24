@@ -62,9 +62,10 @@ export default class NavigationTools extends HTMLElement {
         });
         clearResultsBtn.setAttribute('data-primary', true);
         clearResultsBtn.setAttribute('data-label', 'x');
-        clearResultsBtn.setAttribute('data-size', 'large');
+        clearResultsBtn.setAttribute('data-size', 'lg');
         clearResultsBtn.setAttribute('data-hover', false);
-        clearResultsBtn.setAttribute('data-background-color', 'color-3');
+        clearResultsBtn.setAttribute('data-extra-classes', 'fw-bold');
+        clearResultsBtn.setAttribute('data-background-color', 'warning');
         clearResultsBtn.setAttribute('data-img', '');
         clearResultsBtn.setAttribute('data-img-alt', '');
         clearResultsBtn.setAttribute('data-shape', 'square');
@@ -74,17 +75,17 @@ export default class NavigationTools extends HTMLElement {
         if (appMode == 'my-home-info' && appStatus != 'error') {
             const propertyDataBtn = document.createElement('cod-button');
             propertyDataBtn.setAttribute('data-label', '');
-            propertyDataBtn.setAttribute('data-size', 'large');
+            propertyDataBtn.setAttribute('data-size', 'lg');
             propertyDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/home.png');
             propertyDataBtn.setAttribute('data-img-alt', 'about this property');
             propertyDataBtn.setAttribute('data-shape', 'square');
             propertyDataBtn.setAttribute('data-nav-value', 'about this property');
             propertyDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'about this property') {
-                propertyDataBtn.setAttribute('data-background-color', 'color-2');
+                propertyDataBtn.setAttribute('data-background-color', 'success');
                 propertyDataBtn.setAttribute('data-primary', true);
             } else {
-                propertyDataBtn.setAttribute('data-background-color', 'color-5');
+                propertyDataBtn.setAttribute('data-background-color', 'secondary');
                 propertyDataBtn.setAttribute('data-primary', false);
                 propertyDataBtn.addEventListener('click', (ev) => {
                     if (app[0].getAttribute('data-api-active-datasets') != 'none') {
@@ -108,17 +109,17 @@ export default class NavigationTools extends HTMLElement {
 
             const govDataBtn = document.createElement('cod-button');
             govDataBtn.setAttribute('data-label', '');
-            govDataBtn.setAttribute('data-size', 'large');
+            govDataBtn.setAttribute('data-size', 'lg');
             govDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/government.png');
             govDataBtn.setAttribute('data-img-alt', 'government officials');
             govDataBtn.setAttribute('data-shape', 'square');
             govDataBtn.setAttribute('data-nav-value', 'government officials');
             govDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'government officials') {
-                govDataBtn.setAttribute('data-background-color', 'color-2');
+                govDataBtn.setAttribute('data-background-color', 'success');
                 govDataBtn.setAttribute('data-primary', true);
             } else {
-                govDataBtn.setAttribute('data-background-color', 'color-5');
+                govDataBtn.setAttribute('data-background-color', 'secondary');
                 govDataBtn.setAttribute('data-primary', false);
                 govDataBtn.addEventListener('click', (ev) => {
                     if (app[0].getAttribute('data-api-active-datasets') != 'none') {
@@ -142,17 +143,17 @@ export default class NavigationTools extends HTMLElement {
 
             const zoneDataBtn = document.createElement('cod-button');
             zoneDataBtn.setAttribute('data-label', '');
-            zoneDataBtn.setAttribute('data-size', 'large');
+            zoneDataBtn.setAttribute('data-size', 'lg');
             zoneDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/zone.png');
             zoneDataBtn.setAttribute('data-img-alt', 'special areas and zones');
             zoneDataBtn.setAttribute('data-shape', 'square');
             zoneDataBtn.setAttribute('data-nav-value', 'special areas and zones');
             zoneDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'special areas and zones') {
-                zoneDataBtn.setAttribute('data-background-color', 'color-2');
+                zoneDataBtn.setAttribute('data-background-color', 'success');
                 zoneDataBtn.setAttribute('data-primary', true);
             } else {
-                zoneDataBtn.setAttribute('data-background-color', 'color-5');
+                zoneDataBtn.setAttribute('data-background-color', 'secondary');
                 zoneDataBtn.setAttribute('data-primary', false);
                 zoneDataBtn.addEventListener('click', (ev) => {
                     if (app[0].getAttribute('data-api-active-datasets') != 'none') {
@@ -176,17 +177,17 @@ export default class NavigationTools extends HTMLElement {
 
             const nearDataBtn = document.createElement('cod-button');
             nearDataBtn.setAttribute('data-label', '');
-            nearDataBtn.setAttribute('data-size', 'large');
+            nearDataBtn.setAttribute('data-size', 'lg');
             nearDataBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/nearby.png');
             nearDataBtn.setAttribute('data-img-alt', 'things nearby');
             nearDataBtn.setAttribute('data-shape', 'square');
             nearDataBtn.setAttribute('data-nav-value', 'things nearby');
             nearDataBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'things nearby') {
-                nearDataBtn.setAttribute('data-background-color', 'color-2');
+                nearDataBtn.setAttribute('data-background-color', 'success');
                 nearDataBtn.setAttribute('data-primary', true);
             } else {
-                nearDataBtn.setAttribute('data-background-color', 'color-5');
+                nearDataBtn.setAttribute('data-background-color', 'secondary');
                 nearDataBtn.setAttribute('data-primary', false);
                 nearDataBtn.addEventListener('click', (ev) => {
                     if (app[0].getAttribute('data-api-active-datasets') != 'none') {
@@ -210,17 +211,17 @@ export default class NavigationTools extends HTMLElement {
 
             const printBtn = document.createElement('cod-button');
             printBtn.setAttribute('data-label', '');
-            printBtn.setAttribute('data-size', 'large');
+            printBtn.setAttribute('data-size', 'lg');
             printBtn.setAttribute('data-img', 'https://detroitmi.gov/sites/detroitmi.localhost/files/2023-01/print.png');
             printBtn.setAttribute('data-img-alt', 'print');
             printBtn.setAttribute('data-shape', 'square');
             printBtn.setAttribute('data-nav-value', 'print');
             printBtn.setAttribute('data-icon', '');
             if (app[0].getAttribute('data-active-section') == 'print') {
-                printBtn.setAttribute('data-background-color', 'color-2');
+                printBtn.setAttribute('data-background-color', 'success');
                 printBtn.setAttribute('data-primary', true);
             } else {
-                printBtn.setAttribute('data-background-color', 'color-5');
+                printBtn.setAttribute('data-background-color', 'secondary');
                 printBtn.setAttribute('data-primary', false);
                 printBtn.addEventListener('click', (ev) => {
                     if(ev.target.getAttribute('data-nav-value')){
