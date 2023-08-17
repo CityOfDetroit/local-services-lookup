@@ -88,8 +88,8 @@ module.exports = function(_env, argv) {
         )
       }),
       isProduction && sentryWebpackPlugin({
-        org: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
+        org:  "cityofdetroit",
+        project: "myhomeinfo",
   
         // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
         // and need `project:releases` and `org:read` scopes
