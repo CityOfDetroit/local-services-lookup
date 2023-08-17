@@ -4,13 +4,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 
 module.exports = function(_env, argv) {
   const isProduction = argv.mode === "production";
   const isDevelopment = !isProduction;
 
   return {
-    devtool: isDevelopment && "cheap-module-source-map",
+    devtool: isProduction ? "source-map" : "cheap-module-source-map",
     entry: "./src/index.js",
     output: {
       path: path.resolve(__dirname, "build"),
@@ -85,7 +86,15 @@ module.exports = function(_env, argv) {
         "process.env.NODE_ENV": JSON.stringify(
           isProduction ? "production" : "development"
         )
-      })
+      }),
+      isProduction && sentryWebpackPlugin({
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+  
+        // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+        // and need `project:releases` and `org:read` scopes
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+      }),
     ].filter(Boolean),
     optimization: {
       minimize: isProduction,
