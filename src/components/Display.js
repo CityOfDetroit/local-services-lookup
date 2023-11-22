@@ -46,7 +46,7 @@ export default class Display extends HTMLElement {
           .data-title { font-weight: bold; border-left: solid .2em #FEB70D; padding: .5em; margin: 0 0 1em 0; font-family: 'Montserrat', sans-serif;}
           .result-address {background-color: #fff; border: solid 0.1em #e6e6e6; padding: 1.04em 0.6em; font-family: 'Montserrat', sans-serif;}
           .data-block-title { padding: .5em; background-color: #FEB70D; margin: 0; font-weight: bold; font-family: 'Montserrat', sans-serif; display: flex;}
-          .data-block-title span { flex: 1 }
+          .data-block-title span { flex: 1; margin: auto; }
           .data-block-content { padding: .5em; margin-bottom: .5em; background-color: #fff; }
           .data-block-content p { margin: 0; font-family: 'Montserrat', sans-serif;}
           .data-block-content hr { border-top: 1px dotted;}
@@ -547,7 +547,7 @@ export default class Display extends HTMLElement {
       });
 
     } else {
-      dataParsing.content = `<p>No demolitions are happening nearby.</p>`;
+      dataParsing.content = `<p>No stabilizations are happening nearby.</p>`;
     }
     return dataParsing;
   }
