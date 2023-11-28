@@ -416,9 +416,12 @@ export default class Display extends HTMLElement {
   }
 
   buildSchools(value, display) {
+    let pagination = display.setDatasetPagination(display, value);
+    console.log(pagination);
     let dataParsing = { title: "Schools", content: null };
     if (value && value.data.features.length) {
-      value.data.features.forEach(function (value, index) {
+      let splitDataset = value.data.features.slice(pagination.start, pagination.end);
+      splitDataset.forEach(function (value, index) {
         if (index == 0) {
           dataParsing.content = `
               <p><strong>Name:</strong> ${value.properties.EntityOfficialName}</p>
@@ -437,6 +440,9 @@ export default class Display extends HTMLElement {
               `;
         }
       });
+      if(pagination.more){
+        dataParsing.content += `<div class="d-flex"><cod-button onclick="(function(){console.log('Hey')})()" data-primary="false" data-label="Load More +" data-img="" data-img-alt="" data-icon="" data-icon-order="" data-icon-size="" data-aria-label="" data-background-color="primary" data-extra-class="m-auto"></cod-button></div>`;
+      }
     } else {
       dataParsing.content = `<p>No schools nearby.</p>`;
     }
@@ -774,6 +780,22 @@ export default class Display extends HTMLElement {
       default:
         return '';
         break;
+    }
+  }
+
+  setDatasetPagination(display, dataset){
+    console.log(dataset);
+    if(display.hasAttribute('data-pagination')){
+      let paginations = JSON.parse(display.get('data-pagination'));
+      console.log(paginations);
+      return {start: paginations[dataset].start + 5, end: paginations[dataset].end + 5};
+    }else{
+      let paginationObj = {start: 0, end: 4, more: true};
+      if(dataset.data.features.length <= 4){
+        paginationObj.end = dataset.data.features.length;
+        paginationObj.more = false;
+      }
+      return paginationObj;
     }
   }
 
