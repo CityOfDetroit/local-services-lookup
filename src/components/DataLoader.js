@@ -34,7 +34,7 @@ export default class DataLoader extends HTMLElement {
     }
   }
 
-  getDataSets() {
+  getDataSets(loader) {
     const app = document.getElementsByTagName('my-home-info');
     const dataSets = app[0].getAttribute('data-active-sets').split(',');
     const parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
@@ -177,13 +177,14 @@ export default class DataLoader extends HTMLElement {
     });
     let demosData = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 5, { units: 'miles' });
+      let buffer = turf.buffer(point, 1, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
-      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=geojson`;
+      let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=geojson`;
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
+          data.features.sort(loader.sortFeaturesByDistanceTo(point));
           resolve({ "id": "demos-data", "data": data });
         }).catch(err => {
           // console.log(err);
@@ -191,13 +192,14 @@ export default class DataLoader extends HTMLElement {
     });
     let stabilizationData = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 5, { units: 'miles' });
+      let buffer = turf.buffer(point, 1, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Contracted_Stabilizations/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=geojson`;
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
+          data.features.sort(loader.sortFeaturesByDistanceTo(point));
           resolve({ "id": "stabilization-data", "data": data });
         }).catch(err => {
           // console.log(err);
@@ -215,13 +217,14 @@ export default class DataLoader extends HTMLElement {
     });
     let schools = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 2, { units: 'miles' });
+      let buffer = turf.buffer(point, 1, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/2018_2019_Schools_(EEM)/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=geojson`;
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
+          data.features.sort(loader.sortFeaturesByDistanceTo(point));
           resolve({ "id": "schools", "data": data });
         }).catch(err => {
           // console.log(err);
@@ -669,6 +672,13 @@ export default class DataLoader extends HTMLElement {
     return councilData;
   }
 
+  sortFeaturesByDistanceTo(target){
+    return function(a, b) {
+      var options = {units: 'radians'}; // using radians to forgo conversion to another unit
+      return turf.distance(target, a, options) - turf.distance(target, b, options);
+    }
+  }
+
   getData(loader) {
     const app = document.getElementsByTagName('my-home-info');
     const activeDataSets = app[0].getAttribute('data-active-sets').split(',');
@@ -688,7 +698,7 @@ export default class DataLoader extends HTMLElement {
       app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
       app[0].setAttribute('data-app-state', 'results');
     } else {
-      let dataList = loader.getDataSets();
+      let dataList = loader.getDataSets(loader);
       Promise.all(dataList).then(values => {
         let dataSets = {};
         for (let key in values) {
@@ -715,6 +725,7 @@ export default class DataLoader extends HTMLElement {
             // console.log(error);
           }
         }
+        
         app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
         app[0].setAttribute('data-app-state', 'results');
       }).catch(reason => {

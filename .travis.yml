@@ -1,8 +1,12 @@
 language: node_js
   # Node env
+
+install:
+  - yarn
+
 node_js:
   # Node version
-  - 14
+  - 16
 
 cache:
   yarn: true
