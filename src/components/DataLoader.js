@@ -224,6 +224,7 @@ export default class DataLoader extends HTMLElement {
       return fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
+          console.log(data);
           data.features.sort(loader.sortFeaturesByDistanceTo(point));
           resolve({ "id": "schools", "data": data });
         }).catch(err => {
