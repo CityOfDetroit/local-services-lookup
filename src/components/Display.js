@@ -5,7 +5,7 @@ customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
   static get observedAttributes() {
-    return ['data-display-type'];
+    return ['data-display-type', 'data-pagination'];
   }
 
   constructor() {
@@ -73,8 +73,11 @@ export default class Display extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+    console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
     if (newValue == 'results') {
+      this.clearDisplay(this);
+    }
+    if (name == 'data-pagination'){
       this.clearDisplay(this);
     }
     this.loadDisplay(this);
@@ -784,9 +787,32 @@ export default class Display extends HTMLElement {
   setDatasetPagination(display, dataset){
     console.log(dataset);
     if(display.hasAttribute('data-pagination')){
-      let paginations = JSON.parse(display.get('data-pagination'));
+
+      let paginations = JSON.parse(display.getAttribute('data-pagination'));
       console.log(paginations);
-      return {start: paginations[dataset].start + 5, end: paginations[dataset].end + 5};
+      if(paginations[dataset.id]){
+        let paginationObj = {start: paginations[dataset.id].start};
+        if(dataset.data.features.length <= 3){
+          paginationObj.end = dataset.data.features.length;
+          paginationObj.more = false;
+        }else{
+          paginationObj.end = paginations[dataset.id].end + 3;
+          paginationObj.more = true;
+        }
+        return paginationObj;
+      }else{
+        let paginationObj = {start: 0, end: 3, more: true};
+        if(dataset.data.features){
+          if(dataset.data.features.length <= 3){
+            paginationObj.end = dataset.data.features.length;
+            paginationObj.more = false;
+          }
+        }else{
+          paginationObj.start = null;
+          paginationObj.more = false;
+        }
+        return paginationObj;
+      }
     }else{
       let paginationObj = {start: 0, end: 3, more: true};
       if(dataset.data.features){
@@ -865,6 +891,7 @@ export default class Display extends HTMLElement {
       if(pagination.more){
         let loadMoreBtn = document.createElement('cod-button');
         loadMoreBtn.setAttribute('data-pagination-id', dataSet.id);
+        loadMoreBtn.setAttribute('data-pagination', JSON.stringify(pagination));
         loadMoreBtn.setAttribute('data-label', 'Load More +');
         loadMoreBtn.setAttribute('data-size', 'xsmall');
         loadMoreBtn.setAttribute('data-icon', '');
@@ -876,10 +903,23 @@ export default class Display extends HTMLElement {
         loadMoreBtn.setAttribute('data-background-color', 'primary');
         loadMoreBtn.setAttribute('data-primary', false);
         loadMoreBtn.addEventListener('click', (ev) => {
-          if(ev.target.getAttribute('data-pagination-id')){
+          if(ev.target.getAttribute('data-pagination')){
             // app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
             // app[0].setAttribute('data-app-state', 'map');
-            console.log(ev.target.getAttribute('data-pagination-id'));
+            let loadMoreSpinner = document.createElement('cod-spinner');
+            loadMoreSpinner.setAttribute('data-type', 'border');
+            loadMoreSpinner.setAttribute('data-background-color', 'primary');
+            loadMoreSpinner.setAttribute('data-size', 'sm');
+            console.log(ev.target.getAttribute('data-pagination'));
+            let paginations = display.getAttribute('data-pagination');
+            console.log(paginations);
+            if(paginations === null){
+              paginations = {};
+            }
+            paginations[`${ev.target.getAttribute('data-pagination-id')}`] = JSON.parse(ev.target.getAttribute('data-pagination'));
+            display.setAttribute('data-pagination', JSON.stringify(paginations));
+            ev.target.parentElement.appendChild(loadMoreSpinner);
+            ev.target.remove();
           }
         });
         dataBlockContent.appendChild(loadMoreBtn);
