@@ -73,7 +73,7 @@ export default class Display extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
+    // console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
     if (newValue == 'results') {
       this.clearDisplay(this);
     }
@@ -780,19 +780,12 @@ export default class Display extends HTMLElement {
     }
   }
 
-  updateDatasetPagination(display, dataset){
-    console.log('loading more');
-  }
-
   setDatasetPagination(display, dataset){
-    console.log(dataset);
     if(display.hasAttribute('data-pagination')){
-
       let paginations = JSON.parse(display.getAttribute('data-pagination'));
-      console.log(paginations);
       if(paginations[dataset.id]){
         let paginationObj = {start: paginations[dataset.id].start};
-        if(dataset.data.features.length <= 3){
+        if(dataset.data.features.length <= (paginations[dataset.id].end + 3)){
           paginationObj.end = dataset.data.features.length;
           paginationObj.more = false;
         }else{
@@ -846,7 +839,6 @@ export default class Display extends HTMLElement {
     const dataBlock = document.createElement('article');
     dataBlock.className = 'data-block';
     let pagination = display.setDatasetPagination(display, dataSet);
-    console.log(pagination);
     let splitDataset = JSON.parse(JSON.stringify(dataSet));
     if(pagination.start !== null){
       splitDataset.data.features = dataSet.data.features.slice(pagination.start, pagination.end);
@@ -904,17 +896,15 @@ export default class Display extends HTMLElement {
         loadMoreBtn.setAttribute('data-primary', false);
         loadMoreBtn.addEventListener('click', (ev) => {
           if(ev.target.getAttribute('data-pagination')){
-            // app[0].setAttribute('data-map-active-data', ev.target.getAttribute('data-map-active-data'));
-            // app[0].setAttribute('data-app-state', 'map');
             let loadMoreSpinner = document.createElement('cod-spinner');
             loadMoreSpinner.setAttribute('data-type', 'border');
             loadMoreSpinner.setAttribute('data-background-color', 'primary');
             loadMoreSpinner.setAttribute('data-size', 'sm');
-            console.log(ev.target.getAttribute('data-pagination'));
             let paginations = display.getAttribute('data-pagination');
-            console.log(paginations);
             if(paginations === null){
               paginations = {};
+            }else{
+              paginations = JSON.parse(paginations);
             }
             paginations[`${ev.target.getAttribute('data-pagination-id')}`] = JSON.parse(ev.target.getAttribute('data-pagination'));
             display.setAttribute('data-pagination', JSON.stringify(paginations));
