@@ -5,7 +5,7 @@ customElements.define('app-geocoder', Geocoder);
 customElements.define('app-nav-tools', NavigationTools);
 export default class Display extends HTMLElement {
   static get observedAttributes() {
-    return ['data-display-type'];
+    return ['data-display-type', 'data-pagination'];
   }
 
   constructor() {
@@ -75,6 +75,9 @@ export default class Display extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     // console.log(`Display - attribute: ${name}, old: ${oldValue}, new: ${newValue}`);
     if (newValue == 'results') {
+      this.clearDisplay(this);
+    }
+    if (name == 'data-pagination'){
       this.clearDisplay(this);
     }
     this.loadDisplay(this);
@@ -472,13 +475,13 @@ export default class Display extends HTMLElement {
             <p>THIS PROPERTY IS SCHEDULED FOR DEMOLITION</p> 
             ${(value.data.features[0].attributes.demolish_by_date == null) ? `<p><strong>Date to be determined</strong></p>` : `<p><strong>${display.formatDate(value.attributes.demolish_by_date)}</stron></p>`}
             <br>
-            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>
+            <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="primary" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>
           `;
     } else {
       dataParsing.content = `
           <p>This property is not on the demolition list</p>
           <br>
-          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="color-1" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
+          <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="primary" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
     }
     return dataParsing;
   }
@@ -777,6 +780,47 @@ export default class Display extends HTMLElement {
     }
   }
 
+  setDatasetPagination(display, dataset){
+    if(display.hasAttribute('data-pagination')){
+      let paginations = JSON.parse(display.getAttribute('data-pagination'));
+      if(paginations[dataset.id]){
+        let paginationObj = {start: paginations[dataset.id].start};
+        if(dataset.data.features.length <= (paginations[dataset.id].end + 3)){
+          paginationObj.end = dataset.data.features.length;
+          paginationObj.more = false;
+        }else{
+          paginationObj.end = paginations[dataset.id].end + 3;
+          paginationObj.more = true;
+        }
+        return paginationObj;
+      }else{
+        let paginationObj = {start: 0, end: 3, more: true};
+        if(dataset.data.features){
+          if(dataset.data.features.length <= 3){
+            paginationObj.end = dataset.data.features.length;
+            paginationObj.more = false;
+          }
+        }else{
+          paginationObj.start = null;
+          paginationObj.more = false;
+        }
+        return paginationObj;
+      }
+    }else{
+      let paginationObj = {start: 0, end: 3, more: true};
+      if(dataset.data.features){
+        if(dataset.data.features.length <= 3){
+          paginationObj.end = dataset.data.features.length;
+          paginationObj.more = false;
+        }
+      }else{
+        paginationObj.start = null;
+        paginationObj.more = false;
+      }
+      return paginationObj;
+    }
+  }
+
   printInfo(display) {
     let divContents = display.buildDataSection(display);
     let a = window.open('', '', 'height=500, width=500');
@@ -794,12 +838,20 @@ export default class Display extends HTMLElement {
     const mapAvailable = app[0].getAttribute('data-map-available');
     const dataBlock = document.createElement('article');
     dataBlock.className = 'data-block';
-    let datasetValues = display.selectDataBlockType(display, dataSet);
+    let pagination = display.setDatasetPagination(display, dataSet);
+    let splitDataset = JSON.parse(JSON.stringify(dataSet));
+    if(pagination.start !== null){
+      splitDataset.data.features = dataSet.data.features.slice(pagination.start, pagination.end);
+    }
+    let datasetValues = display.selectDataBlockType(display, splitDataset);
     if (datasetValues == undefined || datasetValues.content == null) {
       return null;
     } else {
       const dataBlockTitle = document.createElement('p');
       dataBlockTitle.className = 'data-block-title';
+      const dataBlockContent = document.createElement('article');
+      dataBlockContent.className = 'data-block-content';
+      dataBlockContent.innerHTML = datasetValues.content;
       if (mapAvailable == 'true') {
         const text = document.createElement('span');
         text.innerText = datasetValues.title;
@@ -827,10 +879,41 @@ export default class Display extends HTMLElement {
         dataBlockTitle.innerText = datasetValues.title;
       }
       dataBlock.appendChild(dataBlockTitle);
-      const dataBlockContent = document.createElement('article');
-      dataBlockContent.className = 'data-block-content';
-      dataBlockContent.innerHTML = datasetValues.content;
       dataBlock.appendChild(dataBlockContent);
+      if(pagination.more){
+        let loadMoreBtn = document.createElement('cod-button');
+        loadMoreBtn.setAttribute('data-pagination-id', dataSet.id);
+        loadMoreBtn.setAttribute('data-pagination', JSON.stringify(pagination));
+        loadMoreBtn.setAttribute('data-label', 'Load More +');
+        loadMoreBtn.setAttribute('data-size', 'xsmall');
+        loadMoreBtn.setAttribute('data-icon', '');
+        loadMoreBtn.setAttribute('data-img', '');
+        loadMoreBtn.setAttribute('data-img-alt', '');
+        loadMoreBtn.setAttribute('data-shape', '');
+        loadMoreBtn.setAttribute('data-hover', false);
+        loadMoreBtn.setAttribute('data-extra-classes', 'fw-bold');
+        loadMoreBtn.setAttribute('data-background-color', 'primary');
+        loadMoreBtn.setAttribute('data-primary', false);
+        loadMoreBtn.addEventListener('click', (ev) => {
+          if(ev.target.getAttribute('data-pagination')){
+            let loadMoreSpinner = document.createElement('cod-spinner');
+            loadMoreSpinner.setAttribute('data-type', 'border');
+            loadMoreSpinner.setAttribute('data-background-color', 'primary');
+            loadMoreSpinner.setAttribute('data-size', 'sm');
+            let paginations = display.getAttribute('data-pagination');
+            if(paginations === null){
+              paginations = {};
+            }else{
+              paginations = JSON.parse(paginations);
+            }
+            paginations[`${ev.target.getAttribute('data-pagination-id')}`] = JSON.parse(ev.target.getAttribute('data-pagination'));
+            display.setAttribute('data-pagination', JSON.stringify(paginations));
+            ev.target.parentElement.appendChild(loadMoreSpinner);
+            ev.target.remove();
+          }
+        });
+        dataBlockContent.appendChild(loadMoreBtn);
+      }
       return dataBlock;
     }
   }

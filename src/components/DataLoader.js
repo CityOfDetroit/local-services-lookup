@@ -177,7 +177,7 @@ export default class DataLoader extends HTMLElement {
     });
     let demosData = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 1, { units: 'miles' });
+      let buffer = turf.buffer(point, 2, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Demolitions_under_Contract/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=geojson`;
@@ -192,7 +192,7 @@ export default class DataLoader extends HTMLElement {
     });
     let stabilizationData = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 1, { units: 'miles' });
+      let buffer = turf.buffer(point, 2, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Contracted_Stabilizations/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=3&f=geojson`;
@@ -217,7 +217,7 @@ export default class DataLoader extends HTMLElement {
     });
     let schools = new Promise((resolve, reject) => {
       let point = turf.point([parcelData.location.x, parcelData.location.y]);
-      let buffer = turf.buffer(point, 1, { units: 'miles' });
+      let buffer = turf.buffer(point, 2, { units: 'miles' });
       let simplePolygon = turf.simplify(buffer.geometry, { tolerance: 0.005, highQuality: false });
       let arcsimplePolygon = arcGIS.convert(simplePolygon);
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/2018_2019_Schools_(EEM)/FeatureServer/0/query?where=&objectIds=&time=&geometry=${encodeURI(JSON.stringify(arcsimplePolygon))}&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&f=geojson`;
