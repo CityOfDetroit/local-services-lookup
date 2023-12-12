@@ -5,7 +5,6 @@ module.exports = defineConfig({
   projectId: 'local-services-lookup',
   pageLoadTimeout: 100000,
   video: false,
-  videoUploadOnPasses: false,
   includeShadowDom: true,
   e2e: {
     // We've imported your old cypress plugins here.
