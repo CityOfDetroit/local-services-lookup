@@ -137,8 +137,6 @@
 - Bump lodash from 4.17.10 to 4.17.11 in /functions [#3](https://github.com/CityOfDetroit/local-services-lookup/pull/3) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump axios from 0.18.0 to 0.18.1 in /functions [#2](https://github.com/CityOfDetroit/local-services-lookup/pull/2) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
-#### Authors: 3
+#### Authors: 1
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Edgar Montes (montesje@detroitmi.gov)
 - J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))

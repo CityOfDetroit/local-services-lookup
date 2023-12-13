@@ -1,6 +1,6 @@
 {
   "name": "local-services-lookup",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Simple app to lookup city services based on a location.",
   "main": "main.js",
   "repository": {
@@ -26,7 +26,8 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
     "cy:run": "./node_modules/.bin/cypress run --headed",
-    "test": "start-server-and-test start http://localhost:3000 cy:run"
+    "test": "start-server-and-test start http://localhost:3000 cy:run",
+    "logs": "auto changelog"
   },
   "author": "Edgar Montes",
   "license": "MIT",
@@ -53,6 +54,7 @@
     "@turf/centroid": "^6.5.0",
     "@turf/distance": "^6.5.0",
     "@turf/helpers": "^6.5.0",
+    "auto": "^11.0.4",
     "babel-loader": "^8.2.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "concurrently": "^7.0.0",
