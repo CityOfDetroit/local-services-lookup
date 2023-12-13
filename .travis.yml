@@ -10,6 +10,15 @@ node_js:
 
 cache:
   yarn: true
+  # cache both npm modules and Cypress binary
+  directories:
+    - ~/.npm
+    - ~/.cache
+    - /home/travis/.cache/Cypress
+  # install dependencies and check that Cypress can run
+  override:
+    - npm ci
+    - npm run cy:verify
 
 jobs:
   include:
@@ -21,32 +30,3 @@ jobs:
         - yarn cypress install
         - yarn test
         - kill $(jobs -p) || true
-
-language: node_js
-
-node_js:
-  - 16
-
-cache:
-  yarn: true
-  # cache both npm modules and Cypress binary
-  directories:
-    - ~/.npm
-    - ~/.cache
-    - /home/travis/.cache/Cypress
-  # install dependencies and check that Cypress can run
-  override:
-    - npm ci
-    - npm run cy:verify
-
-script:
-  # start server in the background
-  - yarn build
-  # install dependencies
-  - yarn install
-  # run all Cypress tests and record on Cypress Cloud
-  - yarn test
-  # after all tests finish running we need
-  # to kill all background jobs (like "npm start &")
-  # this avoids flake in Travis jobs
-  - kill $(jobs -p) || true
