@@ -1,3 +1,4 @@
+dist: jammy
 language: node_js
   # Node env
 
@@ -10,6 +11,15 @@ node_js:
 
 cache:
   yarn: true
+  # cache both npm modules and Cypress binary
+  directories:
+    - ~/.npm
+    - ~/.cache
+    - /home/travis/.cache/Cypress
+  # install dependencies and check that Cypress can run
+  override:
+    - npm ci
+    - npm run cy:verify
 
 jobs:
   include:
