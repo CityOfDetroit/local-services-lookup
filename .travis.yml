@@ -1,3 +1,4 @@
+dist: jammy
 language: node_js
   # Node env
 
