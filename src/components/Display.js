@@ -1031,21 +1031,21 @@ export default class Display extends HTMLElement {
         break;
 
       case 'print':
-        parcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
+        let printParcelData = JSON.parse(app[0].getAttribute('data-parcel-id'));
         shadow.appendChild(display.resultsStyle);
-        resultsContainer = document.createElement('section');
-        resultsContainer.className = 'results-container';
-        resultsContainer.appendChild(navTools);
-        dataSetResults = document.createElement('article');
-        dataSetResults.className = 'dataset-results';
-        addressBox = document.createElement('article');
-        addressBox.className = 'result-address';
-        addressBox.innerText = parcelData.address;
-        dataSetResults.appendChild(addressBox);
-        results = display.buildDataSection(display);
-        dataSetResults.appendChild(results);
-        resultsContainer.appendChild(dataSetResults);
-        displayWrapper.appendChild(resultsContainer);
+        let printResultsContainer = document.createElement('section');
+        printResultsContainer.className = 'results-container';
+        printResultsContainer.appendChild(navTools);
+        let printDataSetResults = document.createElement('article');
+        printDataSetResults.className = 'dataset-results';
+        let printAddressBox = document.createElement('article');
+        printAddressBox.className = 'result-address';
+        printAddressBox.innerText = printParcelData.address;
+        printDataSetResults.appendChild(printAddressBox);
+        let printResults = display.buildDataSection(display);
+        printDataSetResults.appendChild(printResults);
+        printResultsContainer.appendChild(printDataSetResults);
+        displayWrapper.appendChild(printResultsContainer);
         shadow.appendChild(displayWrapper);
         display.printInfo(display);
         break;
