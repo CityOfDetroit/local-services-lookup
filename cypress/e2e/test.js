@@ -18,6 +18,7 @@ describe('Basic test for address result', () => {
       cy.get('my-home-info')
       .contains('SPECIAL AREAS AND ZONES')
     })
+    
 
     it('Test invalid address', () => {
       cy.visit('/') 
@@ -26,6 +27,17 @@ describe('Basic test for address result', () => {
       cy.wait(3000)
       cy.get('my-home-info')
       .contains('No Information found on this address. Please close and try again.')
+    })
+
+    it('Test printing functionality', () => {
+      cy.visit('/') 
+      cy.get('my-home-info')
+        .get('#geocoder input').type('1104 military{enter}')
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('1104 Military St, Detroit, MI, 48209')
+      cy.get('my-home-info')
+      .get('cod-button[data-nav-value="print"]').click()
     })
 
     it('Test map feature', () => {
@@ -45,5 +57,43 @@ describe('Basic test for address result', () => {
       cy.get('my-home-info')
       .get('cod-button[data-map-active-data="schools"]')
       .click()
+    })
+
+    it('Check geospatial sorting', () => {
+      cy.visit('/') 
+      cy.get('my-home-info')
+        .get('#geocoder input').type('1104 military{enter}')
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('1104 Military St, Detroit, MI, 48209')
+      cy.get('my-home-info')
+      .get('cod-button[data-nav-value="things nearby"]').click()
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('THINGS NEARBY')
+      cy.get('my-home-info')
+      .contains('Real Parks Help')
+    })
+
+    it('Test pagination', () => {
+      cy.visit('/') 
+      cy.get('my-home-info')
+        .get('#geocoder input').type('1104 military{enter}')
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('1104 Military St, Detroit, MI, 48209')
+      cy.get('my-home-info')
+      .get('cod-button[data-nav-value="things nearby"]').click()
+      cy.wait(3000)
+      cy.get('my-home-info')
+      .contains('THINGS NEARBY')
+      cy.get('my-home-info')
+      .contains('View Map')
+      cy.get('my-home-info')
+      .get('cod-button[data-label="Load More +"]')
+      .first()
+      .click()
+      cy.get('my-home-info')
+      .contains('Cesar Chavez High School')
     })
 })
