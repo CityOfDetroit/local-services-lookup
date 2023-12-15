@@ -5,7 +5,7 @@
 - Update CHANGELOG.md [#152](https://github.com/CityOfDetroit/local-services-lookup/pull/152) ([@jedgar1mx](https://github.com/jedgar1mx))
 - Fixing print issue.: [#151](https://github.com/CityOfDetroit/local-services-lookup/pull/151) ([@jedgar1mx](https://github.com/jedgar1mx))
 
-#### ⚠️ Pushed to `master`
+#### ⚠️ Pushed to `dev`
 
 - Updating end2end testing. ([@jedgar1mx](https://github.com/jedgar1mx))
 
