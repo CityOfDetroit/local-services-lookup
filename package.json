@@ -1,6 +1,6 @@
 {
   "name": "local-services-lookup",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Simple app to lookup city services based on a location.",
   "main": "main.js",
   "repository": {
