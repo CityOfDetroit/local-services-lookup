@@ -7,7 +7,7 @@ install:
 
 node_js:
   # Node version
-  - 16
+  - 18
 
 cache:
   yarn: true
