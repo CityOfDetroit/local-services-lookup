@@ -133,7 +133,7 @@ export default class NavigationTools extends HTMLElement {
                         app[0].setAttribute('data-api-stored-datasets', JSON.stringify(storedData));
                     }
                     app[0].setAttribute('data-api-active-datasets', 'none');
-                    app[0].setAttribute('data-active-sets', 'council,council-members,district-managers,business-liaison,district-inspectors,npo');
+                    app[0].setAttribute('data-active-sets', 'council,council-members,bop-members,district-managers,business-liaison,district-inspectors,npo');
                     app[0].setAttribute('data-map-available', 'false');
                     app[0].setAttribute('data-active-section', 'government officials');
                     app[0].setAttribute('data-app-state', 'loading-screen');
