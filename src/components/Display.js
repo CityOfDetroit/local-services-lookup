@@ -107,6 +107,17 @@ export default class Display extends HTMLElement {
     return dataParsing;
   }
 
+  buildBOP(value) {
+    let siteURL = window.location.hostname;
+    let dataParsing = { title: "Police Commissioner", content: null };
+    dataParsing.content = `
+        <p><strong>Commissioner:</strong> <a href="http://${siteURL}${value.data.url}" target="_blank">${value.data.name}</a></p>
+        <p><strong>Commissioner's Phone:</strong> ${value.data.phone}</p>
+        <p><strong>Commissioner's Email:</strong> ${value.data.email}</p>
+      `;
+    return dataParsing;
+  }
+
   buildDistrictManagers(value) {
     let dataParsing = { title: "District Managers", content: null };
     if (value && Object.keys(value.data).length != 0 && value.data.constructor === Object && value.data.detail !== "Not found.") {
@@ -589,6 +600,15 @@ export default class Display extends HTMLElement {
       case 'council-members':
         try {
           return display.buildCouncil(value);
+        } catch (error) {
+          // console.log(error);
+          return '';
+        }
+        break;
+
+      case 'bop-members':
+        try {
+          return display.buildBOP(value);
         } catch (error) {
           // console.log(error);
           return '';

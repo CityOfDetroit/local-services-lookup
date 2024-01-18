@@ -62,6 +62,16 @@ export default class DataLoader extends HTMLElement {
     let council = new Promise((resolve, reject) => {
       return resolve({ "id": "council", "data": parcelData });
     });
+    let bopMembers = new Promise((resolve, reject) => {
+      let url = "/rest/bop?_format=json";
+      return fetch(url)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) {
+          resolve({ "id": "bop-members", "data": data });
+        }).catch(err => {
+          // console.log(err);
+        });
+    });
     let districtManagers = new Promise((resolve, reject) => {
       let url = "/rest/district-managers?_format=json";
       return fetch(url)
@@ -399,6 +409,10 @@ export default class DataLoader extends HTMLElement {
           dataList.push(councilMembers);
           break;
 
+        case 'bop-members':
+          dataList.push(bopMembers);
+          break;
+
         case 'DWSDBackupProtection':
           dataList.push(DWSDBackupProtection);
           break;
@@ -418,6 +432,14 @@ export default class DataLoader extends HTMLElement {
         name: null,
         url: null,
         phone: null
+      },
+      bop: {
+        district: `District ${data.council.data.attributes.council_district}`,
+        url: null,
+        name: null,
+        url: null,
+        phone: null,
+        email: null
       },
       dmanager: {
         name: null,
@@ -446,6 +468,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1276`;
             councilData.council.phone = item.field_phone;
+          }
+        });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 1')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4331`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
           }
         });
         data['district-managers'].data.forEach((item) => {
@@ -479,6 +511,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.phone = item.field_phone;
           }
         });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 2')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4336`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
+          }
+        });
         data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 2 Manager')) {
             councilData.dmanager.name = item.title;
@@ -508,6 +550,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1481`;
             councilData.council.phone = item.field_phone;
+          }
+        });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 3')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4341`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
           }
         });
         data['district-managers'].data.forEach((item) => {
@@ -541,6 +593,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.phone = item.field_phone;
           }
         });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 4')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4346`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
+          }
+        });
         data['district-managers'].data.forEach((item) => {
           if (item.field_contact_position.includes('District 4 Manager')) {
             councilData.dmanager.name = item.title;
@@ -570,6 +632,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1346`;
             councilData.council.phone = item.field_phone;
+          }
+        });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 5')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4351`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
           }
         });
         data['district-managers'].data.forEach((item) => {
@@ -604,6 +676,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1491`;
             councilData.council.phone = `<a href="tel:${cleanPhone}">${item.field_phone}</a>`;
+          }
+        });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 6')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4321`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
           }
         });
         data['district-managers'].data.forEach((item) => {
@@ -641,6 +723,16 @@ export default class DataLoader extends HTMLElement {
             councilData.council.name = item.field_organization_head_name;
             councilData.council.url = `/taxonomy/term/1511`;
             councilData.council.phone = item.field_phone;
+          }
+        });
+        data['bop-members'].data.forEach((item) => {
+          if (item.field_responsibilities.includes('District 7')) {
+            councilData.bop.name = item.title;
+            councilData.bop.url = `/taxonomy/term/4356`;
+            let cleanPhone = item.field_telephone.replace(/ /g, '-');
+            cleanPhone = cleanPhone.replace(/[()]/g, '');
+            councilData.bop.phone = `<a href="tel:${cleanPhone}">${item.field_telephone}</a>`;
+            councilData.bop.email = item.field_email_address;
           }
         });
         data['district-managers'].data.forEach((item) => {
@@ -711,6 +803,7 @@ export default class DataLoader extends HTMLElement {
         if (activeDataSets.includes('council')) {
           let councilData = loader.buildCouncilData(dataSets);
           dataSets['council-members'] = { id: 'council-members', data: councilData.council };
+          dataSets['bop-members'] = { id: 'bop-members', data: councilData.bop };
           let dManagers = { manager: councilData.dmanager, deputy: councilData.ddmanager }
           dataSets['district-managers'] = { id: 'district-managers', data: dManagers };
           dataSets['business-liaison'] = { id: 'business-liaison', data: councilData.bliaision };
