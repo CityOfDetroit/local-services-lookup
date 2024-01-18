@@ -1,3 +1,19 @@
+# v2.2.2 (Wed Jan 17 2024)
+
+#### 🐛 Bug Fix
+
+- Adding BOP members to government section. [#157](https://github.com/CityOfDetroit/local-services-lookup/pull/157) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### 🔩 Dependency Updates
+
+- Migrating from node 16 to node 18. [#156](https://github.com/CityOfDetroit/local-services-lookup/pull/156) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.1 (Fri Dec 15 2023)
 
 #### 🐛 Bug Fix
