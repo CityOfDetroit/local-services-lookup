@@ -187,7 +187,7 @@ export default class Display extends HTMLElement {
         dataParsing.content = `
         <p>This property qualifies for the DWSD Basement Backup Protection Program.</p>
         <br>
-        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="color-1" data-size="xsmall" data-icon="" data-primary="true" data-img-alt=""></cod-button></a>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="primary" data-size="xsmall" data-icon="" data-primary="true" data-img-alt=""></cod-button></a>
         `;
       }else{
         dataParsing.content = `
@@ -197,6 +197,30 @@ export default class Display extends HTMLElement {
     } else {
       dataParsing.content = `
         <p>This property doesn't qualify for the Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
+        `;
+    }
+    return dataParsing;
+  }
+
+  buildHRDFlooding(values) {
+    console.log(values);
+    let validNeighborhoods = ['Cornerstone Village', 'Morningside', 'Chandler Park', 'Fox Creek', 'Riverbend', 'Morningside', 'West End ', 'Midwest', 'Chadsey‐Condon', 'Claytown', 'North Corktown', 'Michigan‐ Martin', 'Aviation Sub', 'Garden View', 'Plymouth‐I96', 'Plymouth‐Hubell', 'Paveway', 'We Care Community', 'Fiskhorn', 'Joy-Schaefer', 'Warrendale', 'Warren Ave Community', 'Barton-McFarland'];
+    let dataParsing = { title: "HRD Flooding Program", content: null };
+    if (values && values.data.attributes.neighborhood_name) {
+      if (validNeighborhoods.includes(values.data.attributes.neighborhood_name)) {
+        dataParsing.content = `
+        <p>This property qualifies for the HRD Flooding Program.</p>
+        <br>
+        <a href="https://app.smartsheet.com/b/form/509cb1e905a74948bce7b0135da53277?Property%20Street%20Address=${values.data.address}&Property%20City=Detroit&Property%20Zip%20Code=${values.data.attributes.Postal}&Neighborhood=${values.data.attributes.neighborhood_name}" target="_blank"><cod-button data-label="Apply Now" data-background-color="primary" data-size="xsmall" data-icon="" data-primary="true" data-img-alt=""></cod-button></a>
+        `;
+      }else{
+        dataParsing.content = `
+        <p>This property doesn't qualify for the HRD Flooding Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
+        `;
+      }
+    } else {
+      dataParsing.content = `
+        <p>This property doesn't qualify for the HRD Flooding Program. To learn more please <a href="https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-flooding-protection">visit our page.</a></p>
         `;
     }
     return dataParsing;
@@ -789,6 +813,14 @@ export default class Display extends HTMLElement {
       case 'DWSDBackupProtection':
         try {
           return display.buildDWSDBackupProtection(value);
+        } catch (error) {
+          return '';
+        }
+        break;
+
+      case 'HRDFlooding':
+        try {
+          return display.buildHRDFlooding(value);
         } catch (error) {
           return '';
         }

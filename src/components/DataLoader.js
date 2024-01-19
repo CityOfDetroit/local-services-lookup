@@ -105,6 +105,9 @@ export default class DataLoader extends HTMLElement {
     let DWSDBackupProtection = new Promise((resolve, reject) => {
       resolve({ "id": "DWSDBackupProtection", "data": parcelData });
     });
+    let HRDFlooding = new Promise((resolve, reject) => {
+      resolve({ "id": "HRDFlooding", "data": parcelData });
+    });
     let nrsa = new Promise((resolve, reject) => {
       let url = `https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/NRSA_2020/FeatureServer/0/query?where=&objectIds=&time=&geometry=${parcelData.location.x}%2C${parcelData.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=`
       return fetch(url)
@@ -413,8 +416,9 @@ export default class DataLoader extends HTMLElement {
           dataList.push(bopMembers);
           break;
 
-        case 'DWSDBackupProtection':
-          dataList.push(DWSDBackupProtection);
+        case 'HRDFlooding':
+          console.log('pushing HRDFlooding');
+          dataList.push(HRDFlooding);
           break;
 
         default:
@@ -792,6 +796,7 @@ export default class DataLoader extends HTMLElement {
     } else {
       let dataList = loader.getDataSets(loader);
       Promise.all(dataList).then(values => {
+        console.log(values);
         let dataSets = {};
         for (let key in values) {
           if (values[key] != null) {
@@ -818,7 +823,6 @@ export default class DataLoader extends HTMLElement {
             // console.log(error);
           }
         }
-        
         app[0].setAttribute('data-api-active-datasets', JSON.stringify(dataSets));
         app[0].setAttribute('data-app-state', 'results');
       }).catch(reason => {
