@@ -1,10 +1,10 @@
 'use strict';
 import Display from './Display';
 import DataLoader from './DataLoader';
-import Map from './Map';
+// import Map from './Map';
 customElements.define('app-display', Display);
 customElements.define('app-data-loader', DataLoader);
-customElements.define('app-map', Map);
+// customElements.define('app-map', Map);
 
 export default class MyHomeInfo extends HTMLElement {
     static get observedAttributes() {
@@ -102,8 +102,15 @@ export default class MyHomeInfo extends HTMLElement {
                 break;
 
             case 'map':
-                const map = document.createElement('app-map');
-                map.id='app-map';
+                const map = document.createElement('cod-map');
+                map.id='cod-map';
+                let apiData = JSON.parse(this.getAttribute('data-api-active-datasets'));
+                let mapData = this.getAttribute('data-map-active-data');
+                map.setAttribute('data-parent-component', 'my-home-info');
+                map.setAttribute('data-map-mode', 'my-home-info');
+                map.setAttribute('data-map-active-data', this.getAttribute('data-map-active-data'));
+                map.setAttribute('data-map-data', JSON.stringify(apiData[mapData]));
+                map.setAttribute('data-location', this.getAttribute('data-parcel-id'));
                 map.setAttribute('data-map-state', 'init');
                 appWrapper.appendChild(map);
                 break;
