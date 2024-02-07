@@ -1,3 +1,19 @@
+# v2.2.3 (Wed Feb 07 2024)
+
+#### 🐛 Bug Fix
+
+- Feature.159 [#162](https://github.com/CityOfDetroit/local-services-lookup/pull/162) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### 🔩 Dependency Updates
+
+- Moving from custom Map file to using Map component from design system. [#161](https://github.com/CityOfDetroit/local-services-lookup/pull/161) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.2 (Wed Jan 17 2024)
 
 #### 🐛 Bug Fix
