@@ -106,10 +106,33 @@ export default class MyHomeInfo extends HTMLElement {
                 map.id='cod-map';
                 let apiData = JSON.parse(this.getAttribute('data-api-active-datasets'));
                 let mapData = this.getAttribute('data-map-active-data');
+                const layerData = {"id":"mapData","layers":[{"name":"data-points","type":"circle","radius":6,"color":"#004445","active":true,"sort":10,"source":"data-points"}],"source": apiData[mapData].data};
+                let layerStructure;
+                switch (mapData) {
+                    case 'schools':
+                        layerStructure = {"schools":[{"type":"field-value","label":"Name:","value":"EntityOfficialName"}]};
+                        break;
+
+                    case 'demos-data':
+                        layerStructure = {"demos-data":[{"type":"field-value","label":"Address:","value":"address"}]};
+                        break;
+
+                    case 'stabilization-data':
+                        layerStructure = {"stabilization-data":[{"type":"field-value","label":"Address:","value":"address"}]};
+                        break;
+
+                    case 'improve-det':
+                        layerStructure = {"improve-det":[{"type":"field-value","label":"Address:","value":"address"},{"type":"field-value","label":"Type:","value":"request_type_title"}]};
+                        break;
+                
+                    default:
+                        break;
+                };
                 map.setAttribute('data-parent-component', 'my-home-info');
                 map.setAttribute('data-map-mode', 'my-home-info');
                 map.setAttribute('data-map-active-data', this.getAttribute('data-map-active-data'));
-                map.setAttribute('data-map-data', JSON.stringify(apiData[mapData]));
+                map.setAttribute('data-popup-structure', JSON.stringify(layerStructure));
+                map.setAttribute('data-map-data', JSON.stringify(layerData));
                 map.setAttribute('data-location', this.getAttribute('data-parcel-id'));
                 map.setAttribute('data-map-state', 'init');
                 appWrapper.appendChild(map);
