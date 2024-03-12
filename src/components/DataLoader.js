@@ -417,7 +417,6 @@ export default class DataLoader extends HTMLElement {
           break;
 
         case 'HRDFlooding':
-          console.log('pushing HRDFlooding');
           dataList.push(HRDFlooding);
           break;
 
@@ -796,7 +795,7 @@ export default class DataLoader extends HTMLElement {
     } else {
       let dataList = loader.getDataSets(loader);
       Promise.all(dataList).then(values => {
-        console.log(values);
+        // console.log(values);
         let dataSets = {};
         for (let key in values) {
           if (values[key] != null) {
