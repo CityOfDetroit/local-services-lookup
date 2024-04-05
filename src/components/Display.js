@@ -280,9 +280,9 @@ export default class Display extends HTMLElement {
           <p><strong>Address:</strong> ${value.data.features[0].attributes.precinct_location}</p>
           <br>
           <p><strong>NEIGHBORHOOD POLICE OFFICER (NPO)</strong></p>
-          <p><strong>Name:</strong> ${value.data.features[0].attributes.police_officer}</p>
-          <p><strong>Phone:</strong> ${value.data.features[0].attributes.phone_number}</p>
-          <p><strong>Email:</strong> ${value.data.features[0].attributes.email}</p>
+          <p><strong>Name:</strong> ${value.data.features[0].attributes.officer_name}</p>
+          <p><strong>Phone:</strong> ${value.data.features[0].attributes.npo_cell_phone}</p>
+          <p><strong>Email:</strong> ${value.data.features[0].attributes.npo_email}</p>
           `;
     } else {
       dataParsing.content = `<p>No police info found</p>`;
@@ -595,18 +595,18 @@ export default class Display extends HTMLElement {
       value.data.features.forEach(function (value, index) {
         if (index == 0) {
           dataParsing.content = `
-              <p><strong>ID:</strong> <a href="${value.properties.web_url}" target="_blank">${value.properties.id}</a></p>
-              <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
-              <p><strong>Status:</strong> ${value.properties.status}</p>
-              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
+              <p><strong>ID:</strong> <a href="${value.properties.Web_Url}" target="_blank">${value.properties.ID}</a></p>
+              <p><strong>Type:</strong> ${value.properties.Request_Type_Title}</p>
+              <p><strong>Status:</strong> ${value.properties.Status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.Created_At)}</p>
               <hr>
               `;
         } else {
           dataParsing.content += `
-              <p><strong>ID:</strong> <a href="${value.properties.web_url}" target="_blank">${value.properties.id}</a></p>
-              <p><strong>Type:</strong> ${value.properties.request_type_title}</p>
-              <p><strong>Status:</strong> ${value.properties.status}</p>
-              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.created_at)}</p>
+              <p><strong>ID:</strong> <a href="${value.properties.Web_Url}" target="_blank">${value.properties.ID}</a></p>
+              <p><strong>Type:</strong> ${value.properties.Request_Type_Title}</p>
+              <p><strong>Status:</strong> ${value.properties.Status}</p>
+              <p><strong>Reported on:</strong> ${display.formatDate(value.properties.Created_At)}</p>
               <hr>
               `;
         }
