@@ -1,3 +1,20 @@
+# v2.2.4 (Mon Apr 08 2024)
+
+#### 🐛 Bug Fix
+
+- Fixing popups. [#168](https://github.com/CityOfDetroit/local-services-lookup/pull/168) ([@jedgar1mx](https://github.com/jedgar1mx))
+- Updating Improve Detroit issues and NPO dataset, update display fields. [#166](https://github.com/CityOfDetroit/local-services-lookup/pull/166) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### 🔩 Dependency Updates
+
+- Updating app to work with COD UXDS version 1.0.18. [#164](https://github.com/CityOfDetroit/local-services-lookup/pull/164) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.3 (Wed Feb 07 2024)
 
 #### 🐛 Bug Fix
