@@ -122,7 +122,7 @@ export default class MyHomeInfo extends HTMLElement {
                         break;
 
                     case 'improve-det':
-                        layerStructure = {"improve-det":[{"type":"field-value","label":"Address:","value":"address"},{"type":"field-value","label":"Type:","value":"request_type_title"}]};
+                        layerStructure = {"improve-det":[{"type":"field-value","label":"Address:","value":"Address"},{"type":"field-value","label":"Type:","value":"Request_Type_Title"}]};
                         break;
                 
                     default:
