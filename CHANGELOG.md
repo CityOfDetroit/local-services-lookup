@@ -1,3 +1,15 @@
+# v2.2.7 (Tue Apr 23 2024)
+
+#### 🐛 Bug Fix
+
+- Updating CDBG Basement Backup program panel with new title. [#171](https://github.com/CityOfDetroit/local-services-lookup/pull/171) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.6 (Mon Apr 08 2024)
 
 #### 🐛 Bug Fix
