@@ -204,22 +204,22 @@ export default class Display extends HTMLElement {
 
   buildHRDFlooding(values) {
     let validNeighborhoods = ['Cornerstone Village', 'Morningside', 'Chandler Park', 'Fox Creek', 'Riverbend', 'Morningside', 'West End ', 'Midwest', 'Chadsey‐Condon', 'Claytown', 'North Corktown', 'Michigan‐ Martin', 'Aviation Sub', 'Garden View', 'Plymouth‐I96', 'Plymouth‐Hubell', 'Paveway', 'We Care Community', 'Fiskhorn', 'Joy-Schaefer', 'Warrendale', 'Warren Ave Community', 'Barton-McFarland'];
-    let dataParsing = { title: "CDBG Disaster Recovery Basement Backup Protection Program", content: null };
+    let dataParsing = { title: "CDBG-DR Private Sewer Repair Program", content: null };
     if (values && values.data.attributes.neighborhood_name) {
       if (validNeighborhoods.includes(values.data.attributes.neighborhood_name)) {
         dataParsing.content = `
-        <p>This property qualifies for the CDBG Disaster Recovery Basement Backup Protection Program.</p>
+        <p>This property qualifies for the CDBG-DR Private Sewer Repair Program.</p>
         <br>
         <cod-button data-label="Apply Now" data-background-color="primary" data-size="xsmall" data-icon="" data-primary="true" data-img-alt="" data-link="https://app.smartsheet.com/b/form/3dab24dc95bf469b8ac4c27669536507"></cod-button>
         `;
       }else{
         dataParsing.content = `
-        <p>This property doesn’t qualify for the CDBG Disaster Recovery Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/housing-and-revitalization-department/disaster-recovery">visit our page.</a></p>
+        <p>This property doesn’t qualify for the CDBG-DR Private Sewer Repair Program. To learn more please <a href="https://detroitmi.gov/departments/housing-and-revitalization-department/disaster-recovery">visit our page.</a></p>
         `;
       }
     } else {
       dataParsing.content = `
-        <p>This property doesn’t qualify for the CDBG Disaster Recovery Basement Backup Protection Program. To learn more please <a href="https://detroitmi.gov/departments/housing-and-revitalization-department/disaster-recovery">visit our page.</a></p>
+        <p>This property doesn’t qualify for the CDBG-DR Private Sewer Repair Program. To learn more please <a href="https://detroitmi.gov/departments/housing-and-revitalization-department/disaster-recovery">visit our page.</a></p>
         `;
     }
     return dataParsing;
