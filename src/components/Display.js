@@ -336,10 +336,14 @@ export default class Display extends HTMLElement {
         contractorInfo.name = 'GFL';
         contractorInfo.url = 'http://gflusa.com/residential/detroit/';
         contractorInfo.phone = '(844) 464-3587';
-      } else {
+      } else if (value.data.next_pickups.trash.contractor === 'WM') {
         contractorInfo.name = 'WM';
         contractorInfo.url = 'http://www.advanceddisposal.com/mi/detroit/detroit-residential-collection';
-        contractorInfo.phone = ' (844) 233-8764';
+        contractorInfo.phone = '(844) 233-8764';
+      } else if (value.data.next_pickups.trash.contractor === 'Priority Waste') {
+        contractorInfo.name = 'Priority Waste';
+        contractorInfo.url = 'https://www.prioritywaste.com/cities-we-serve/detroit/';
+        contractorInfo.phone = '(855) 927-835';
       }
       dataParsing.content = `
             <p><strong>Provider:</strong> <a href="${contractorInfo.url}" target="_blank">${contractorInfo.name}</a> ${contractorInfo.phone}</p>
