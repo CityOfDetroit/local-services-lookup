@@ -1,3 +1,15 @@
+# v2.2.8 (Wed Jul 03 2024)
+
+#### 🐛 Bug Fix
+
+- Fix contractors [#174](https://github.com/CityOfDetroit/local-services-lookup/pull/174) ([@maxatdetroit](https://github.com/maxatdetroit))
+
+#### Authors: 1
+
+- Max Morgan ([@maxatdetroit](https://github.com/maxatdetroit))
+
+---
+
 # v2.2.7 (Tue Apr 23 2024)
 
 #### 🐛 Bug Fix
