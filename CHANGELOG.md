@@ -1,3 +1,15 @@
+# v2.2.9 (Wed Jul 31 2024)
+
+#### 🐛 Bug Fix
+
+- Fixing neighborhood name for CDBG-DR program. [#177](https://github.com/CityOfDetroit/local-services-lookup/pull/177) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.8 (Wed Jul 03 2024)
 
 #### 🐛 Bug Fix
