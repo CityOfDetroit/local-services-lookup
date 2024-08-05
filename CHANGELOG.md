@@ -1,3 +1,15 @@
+# v2.2.10 (Mon Aug 05 2024)
+
+#### 🐛 Bug Fix
+
+- Fix.issue.179 [#180](https://github.com/CityOfDetroit/local-services-lookup/pull/180) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.9 (Wed Jul 31 2024)
 
 #### 🐛 Bug Fix
