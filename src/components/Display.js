@@ -203,7 +203,8 @@ export default class Display extends HTMLElement {
   }
 
   buildHRDFlooding(values) {
-    let validNeighborhoods = ['Cornerstone Village', 'Morningside', 'Chandler Park', 'Fox Creek', 'Riverbend', 'Morningside', 'West End', 'Midwest', 'Chadsey Condon', 'Claytown', 'North Corktown', 'Michigan‐Martin', 'Aviation Sub', 'Garden View', 'Plymouth‐I96', 'Plymouth‐Hubell', 'Paveway', 'We Care Community', 'Fiskhorn', 'Joy-Schaefer', 'Warrendale', 'Warren Ave Community', 'Barton-McFarland'];
+    console.log(values.data.attributes.neighborhood_name);
+    let validNeighborhoods = ['Cornerstone Village', 'Morningside', 'Chandler Park', 'Fox Creek', 'Riverbend', 'Morningside', 'West End', 'Midwest', 'Chadsey Condon', 'Claytown', 'North Corktown', 'Michigan-Martin', 'Aviation Sub', 'Garden View', 'Plymouth-I96', 'Plymouth-Hubbell', 'Paveway', 'We Care Community', 'Fiskhorn', 'Joy-Schaefer', 'Warrendale', 'Warren Ave Community', 'Barton-McFarland'];
     let dataParsing = { title: "CDBG-DR Private Sewer Repair Program", content: null };
     if (values && values.data.attributes.neighborhood_name) {
       if (validNeighborhoods.includes(values.data.attributes.neighborhood_name)) {
