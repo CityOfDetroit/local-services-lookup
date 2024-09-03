@@ -1,3 +1,15 @@
+# v2.2.11 (Tue Sep 03 2024)
+
+#### 🐛 Bug Fix
+
+- Fixing data issues with CDBG program. [#184](https://github.com/CityOfDetroit/local-services-lookup/pull/184) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.10 (Mon Aug 05 2024)
 
 #### 🐛 Bug Fix
