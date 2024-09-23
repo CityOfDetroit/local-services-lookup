@@ -518,7 +518,7 @@ export default class Display extends HTMLElement {
           `;
     } else {
       dataParsing.content = `
-          <p>This property is not on the demolition list</p>
+          <p>This property is not on the upcoming demolitions list</p>
           <br>
           <p><a href="https://detroitmi.maps.arcgis.com/apps/instant/nearby/index.html?appid=41ba8dd946d842b9ba632ecc0a5d2556&sliderDistance=1&find=${tempAddress}" target="_blank"><cod-button data-label="Expand your demo search" data-background-color="primary" data-icon="" data-size="xsmall" data-primary="true" data-img-alt=""></cod-button></a></p>`;
     }
