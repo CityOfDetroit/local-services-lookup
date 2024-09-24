@@ -1,3 +1,15 @@
+# (Tue Sep 24 2024)
+
+#### 📝 Documentation
+
+- Updating demo status text. [#187](https://github.com/CityOfDetroit/local-services-lookup/pull/187) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # v2.2.11 (Tue Sep 03 2024)
 
 #### 🐛 Bug Fix
