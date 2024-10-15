@@ -1,3 +1,15 @@
+# v2.2.13 (Tue Oct 15 2024)
+
+#### 🐛 Bug Fix
+
+- Adding East Canfield to the CDBG sewer repair program. [#190](https://github.com/CityOfDetroit/local-services-lookup/pull/190) ([@jedgar1mx](https://github.com/jedgar1mx))
+
+#### Authors: 1
+
+- J Edgar Montes ([@jedgar1mx](https://github.com/jedgar1mx))
+
+---
+
 # (Tue Sep 24 2024)
 
 #### 📝 Documentation
